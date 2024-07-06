@@ -3,7 +3,7 @@ import Header from '../components/Header.astro'
 import Footer from '../components/Footer.astro'
 
 interface Props {
-    title: string
+    title?: string
 }
 
 const pageURL = Astro.request.url
@@ -18,7 +18,7 @@ const { title } = Astro.props
         <meta name="viewport" content="width=device-width" />
         <link rel="icon" type="image/svg+xml" href="/images/Logo.svg" />
 
-        <meta property="og:title" content={title ? `${title} - CocoDev` : "cocoDev"} />
+        <meta property="og:title" content={title ? `${title} - CocoDev` : "CocoDev"} />
         <meta property="og:type" content="website" />
         <meta property="og:url" content={pageURL ?? 'https://cocodrulo.dev/'} />
         <meta
@@ -32,7 +32,7 @@ const { title } = Astro.props
             content="Página web oficial de CocoDev donde encontrarás todo lo relacionado con este creador."
         />
 
-        <title>{title}</title>
+        <title>{title ? `${title} - CocoDev` : "CocoDev"}</title>
         <style is:global>
             html,
             body {
