@@ -1,42 +1,61 @@
 ---
 interface Props {
-    current?: string;
+    current?: string
 }
 
-const { current } = Astro.props;
+const { current } = Astro.props
 
 let menuItems = [
-        { label: 'Games', link: '/games', name: 'games', active: false },
-    ];
+    { label: 'My Work', link: '/work', name: 'work', active: false },
+]
 
 if (current) {
-    menuItems = menuItems.map(item => {
+    menuItems = menuItems.map((item) => {
         if (item.name === current) item.active = true
-        return item;
-    });
-
+        return item
+    })
 }
 ---
 
-<header class="top-[2%] left-[2.5%] w-[95%] h-[10svh] bg-[var(--bg-dark)] dark:bg-[var(--bg-light)] text-[var(--bg-light)] dark:text-[var(--bg-dark)] overflow-hidden sticky z-[51] select-none rounded-[30px]">
+<header
+    class="top-[2%] left-[2.5%] w-[95%] h-[10svh] bg-[var(--bg-dark)] dark:bg-[var(--bg-light)] text-[var(--bg-light)] dark:text-[var(--bg-dark)] overflow-hidden sticky z-[51] select-none rounded-[30px]"
+>
     <nav class="h-full overflow-hidden">
-        <ul class="flex flex-row justify-between pl-4 pr-4 lg:pl-10 lg:pr-10 h-full items-center text-2xl overflow-hidden">
+        <ul
+            class="flex flex-row justify-between pl-4 pr-4 lg:pl-10 lg:pr-10 h-full items-center text-2xl overflow-hidden"
+        >
             <div class="flex flex-row items-center justify-center">
                 <div class="block lg:hidden menuelmb z-50">
                     <button class="navbar-burger flex items-center p-3">
-                        <svg class="block h-5 w-5 fill-current" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                        <svg
+                            class="block h-5 w-5 fill-current"
+                            viewBox="0 0 20 20"
+                            xmlns="http://www.w3.org/2000/svg"
+                        >
                             <title>Mobile menu</title>
-                            <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"></path>
+                            <path
+                                d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"
+                            ></path>
                         </svg>
                     </button>
                 </div>
-                <a href="/" class="h-fit w-fit"><img src="/images/Logo.svg" alt="CocoDev Logo" class="max-w-[unset] w-[5vh] h-auto lg:w-[8vh] lg:h-[8vh] transition-all outline-none drop-shadow-[0_0_20px_var(--bg-light)] dark:drop-shadow-[0_0_20px_var(--bg-dark)] hover:scale-110"></a>
+                <a href="/" class="h-fit w-fit"
+                    ><img
+                        src="/images/Logo.svg"
+                        alt="CocoDev Logo"
+                        class="max-w-[unset] w-[5vh] h-auto lg:w-[8vh] lg:h-[8vh] transition-all outline-none drop-shadow-[0_0_20px_var(--bg-light)] dark:drop-shadow-[0_0_20px_var(--bg-dark)] hover:scale-110"
+                    /></a
+                >
             </div>
-            <div class="hidden lg:flex flex-row h-full items-center overflow-hidden">
+            <div
+                class="hidden lg:flex flex-row h-full items-center overflow-hidden"
+            >
                 {
-                    menuItems.map(item => { 
+                    menuItems.map((item) => {
                         return (
-                            <li class={`menuel m-10 mt-0 mb-0 h-fit w-fit cursor-pointer transition-all ease-linear overflow-hidden hover:drop-shadow-[0_0_20px_var(--bg-light)] hover:dark:drop-shadow-[0_0_20px_var(--bg-dark)]${item.active ? " active" : ""}`}>
+                            <li
+                                class={`menuel m-10 mt-0 mb-0 h-fit w-fit cursor-pointer transition-all ease-linear overflow-hidden hover:drop-shadow-[0_0_20px_var(--bg-light)] hover:dark:drop-shadow-[0_0_20px_var(--bg-dark)]${item.active ? ' active' : ''}`}
+                            >
                                 <a href={item.link}>{item.label}</a>
                             </li>
                         )
@@ -46,23 +65,47 @@ if (current) {
         </ul>
     </nav>
 </header>
-<div class="navbar-menu relative z-[70] hidden pointer-events-auto ">
-	<div class="navbar-backdrop fixed inset-0 opacity-25"></div>
-	<nav class="fixed top-0 left-0 bottom-0 h-full flex flex-col w-5/6 max-w-sm py-6 px-1 border-r overflow-y-autobg-[var(--bg-dark)] dark:bg-[var(--bg-light)] text-[var(--bg-light)] dark:text-[var(--bg-dark)] drop-shadow-[0_0_20px_var(--bg-light)] dark:drop-shadow-[0_0_20px_var(--bg-dark)]">
-		<ul class="flex flex-col justify-between pl-7 pr-2 h-full items-center text-2xl overflow-hidden">
+<div class="navbar-menu relative z-[70] hidden pointer-events-auto">
+    <div class="navbar-backdrop fixed inset-0 opacity-25"></div>
+    <nav
+        class="fixed top-0 left-0 bottom-0 h-full flex flex-col w-5/6 max-w-sm py-6 px-1 border-r overflow-y-autobg-[var(--bg-dark)] dark:bg-[var(--bg-light)] text-[var(--bg-light)] dark:text-[var(--bg-dark)] drop-shadow-[0_0_20px_var(--bg-light)] dark:drop-shadow-[0_0_20px_var(--bg-dark)]"
+    >
+        <ul
+            class="flex flex-col justify-between pl-7 pr-2 h-full items-center text-2xl overflow-hidden"
+        >
             <div class="flex flex-row justify-between w-full">
-                <a href="/" class="h-fit w-fit"><img src="/images/Logo.svg" alt="CocoDev Logo" class="max-w-[unset] w-[8vh] h-[8vh] hover:drop-shadow-[0_0_20px_var(--carmesi-red)] transition-all"></a>
+                <a href="/" class="h-fit w-fit"
+                    ><img
+                        src="/images/Logo.svg"
+                        alt="CocoDev Logo"
+                        class="max-w-[unset] w-[8vh] h-[8vh] hover:drop-shadow-[0_0_20px_var(--carmesi-red)] transition-all"
+                    /></a
+                >
                 <button class="navbar-close">
-                    <svg class="h-10 w-10 cursor-pointer hover:text-[var(--brown)]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    <svg
+                        class="h-10 w-10 cursor-pointer hover:text-[var(--brown)]"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M6 18L18 6M6 6l12 12"></path>
                     </svg>
                 </button>
             </div>
-            <div class="flex flex-col h-full items-start overflow-hidden mt-20 w-full">
+            <div
+                class="flex flex-col h-full items-start overflow-hidden mt-20 w-full"
+            >
                 {
-                    menuItems.map(item => { 
+                    menuItems.map((item) => {
                         return (
-                            <li class={`m-5 mr-0 ml-0 h-fit w-fit cursor-pointertransition-all ease-linear overflow-hidden hover:drop-shadow-[0_0_20px_var(--carmesi-red)]${item.active ? " active" : ""}`}>
+                            <li
+                                class={`m-5 mr-0 ml-0 h-fit w-fit cursor-pointertransition-all ease-linear overflow-hidden hover:drop-shadow-[0_0_20px_var(--carmesi-red)]${item.active ? ' active' : ''}`}
+                            >
                                 <a href={item.link}>{item.label}</a>
                             </li>
                         )
@@ -70,51 +113,51 @@ if (current) {
                 }
             </div>
         </ul>
-	</nav>
+    </nav>
 </div>
 
 <script>
-    import { $$ } from "@/libs/dom-selector"
-	// Burger menus
-	document.addEventListener('DOMContentLoaded', function() {
-		// open
-		const burger = $$('.navbar-burger');
-		const menu = $$('.navbar-menu');
-	
-		if (burger.length && menu.length) {
-			for (var i = 0; i < burger.length; i++) {
-				burger[i].addEventListener('click', function() {
-					for (var j = 0; j < menu.length; j++) {
-						menu[j].classList.toggle('hidden');
-					}
-				});
-			}
-		}
-	
-		// close
-		const close = $$('.navbar-close');
-		const backdrop = $$('.navbar-backdrop');
-	
-		if (close.length) {
-			for (var i = 0; i < close.length; i++) {
-				close[i].addEventListener('click', function() {
-					for (var j = 0; j < menu.length; j++) {
-						menu[j].classList.toggle('hidden');
-					}
-				});
-			}
-		}
-	
-		if (backdrop.length) {
-			for (var i = 0; i < backdrop.length; i++) {
-				backdrop[i].addEventListener('click', function() {
-					for (var j = 0; j < menu.length; j++) {
-						menu[j].classList.toggle('hidden');
-					}
-				});
-			}
-		}
-	});
+    import { $$ } from '@/libs/dom-selector'
+    // Burger menus
+    document.addEventListener('DOMContentLoaded', function () {
+        // open
+        const burger = $$('.navbar-burger')
+        const menu = $$('.navbar-menu')
+
+        if (burger.length && menu.length) {
+            for (var i = 0; i < burger.length; i++) {
+                burger[i].addEventListener('click', function () {
+                    for (var j = 0; j < menu.length; j++) {
+                        menu[j].classList.toggle('hidden')
+                    }
+                })
+            }
+        }
+
+        // close
+        const close = $$('.navbar-close')
+        const backdrop = $$('.navbar-backdrop')
+
+        if (close.length) {
+            for (var i = 0; i < close.length; i++) {
+                close[i].addEventListener('click', function () {
+                    for (var j = 0; j < menu.length; j++) {
+                        menu[j].classList.toggle('hidden')
+                    }
+                })
+            }
+        }
+
+        if (backdrop.length) {
+            for (var i = 0; i < backdrop.length; i++) {
+                backdrop[i].addEventListener('click', function () {
+                    for (var j = 0; j < menu.length; j++) {
+                        menu[j].classList.toggle('hidden')
+                    }
+                })
+            }
+        }
+    })
 </script>
 
 <style>
@@ -136,7 +179,6 @@ if (current) {
     }
 
     @media (prefers-color-scheme: dark) {
-        
         li.active {
             border-bottom: 2px solid var(--cream);
         }
@@ -148,7 +190,6 @@ if (current) {
 </style>
 
 <style is:global>
-    
     @keyframes palla {
         0% {
             display: block;
