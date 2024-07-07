@@ -1,9 +1,46 @@
 ---
-import Layout from "@/layouts/Layout.astro"
+import Layout from '@/layouts/Layout.astro'
+import { Image } from 'astro:assets'
+import Me from '@/assets/images/me.jpg'
 ---
 
 <Layout>
-    <div class="h-[80vh] w-full flex justify-center items-center flex-col text-center">
-        <h1 class="text-[100px]">En construcción 🛠</h1>
+    <div
+        class="h-[80vh] w-full flex justify-center items-center flex-row text-center gap-10"
+    >
+        <Image
+            src={Me}
+            alt="Javier Pérez Romero"
+            width={200}
+            height={200}
+            decoding="async"
+            loading="eager"
+        />
+        <article>
+            <h1>Hi, my name is Javier Pérez</h1>
+            <p>
+                I am a software developer settled in Gran Canaria, Canary
+                Islands, Spain
+            </p>
+        </article>
     </div>
 </Layout>
+
+<style>
+    h1 {
+        font-size: 5rem;
+    }
+
+    p {
+        font-size: 1.5rem;
+        opacity: 0.8;
+    }
+
+    img {
+        border-radius: 50%;
+        width: 200px;
+        height: 200px;
+        object-fit: cover;
+        object-position: top;
+    }
+</style>
