@@ -18,12 +18,15 @@ const { title } = Astro.props
         <meta name="viewport" content="width=device-width" />
         <link rel="icon" type="image/svg+xml" href="/images/Logo.svg" />
 
-        <meta property="og:title" content={title ? `${title} - CocoDev` : "CocoDev"} />
+        <meta
+            property="og:title"
+            content={title ? `${title} - CocoDev` : 'CocoDev'}
+        />
         <meta property="og:type" content="website" />
         <meta property="og:url" content={pageURL ?? 'https://cocodrulo.dev/'} />
         <meta
             property="og:image"
-            content={'https://ardens.es/images/Logo.png'}
+            content={'https://cocodrulo.dev/images/Logo.png'}
         />
         <meta property="og:image:type" content="image/png" />
         <meta property="og:locale" content="es_ES" />
@@ -32,8 +35,14 @@ const { title } = Astro.props
             content="Página web oficial de CocoDev donde encontrarás todo lo relacionado con este creador."
         />
 
-        <title>{title ? `${title} - CocoDev` : "CocoDev"}</title>
+        <title>{title ? `${title} - CocoDev` : 'CocoDev'}</title>
         <style is:global>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+
             html,
             body {
                 color-scheme: light dark;
@@ -44,7 +53,6 @@ const { title } = Astro.props
                 overflow: hidden;
                 font-family: 'Trebuchet MS', 'Lucida Sans Unicode',
                     'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-
             }
 
             :root {
@@ -53,12 +61,8 @@ const { title } = Astro.props
             }
 
             body {
-                background: light-dark(
-                    var(--bg-light), var(--bg-dark)
-                );
-                color: light-dark(
-                    var(--bg-dark), var(--bg-light)
-                );
+                background: light-dark(var(--bg-light), var(--bg-dark));
+                color: light-dark(var(--bg-dark), var(--bg-light));
             }
 
             code {
@@ -83,9 +87,7 @@ const { title } = Astro.props
             }
 
             ::-webkit-scrollbar-thumb {
-                background: light-dark(
-                    var(--bg-dark), var(--bg-light)
-                );
+                background: light-dark(var(--bg-dark), var(--bg-light));
                 border-radius: 10px;
                 transition: all 0.3s linear;
             }
@@ -98,10 +100,10 @@ const { title } = Astro.props
         </style>
     </head>
     <body>
-        <Header></Header>
-		<main>
-			<slot />
-		</main>
-        <Footer></Footer>
-	</body>
+        <Header />
+        <main>
+            <slot />
+        </main>
+        <Footer />
+    </body>
 </html>
