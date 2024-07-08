@@ -6,7 +6,7 @@ import Me from '@/assets/images/me.jpg'
 
 <Layout>
     <div
-        class="h-[80vh] w-full flex justify-center items-center flex-row text-center gap-10"
+        class="h-[80vh] w-full flex justify-center items-center flex-col lg:flex-row text-center gap-10"
     >
         <Image
             src={Me}
@@ -16,9 +16,9 @@ import Me from '@/assets/images/me.jpg'
             decoding="async"
             loading="eager"
         />
-        <article>
-            <h1>Hi, my name is Javier Pérez</h1>
-            <p>
+        <article class="p-5">
+            <h1 class="text-6xl">Hi, my name is Javier Pérez</h1>
+            <p class="text-2xl opacity-80 mt-5">
                 I am a software developer settled in Gran Canaria, Canary
                 Islands, Spain
             </p>
@@ -27,15 +27,6 @@ import Me from '@/assets/images/me.jpg'
 </Layout>
 
 <style>
-    h1 {
-        font-size: 5rem;
-    }
-
-    p {
-        font-size: 1.5rem;
-        opacity: 0.8;
-    }
-
     img {
         border-radius: 50%;
         width: 200px;
