@@ -6,10 +6,10 @@ import TailwindCSSIcon from './TailwindCSSIcon.astro'
 import TypeScriptIcon from './TypeScriptIcon.astro'
 
 export default {
-    Astro: AstroIcon,
-    CSS: CSSIcon,
-    JavaScript: JavaScriptIcon,
-    TypeScript: TypeScriptIcon,
-    TailwindCSS: TailwindCSSIcon,
-    Snipcart: SnipcartIcon,
+    Astro: { icon: AstroIcon },
+    CSS: { icon: CSSIcon },
+    JavaScript: { icon: JavaScriptIcon },
+    TypeScript: { icon: TypeScriptIcon },
+    TailwindCSS: { icon: TailwindCSSIcon },
+    Snipcart: { icon: SnipcartIcon },
 }
