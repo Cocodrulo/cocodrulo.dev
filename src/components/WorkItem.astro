@@ -7,7 +7,7 @@ interface Props {
     description: string
     techs: string[]
     date: string
-    link: string
+    link?: string
 }
 
 const { image, title, description, techs, date, link } = Astro.props
@@ -27,5 +27,5 @@ const { image, title, description, techs, date, link } = Astro.props
             })
         }
     </div>
-    <Badge link={link}>{link}</Badge>
+    {link && <Badge link={link}>{link}</Badge>}
 </article>
