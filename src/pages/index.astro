@@ -7,8 +7,34 @@ import WorkItem from '@/components/WorkItem.astro'
 
 const MYWORKS = [
     {
+        title: 'LionRP',
+        description:
+            'A FiveM roleplay server for GTA V. Also the webpage for LionCommunity.',
+        techs: [
+            'HTML',
+            'CSS',
+            'JavaScript',
+            'Lua',
+            'Astro',
+            'TailwindCSS',
+            'MariaDB',
+            'MySQL',
+        ],
+        date: '2021 - Currently',
+        link: 'https://lioncommunity.es',
+        image: 'https://lioncommunity.es/favicon.svg',
+    },
+    {
+        title: 'Discord Bots',
+        description:
+            'A collection of Discord bots made with Discord.js and Node.js for multiple usages.',
+        techs: ['NodeJS', 'DiscordJS', 'JavaScript', 'MongoDB'],
+        date: '2021 - Currently',
+        image: 'https://cdn.prod.website-files.com/6257adef93867e50d84d30e2/62fddf0fde45a8baedcc7ee5_847541504914fd33810e70a0ea73177e%20(2)-1.png',
+    },
+    {
         title: 'Ardens.es',
-        description: 'The website of Ardens, a clothes selling company',
+        description: 'The website of Ardens, a clothes selling company.',
         techs: [
             'Astro',
             'CSS',
@@ -16,8 +42,9 @@ const MYWORKS = [
             'Snipcart',
             'TailwindCSS',
             'JavaScript',
+            'MySQL',
         ],
-        date: 'June 2024',
+        date: 'June 2024 - July 2024',
         link: 'https://ardens.es',
         image: 'https://ardens.es/favicon.svg',
     },
@@ -51,22 +78,24 @@ const MYWORKS = [
             <h2 class="text-3xl md:text-4xl lg:text-6xl mb-5 md:mb-8 lg:mb-11">
                 My Work
             </h2>
-            {
-                MYWORKS.map((item) => {
-                    const { title, description, image, techs, date, link } =
-                        item
-                    return (
-                        <WorkItem
-                            title={title}
-                            description={description}
-                            image={image}
-                            techs={techs}
-                            date={date}
-                            link={link}
-                        />
-                    )
-                })
-            }
+            <div class="flex flex-col gap-y-5">
+                {
+                    MYWORKS.map((item) => {
+                        const { title, description, image, techs, date, link } =
+                            item
+                        return (
+                            <WorkItem
+                                title={title}
+                                description={description}
+                                image={image}
+                                techs={techs}
+                                date={date}
+                                link={link}
+                            />
+                        )
+                    })
+                }
+            </div>
         </Container>
     </div>
 </Layout>
