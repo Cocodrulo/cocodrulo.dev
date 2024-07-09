@@ -19,13 +19,18 @@ const myicon = icon && POSIBLE_ICONS[icon] ? POSIBLE_ICONS[icon] : null
             target="_blank"
             class="text-sm lg:text-base rounded-full min-w-7 w-fit bg-blue-200/90 text-black py-2 lg:py-3 px-3 lg:px-4 hover:scale-105 transition flex flex-row gap-3 items-center"
         >
-            <img class="size-6" src={link + '/favicon.svg'} alt={link} />
+            <img
+                loading="lazy"
+                class="size-6"
+                src={link + '/favicon.svg'}
+                alt={link}
+            />
             <slot />
         </a>
     ) : (
         <>
             <span class="text-xs lg:text-base rounded-full min-w-7 w-fit bg-white/70 text-black py-1 lg:py-[0.40rem] px-3 flex flex-row gap-3 items-center">
-                {myicon && <myicon class="size-4 lg:size-6" />}
+                {myicon && <myicon.icon class="size-4 lg:size-6" />}
                 <slot />
             </span>
         </>
