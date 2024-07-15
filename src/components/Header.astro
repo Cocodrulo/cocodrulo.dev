@@ -1,20 +1,15 @@
 ---
+import Languages from '@/constants/Languages'
+import HeaderItems from '@/constants/HeaderItems'
+
 interface Props {
-    current?: string
+    locales: string[]
 }
 
-const { current } = Astro.props
+const { locales } = Astro.props
+const currentLanguage = Astro.currentLocale as string
 
-let menuItems = [
-    { label: 'My Work', link: '#work', name: 'work', active: false },
-]
-
-if (current) {
-    menuItems = menuItems.map((item) => {
-        if (item.name === current) item.active = true
-        return item
-    })
-}
+let menuItems = HeaderItems[currentLanguage] ?? HeaderItems['es']
 ---
 
 <header
@@ -54,7 +49,7 @@ if (current) {
                     menuItems.map((item) => {
                         return (
                             <li
-                                class={`menuel m-10 mt-0 mb-0 h-fit w-fit cursor-pointer transition-all ease-linear overflow-hidden hover:drop-shadow-[0_0_20px_var(--bg-light)] hover:dark:drop-shadow-[0_0_20px_var(--bg-dark)]${item.active ? ' active' : ''}`}
+                                class={`menuel m-10 mt-0 mb-0 h-fit w-fit cursor-pointer transition-all ease-linear overflow-hidden hover:drop-shadow-[0_0_20px_var(--bg-light)] hover:dark:drop-shadow-[0_0_20px_var(--bg-dark)]`}
                             >
                                 <a href={item.link}>{item.label}</a>
                             </li>
@@ -62,6 +57,27 @@ if (current) {
                     })
                 }
             </div>
+            <select
+                name="languages"
+                id="languages"
+                class="bg-transparent text-black outline-none border-none cursor-pointer"
+            >
+                {
+                    locales.map((locale) => {
+                        console.log(locale, currentLanguage)
+                        return (
+                            <option
+                                value={Languages[locale].prefix}
+                                selected={
+                                    Languages[locale].prefix === currentLanguage
+                                }
+                            >
+                                {Languages[locale].name ?? 'Unknown'}
+                            </option>
+                        )
+                    })
+                }
+            </select>
         </ul>
     </nav>
 </header>
@@ -104,7 +120,7 @@ if (current) {
                     menuItems.map((item) => {
                         return (
                             <li
-                                class={`m-5 mr-0 ml-0 h-fit w-fit cursor-pointertransition-all ease-linear overflow-hidden hover:drop-shadow-[0_0_20px_var(--carmesi-red)]${item.active ? ' active' : ''}`}
+                                class={`m-5 mr-0 ml-0 h-fit w-fit cursor-pointertransition-all ease-linear overflow-hidden hover:drop-shadow-[0_0_20px_var(--carmesi-red)]`}
                             >
                                 <a href={item.link}>{item.label}</a>
                             </li>
@@ -216,3 +232,14 @@ if (current) {
         }
     }
 </style>
+
+<script>
+    import { $ } from '@/libs/dom-selector'
+
+    $("select[name='languages']").addEventListener(
+        'change',
+        function (e: Event) {
+            window.location.href = `${window.location.href.split('/')[0]}/${(e.target as HTMLSelectElement).value}/`
+        },
+    )
+</script>
