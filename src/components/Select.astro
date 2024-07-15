@@ -1,0 +1,162 @@
+---
+import Icons from '@/assets/icons/IconsHandler'
+
+interface Props {
+    class?: string
+    name?: string
+    id: string
+    options: {
+        value: string
+        selected: boolean
+        label: string
+        isHTML?: boolean
+    }[]
+}
+
+const { options } = Astro.props
+const currentOption =
+    options.filter((obj) => {
+        return obj.selected
+    })[0] ?? options[0]
+---
+
+<div class="custom-select" data-value={currentOption.value} id={Astro.props.id}>
+    <button>
+        {
+            !currentOption.isHTML ? (
+                <span>{currentOption.label}</span>
+            ) : (
+                <span set:html={currentOption.label} />
+            )
+        }
+        <Icons.Dropdown.icon />
+    </button>
+
+    <div id="selector-data">
+        {
+            options.map((option) => {
+                if (!option.isHTML)
+                    return (
+                        <button
+                            type="button"
+                            data-value={option.value}
+                            class={`button-select-${Astro.props.id} ${option.selected ? 'selected' : ''}`}
+                        >
+                            {option.label}
+                        </button>
+                    )
+                else
+                    return (
+                        <button
+                            type="button"
+                            data-value={option.value}
+                            class={`button-select-${Astro.props.id} ${option.selected ? 'selected' : ''}`}
+                            set:html={option.label}
+                        />
+                    )
+            })
+        }
+    </div>
+</div>
+
+<script>
+    import { $$ } from '@/libs/dom-selector'
+    const changeEvent = new Event('changeContent')
+
+    $$('.custom-select').forEach((select) => {
+        const button = select.querySelector('button') as HTMLButtonElement
+        const selectorData = select.querySelector(
+            '#selector-data',
+        ) as HTMLDivElement
+        const buttons = selectorData.querySelectorAll(
+            'button',
+        ) as NodeListOf<HTMLButtonElement>
+
+        button.addEventListener('click', () => {
+            selectorData.classList.toggle('active')
+        })
+
+        buttons.forEach((btn: HTMLButtonElement) => {
+            btn.addEventListener('click', () => {
+                const span = button.querySelector('span') as HTMLSpanElement
+                span.textContent = btn.textContent
+                select.setAttribute(
+                    'data-value',
+                    btn.dataset['value'] ?? 'undefined',
+                )
+                selectorData.classList.remove('active')
+
+                select.dispatchEvent(changeEvent)
+            })
+        })
+    })
+</script>
+
+<style>
+    .custom-select {
+        position: relative;
+        width: fit-content;
+    }
+
+    .custom-select button {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        padding: 10px;
+        border: 1px solid transparent;
+        border-radius: 5px;
+        background-color: transparent;
+        cursor: pointer;
+    }
+
+    .custom-select button span {
+        font-size: 1rem;
+        margin-right: 3rem;
+    }
+
+    .custom-select button svg {
+        width: 20px;
+        height: 20px;
+    }
+
+    .custom-select #selector-data {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        max-height: 200px;
+        overflow-y: auto;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: #fff;
+        font-size: 1rem;
+        z-index: 9999;
+    }
+
+    .custom-select #selector-data.active {
+        display: block;
+    }
+
+    .custom-select button + #selector-data {
+        margin-top: 5px;
+    }
+
+    .custom-select button + #selector-data button {
+        display: block;
+        width: 100%;
+        padding: 10px;
+        border: none;
+        background-color: #fff;
+        cursor: pointer;
+    }
+
+    .custom-select button + #selector-data button:hover {
+        background-color: #f0f0f0;
+    }
+
+    .custom-select button + #selector-data button.selected {
+        background-color: #f0f0f0;
+    }
+</style>
