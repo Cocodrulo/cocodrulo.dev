@@ -63,6 +63,14 @@ const currentOption =
     import { $$ } from '@/libs/dom-selector'
     const changeEvent = new Event('changeContent')
 
+    document.addEventListener('click', (e) => {
+        if (!(e.target as HTMLElement).closest('.custom-select')) {
+            $$('.custom-select #selector-data').forEach((selectorData) => {
+                selectorData.classList.remove('active')
+            })
+        }
+    })
+
     $$('.custom-select').forEach((select) => {
         const button = select.querySelector('button') as HTMLButtonElement
         const selectorData = select.querySelector(
