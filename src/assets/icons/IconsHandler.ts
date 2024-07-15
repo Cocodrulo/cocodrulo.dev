@@ -11,6 +11,7 @@ import NodeJSIcon from './NodeJSIcon.astro'
 import SnipcartIcon from './SnipcartIcon.astro'
 import TailwindCSSIcon from './TailwindCSSIcon.astro'
 import TypeScriptIcon from './TypeScriptIcon.astro'
+import DropdownIcon from './Dropdown.astro'
 
 export default {
     Astro: { icon: AstroIcon },
@@ -26,4 +27,5 @@ export default {
     MongoDB: { icon: MongoDBIcon },
     DiscordJS: { icon: DiscordJSIcon },
     NodeJS: { icon: NodeJSIcon },
+    Dropdown: { icon: DropdownIcon },
 }
