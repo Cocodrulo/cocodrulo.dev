@@ -87,7 +87,7 @@ const currentOption =
         buttons.forEach((btn: HTMLButtonElement) => {
             btn.addEventListener('click', () => {
                 const span = button.querySelector('span') as HTMLSpanElement
-                span.textContent = btn.textContent
+                span.innerHTML = btn.innerHTML
                 select.setAttribute(
                     'data-value',
                     btn.dataset['value'] ?? 'undefined',

@@ -4,10 +4,11 @@ import Icons from '@/assets/icons/IconsHandler.ts'
 interface Props {
     link?: string
     icon?: string
+    imgLink?: string
 }
 
 const POSIBLE_ICONS: { [key: string]: any } = Icons
-const { link, icon } = Astro.props
+const { link, icon, imgLink } = Astro.props
 
 const myicon = icon && POSIBLE_ICONS[icon] ? POSIBLE_ICONS[icon] : null
 ---
@@ -22,7 +23,7 @@ const myicon = icon && POSIBLE_ICONS[icon] ? POSIBLE_ICONS[icon] : null
             <img
                 loading="lazy"
                 class="size-6"
-                src={link + '/favicon.svg'}
+                src={imgLink ?? link + '/favicon.svg'}
                 alt={link}
             />
             <slot />
