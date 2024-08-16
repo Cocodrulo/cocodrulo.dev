@@ -64,7 +64,7 @@ let menuItems = HeaderItems[currentLanguage] ?? HeaderItems['es']
                 class="bg-transparent text-black outline-none border-none cursor-pointer"
                 options={locales.map((locale) => {
                     return {
-                        value: Languages[locale].prefix,
+                        value: locale,
                         selected: Languages[locale].prefix === currentLanguage,
                         label: `
                             <span class="flex flex-row gap-x-2 items-center">
@@ -235,6 +235,7 @@ let menuItems = HeaderItems[currentLanguage] ?? HeaderItems['es']
     import { $ } from '@/libs/dom-selector'
 
     $('#languages').addEventListener('changeContent', function (e: Event) {
-        window.location.href = `${window.location.href.split('/')[0]}/${(e.target as HTMLSelectElement).dataset['value']}/`
+        const value = (e.target as HTMLSelectElement).dataset['value']
+        window.location.href = `${window.location.href.split('/')[0]}${value}`
     })
 </script>
