@@ -1,5 +1,5 @@
 export default {
-    ['/es/']: {
+    ['/']: {
         prefix: 'es',
         name: 'Español',
         flag: '/images/flags/es.png',
