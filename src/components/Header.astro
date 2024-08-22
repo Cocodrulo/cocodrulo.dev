@@ -20,7 +20,7 @@ let menuItems = HeaderItems[currentLanguage] ?? HeaderItems['es']
         <ul
             class="flex flex-row justify-between pl-4 pr-4 lg:pl-10 lg:pr-10 h-full items-center text-2xl"
         >
-            <div class="flex flex-row items-center justify-center">
+            <li class="flex flex-row items-center justify-center">
                 <div class="block lg:hidden menuelmb z-50">
                     <button class="navbar-burger flex items-center p-3">
                         <svg
@@ -42,40 +42,45 @@ let menuItems = HeaderItems[currentLanguage] ?? HeaderItems['es']
                         class="max-w-[unset] w-[5vh] h-auto lg:w-[8vh] lg:h-[8vh] transition-all outline-none drop-shadow-[0_0_20px_var(--bg-light)] dark:drop-shadow-[0_0_20px_var(--bg-dark)] hover:scale-110"
                     /></a
                 >
-            </div>
-            <ul
-                class="hidden lg:flex flex-row h-full items-center overflow-hidden"
-            >
-                {
-                    menuItems.map((item) => {
-                        return (
-                            <li
-                                class={`menuel m-10 mt-0 mb-0 h-fit w-fit cursor-pointer transition-all ease-linear overflow-hidden hover:drop-shadow-[0_0_20px_var(--bg-light)] hover:dark:drop-shadow-[0_0_20px_var(--bg-dark)]`}
-                            >
-                                <a href={item.link}>{item.label}</a>
-                            </li>
-                        )
-                    })
-                }
-            </ul>
-            <Select
-                name="languages"
-                id="languages"
-                class="bg-transparent text-black outline-none border-none cursor-pointer"
-                options={locales.map((locale) => {
-                    return {
-                        value: locale,
-                        selected: Languages[locale].prefix === currentLanguage,
-                        label: `
+            </li>
+            <li>
+                <ul
+                    class="hidden lg:flex flex-row h-full items-center overflow-hidden"
+                >
+                    {
+                        menuItems.map((item) => {
+                            return (
+                                <li
+                                    class={`menuel m-10 mt-0 mb-0 h-fit w-fit cursor-pointer transition-all ease-linear overflow-hidden hover:drop-shadow-[0_0_20px_var(--bg-light)] hover:dark:drop-shadow-[0_0_20px_var(--bg-dark)]`}
+                                >
+                                    <a href={item.link}>{item.label}</a>
+                                </li>
+                            )
+                        })
+                    }
+                </ul>
+            </li>
+            <li>
+                <Select
+                    name="languages"
+                    id="languages"
+                    class="bg-transparent text-black outline-none border-none cursor-pointer"
+                    options={locales.map((locale) => {
+                        return {
+                            value: locale,
+                            selected:
+                                Languages[locale].prefix === currentLanguage,
+                            label: `
                             <span class="flex flex-row gap-x-2 items-center">
                                 <img src="${Languages[locale].flag}" alt="${Languages[locale].name} Flag" class="h-4 w-auto ml-2" />
                                 ${Languages[locale].name}
                             </span>
                         `,
-                        isHTML: true,
-                    }
-                })}
-            />
+                            isHTML: true,
+                        }
+                    })}
+                />
+            </li>
         </ul>
     </nav>
 </header>
@@ -87,7 +92,7 @@ let menuItems = HeaderItems[currentLanguage] ?? HeaderItems['es']
         <ul
             class="flex flex-col justify-between pl-7 pr-2 h-full items-center text-2xl overflow-hidden"
         >
-            <div class="flex flex-row justify-between w-full">
+            <li class="flex flex-row justify-between w-full">
                 <a href="/" class="h-fit w-fit"
                     ><img
                         src="/images/Logo.svg"
@@ -110,22 +115,24 @@ let menuItems = HeaderItems[currentLanguage] ?? HeaderItems['es']
                             d="M6 18L18 6M6 6l12 12"></path>
                     </svg>
                 </button>
-            </div>
-            <ul
-                class="flex flex-col h-full items-start overflow-hidden mt-20 w-full"
-            >
-                {
-                    menuItems.map((item) => {
-                        return (
-                            <li
-                                class={`m-5 mr-0 ml-0 h-fit w-fit cursor-pointertransition-all ease-linear overflow-hidden hover:drop-shadow-[0_0_20px_var(--carmesi-red)]`}
-                            >
-                                <a href={item.link}>{item.label}</a>
-                            </li>
-                        )
-                    })
-                }
-            </ul>
+            </li>
+            <li>
+                <ul
+                    class="flex flex-col h-full items-start overflow-hidden mt-20 w-full"
+                >
+                    {
+                        menuItems.map((item) => {
+                            return (
+                                <li
+                                    class={`m-5 mr-0 ml-0 h-fit w-fit cursor-pointertransition-all ease-linear overflow-hidden hover:drop-shadow-[0_0_20px_var(--carmesi-red)]`}
+                                >
+                                    <a href={item.link}>{item.label}</a>
+                                </li>
+                            )
+                        })
+                    }
+                </ul>
+            </li>
         </ul>
     </nav>
 </div>
