@@ -22,16 +22,16 @@ const myicon = icon && POSIBLE_ICONS[icon] ? POSIBLE_ICONS[icon] : null
         >
             <img
                 loading="lazy"
-                class="size-6"
+                class="h-4 w-auto lg:h-6"
                 src={imgLink ?? link + '/favicon.svg'}
-                alt={link}
+                alt={`Logo of the following link`}
             />
             <slot />
         </a>
     ) : (
         <>
             <span class="text-xs lg:text-base rounded-full min-w-7 w-fit bg-white/70 text-black py-1 lg:py-[0.40rem] px-3 flex flex-row gap-3 items-center">
-                {myicon && <myicon.icon class="size-4 lg:size-6" />}
+                {myicon && <myicon.icon class="h-4 w-auto lg:h-6" />}
                 <slot />
             </span>
         </>
