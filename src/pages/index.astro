@@ -1,7 +1,5 @@
 ---
 import Layout from '@/layouts/Layout.astro'
-import { Image } from 'astro:assets'
-import Me from '@/assets/images/me.jpg'
 
 import Container from '@/components/Container.astro'
 import WorkItem from '@/components/WorkItem.astro'
@@ -14,8 +12,8 @@ import MyStudies from '@/constants/MyStudies'
 <Layout language="es">
     <div class="w-full flex flex-col gap-10 py-12">
         <Container class="py-5 mx-auto mb-11">
-            <Image
-                src={Me}
+            <img
+                src={'/images/me.jpg'}
                 alt="Javier Pérez Romero"
                 width={200}
                 height={200}
