@@ -43,7 +43,7 @@ let menuItems = HeaderItems[currentLanguage] ?? HeaderItems['es']
                     /></a
                 >
             </div>
-            <div
+            <ul
                 class="hidden lg:flex flex-row h-full items-center overflow-hidden"
             >
                 {
@@ -57,7 +57,7 @@ let menuItems = HeaderItems[currentLanguage] ?? HeaderItems['es']
                         )
                     })
                 }
-            </div>
+            </ul>
             <Select
                 name="languages"
                 id="languages"
@@ -68,7 +68,7 @@ let menuItems = HeaderItems[currentLanguage] ?? HeaderItems['es']
                         selected: Languages[locale].prefix === currentLanguage,
                         label: `
                             <span class="flex flex-row gap-x-2 items-center">
-                                <img src="${Languages[locale].flag}" alt="${Languages[locale].name}" class="h-4 w-auto ml-2" />
+                                <img src="${Languages[locale].flag}" alt="${Languages[locale].name} Flag" class="h-4 w-auto ml-2" />
                                 ${Languages[locale].name}
                             </span>
                         `,
@@ -111,7 +111,7 @@ let menuItems = HeaderItems[currentLanguage] ?? HeaderItems['es']
                     </svg>
                 </button>
             </div>
-            <div
+            <ul
                 class="flex flex-col h-full items-start overflow-hidden mt-20 w-full"
             >
                 {
@@ -125,7 +125,7 @@ let menuItems = HeaderItems[currentLanguage] ?? HeaderItems['es']
                         )
                     })
                 }
-            </div>
+            </ul>
         </ul>
     </nav>
 </div>
