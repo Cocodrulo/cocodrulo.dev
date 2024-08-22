@@ -2,6 +2,7 @@
 import Header from '../components/Header.astro'
 import Footer from '../components/Footer.astro'
 import { getRelativeLocaleUrlList } from 'astro:i18n'
+import SpeedInsights from '@vercel/speed-insights/astro'
 
 interface Props {
     title?: string
@@ -38,7 +39,7 @@ const localeUrls = getRelativeLocaleUrlList()
             property="og:description"
             content="Página web oficial de CocoDev donde encontrarás todo lo relacionado con este creador."
         />
-
+        <SpeedInsights />
         <title>{title ? `${title} - CocoDev` : 'CocoDev'}</title>
         <style is:global>
             * {
