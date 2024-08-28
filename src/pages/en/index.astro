@@ -71,33 +71,38 @@ import MyStudies from '@/constants/MyStudies'
             </h2>
             <div class="flex flex-col gap-y-5 relative">
                 <div
-                    class="w-[3px] h-full py-2 absolute top-0 -left-7 bg-gray-500 rounded opacity-50"
+                    class="w-[3px] h-full py-2 absolute top-0 -left-2 md:-left-7 bg-gray-500 rounded opacity-50"
                 >
                     {
                         MyStudies.map((item) => {
                             return (
-                                <div class="size-2 -ml-[2.5px] mt-[13.8rem] first:mt-4 bg-gray-400 rounded-full" />
+                                <div class="size-2 -ml-[2.5px] mt-[10.4rem] md:mt-[11.5rem] first:mt-3 md:first:mt-4 bg-gray-400 rounded-full scroll" />
                             )
                         })
                     }
                 </div>
-                {
-                    MyStudies.map((item) => {
-                        const { title, description, image, date, link } = item
-                        return (
-                            <StudyItem
-                                title={title.en}
-                                description={description}
-                                image={image}
-                                date={date.replaceAll(
-                                    'Actualmente',
-                                    'Currently',
-                                )}
-                                link={link}
-                            />
-                        )
-                    })
-                }
+                <ul class="ml-5 max-w-2/3 md:ml-0 md:max-w-full">
+                    {
+                        MyStudies.map((item) => {
+                            const { title, description, image, date, link } =
+                                item
+                            return (
+                                <li>
+                                    <StudyItem
+                                        title={title.en}
+                                        description={description}
+                                        image={image}
+                                        date={date.replaceAll(
+                                            'Actualmente',
+                                            'Currently',
+                                        )}
+                                        link={link}
+                                    />
+                                </li>
+                            )
+                        })
+                    }
+                </ul>
             </div>
         </Container>
     </div>
