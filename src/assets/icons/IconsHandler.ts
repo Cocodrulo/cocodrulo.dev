@@ -12,6 +12,10 @@ import SnipcartIcon from './SnipcartIcon.astro'
 import TailwindCSSIcon from './TailwindCSSIcon.astro'
 import TypeScriptIcon from './TypeScriptIcon.astro'
 import DropdownIcon from './Dropdown.astro'
+import Instagram from './Instagram.astro'
+import Linkedin from './Linkedin.astro'
+import Twitter from './Twitter.astro'
+import Github from './Github.astro'
 
 export default {
     Astro: { icon: AstroIcon },
@@ -28,4 +32,8 @@ export default {
     DiscordJS: { icon: DiscordJSIcon },
     NodeJS: { icon: NodeJSIcon },
     Dropdown: { icon: DropdownIcon },
+    Instagram: { icon: Instagram },
+    Linkedin: { icon: Linkedin },
+    Twitter: { icon: Twitter },
+    Github: { icon: Github },
 }
