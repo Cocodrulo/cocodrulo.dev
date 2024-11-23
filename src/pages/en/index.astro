@@ -4,9 +4,11 @@ import Layout from '@/layouts/Layout.astro'
 import Container from '@/components/Container.astro'
 import WorkItem from '@/components/WorkItem.astro'
 import StudyItem from '@/components/StudyItem.astro'
+import Badge from '@/components/Badge.astro'
 
 import MyWorks from '@/constants/MyWorks'
 import MyStudies from '@/constants/MyStudies'
+import SocialMedia from '@/constants/SocialMedia'
 ---
 
 <Layout language="en">
@@ -34,6 +36,27 @@ import MyStudies from '@/constants/MyStudies'
                     >Computer Engineering</span
                 > at the University of Las Palmas de Gran Canaria (ULPGC).
             </p>
+        </Container>
+
+        <Container
+            class="py-2 mx-auto border-l-2 border-gray-500 flex flex-row gap-28"
+            id="socialmedia"
+        >
+            {
+                SocialMedia.map((item) => {
+                    const { name, link, icon } = item
+                    return (
+                        <a
+                            href={link}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="size-8 md:size-10 lg:size-12"
+                        >
+                            <Badge icon={icon}>{name}</Badge>
+                        </a>
+                    )
+                })
+            }
         </Container>
         <Container id="work">
             <h2
