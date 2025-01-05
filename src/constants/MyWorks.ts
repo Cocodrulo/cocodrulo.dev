@@ -19,6 +19,23 @@ export default [
         date: '2021 - Actualmente',
         link: 'https://lioncommunity.es',
         image: 'https://lioncommunity.es/favicon.svg',
+    },{
+        title: 'QBCore Framework Developer',
+        description: {
+            en: 'QBCore is an ever-expanding framework for Grand Theft Auto V utilizing the FiveM platform. It offers extensive customization, ease of use, ongoing maintenance and active support!',
+            es: 'QBCore es un framework en constante actualización para Grand Theft Auto V que utiliza la plataforma FiveM. Ofrece una gran personalización, facilidad de uso, mantenimiento continuo y soporte activo.',
+        },
+
+        techs: [
+            'HTML',
+            'CSS',
+            'JavaScript',
+            'Lua',
+            'MariaDB',
+        ],
+        date: '2024 - Actualmente',
+        link: 'https://lioncommunity.es',
+        image: 'https://lioncommunity.es/favicon.svg',
     },
     {
         title: 'Bots de Discord',
