@@ -16,6 +16,7 @@ import Instagram from './Instagram.astro'
 import Linkedin from './Linkedin.astro'
 import Twitter from './Twitter.astro'
 import Github from './Github.astro'
+import ArrowIcon from './ArrowIcon.astro'
 
 export default {
     Astro: { icon: AstroIcon },
@@ -36,4 +37,5 @@ export default {
     Linkedin: { icon: Linkedin },
     Twitter: { icon: Twitter },
     Github: { icon: Github },
+    ArrowIcon: { icon: ArrowIcon },
 }
