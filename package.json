@@ -1,7 +1,7 @@
 {
     "name": "cocodrulo.dev",
     "type": "module",
-    "version": "0.0.1",
+    "version": "1.0.1",
     "scripts": {
         "dev": "astro dev",
         "start": "astro dev",
@@ -11,15 +11,14 @@
     },
     "dependencies": {
         "@astrojs/check": "0.9.4",
-        "@astrojs/tailwind": "5.1.2",
-        "@vercel/speed-insights": "1.1.0",
-        "astro": "4.16.14",
-        "tailwindcss": "3.4.15",
-        "typescript": "5.7.2"
+        "@tailwindcss/vite": "4.1.13",
+        "@vercel/speed-insights": "1.2.0",
+        "astro": "5.13.7",
+        "tailwindcss": "4.1.13",
+        "typescript": "5.9.2"
     },
     "devDependencies": {
-        "@types/dompurify": "3.2.0",
-        "prettier": "3.3.3",
+        "prettier": "3.6.2",
         "prettier-plugin-astro": "0.14.1"
     }
 }

@@ -64,7 +64,7 @@ export default [
             'MySQL',
         ],
         date: 'Junio 2024 - Julio 2024',
-        link: 'https://ardens.es',
+        link: 'Not longer available',
         image: 'https://ardens.es/favicon.svg',
     },
 ]

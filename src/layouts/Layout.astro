@@ -3,6 +3,7 @@ import Header from '../components/Header.astro'
 import Footer from '../components/Footer.astro'
 import { getRelativeLocaleUrlList } from 'astro:i18n'
 import SpeedInsights from '@vercel/speed-insights/astro'
+import '@/styles/global.css'
 
 interface Props {
     title?: string
@@ -24,7 +25,7 @@ const localeUrls = getRelativeLocaleUrlList()
 
         <meta
             property="og:title"
-            content={title ? `${title} - CocoDev` : 'CocoDev'}
+            content={title ? `${title} - Cocodrulo` : 'Cocodrulo'}
         />
         <meta property="og:type" content="website" />
         <meta property="og:url" content={pageURL ?? 'https://cocodrulo.dev/'} />
@@ -37,10 +38,10 @@ const localeUrls = getRelativeLocaleUrlList()
         <meta property="og:locale:alternate" content="es_ES" />
         <meta
             property="og:description"
-            content="Página web oficial de CocoDev donde encontrarás todo lo relacionado con este creador."
+            content="Página web oficial de Cocodrulo donde encontrarás todo lo relacionado con este creador."
         />
         <SpeedInsights />
-        <title>{title ? `${title} - CocoDev` : 'CocoDev'}</title>
+        <title>{title ? `${title} - Cocodrulo` : 'Cocodrulo'}</title>
     </head>
     <body class="overflow-hidden">
         <Header locales={localeUrls} />
@@ -54,11 +55,6 @@ const localeUrls = getRelativeLocaleUrlList()
 </html>
 
 <style is:global>
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-    }
 
     html {
         scroll-behavior: smooth;

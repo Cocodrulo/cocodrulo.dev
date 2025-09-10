@@ -14,7 +14,7 @@ const myicon = icon && POSIBLE_ICONS[icon] ? POSIBLE_ICONS[icon] : null
 ---
 
 {
-    link ? (
+    link && link.includes('http') ? (
         <a
             href={link}
             target="_blank"
@@ -29,12 +29,20 @@ const myicon = icon && POSIBLE_ICONS[icon] ? POSIBLE_ICONS[icon] : null
             />
             <slot />
         </a>
+    ) : link === 'Not longer available' ? (
+        <span class="text-sm lg:text-base rounded-full min-w-7 w-fit bg-blue-200/90 text-black py-2 lg:py-3 px-3 lg:px-4 hover:scale-105 transition flex flex-row gap-3 items-center">
+            <img
+                loading="lazy"
+                class="h-4 w-auto lg:h-6"
+                src={'/images/Logo.png'}
+                alt={`Logo of the following link`}
+            />
+            <slot />
+        </span>
     ) : (
-        <>
-            <span class="text-xs lg:text-base rounded-full min-w-7 w-fit bg-white/70 text-black py-1 lg:py-[0.40rem] px-3 flex flex-row gap-3 items-center">
-                {myicon && <myicon.icon class="h-4 w-auto lg:h-6 text-inherit" />}
-                <slot />
-            </span>
-        </>
+        <span class="text-xs lg:text-base rounded-full min-w-7 w-fit bg-white/70 text-black py-1 lg:py-[0.40rem] px-3 flex flex-row gap-3 items-center">
+            {myicon && <myicon.icon class="h-4 w-auto lg:h-6 text-inherit" />}
+            <slot />
+        </span>
     )
 }

@@ -1,0 +1,75 @@
+---
+interface Props {
+    label: string
+    certificate: string
+    issuer: string
+    issuerWebsite: string
+}
+
+const { label, certificate, issuer, issuerWebsite } = Astro.props
+---
+
+<article class="group relative bg-gradient-to-br from-amber-900/40 to-orange-900/20 border border-amber-700/40 rounded-xl p-6 hover:border-amber-600/60 transition-all duration-300 hover:shadow-xl hover:shadow-amber-500/10 backdrop-blur-sm">
+    <!-- Badge de certificado -->
+    <div class="absolute top-4 right-4">
+        <div class="bg-green-500/20 text-green-300 px-3 py-1 rounded-full text-xs font-medium border border-green-500/30">
+            Certificado
+        </div>
+    </div>
+    
+    <!-- Contenido principal -->
+    <div class="flex flex-col gap-4">
+        <!-- Título del certificado -->
+        <div class="pr-20">
+            <h3 class="text-lg lg:text-xl font-semibold text-white group-hover:text-amber-200 transition-colors duration-300 leading-tight">
+                {label}
+            </h3>
+        </div>
+        
+        <!-- Información del emisor -->
+        <div class="flex items-center gap-2">
+            <div class="w-2 h-2 bg-yellow-400 rounded-full flex-shrink-0"></div>
+            <p class="text-sm lg:text-base text-amber-100/80">
+                Emitido por: 
+                <a 
+                    href={issuerWebsite} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    class="text-yellow-300 hover:text-yellow-200 transition-colors font-medium ml-1"
+                >
+                    {issuer}
+                </a>
+            </p>
+        </div>
+        
+        <!-- Botones de acción -->
+        <div class="flex gap-3 mt-2">
+            <a
+                href={certificate}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-flex items-center gap-2 bg-amber-600 hover:bg-amber-700 text-white px-4 py-2.5 rounded-lg transition-all duration-300 text-sm font-medium hover:scale-105 hover:shadow-lg"
+            >
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                </svg>
+                Ver Certificado
+            </a>
+            
+            <a
+                href={issuerWebsite}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-flex items-center gap-2 bg-amber-800/60 hover:bg-amber-700/80 text-amber-100 px-4 py-2.5 rounded-lg transition-all duration-300 text-sm font-medium hover:scale-105"
+            >
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                </svg>
+                Emisor
+            </a>
+        </div>
+    </div>
+    
+    <!-- Efecto de brillo en hover -->
+    <div class="absolute inset-0 bg-gradient-to-r from-amber-600/0 via-amber-600/5 to-orange-600/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl pointer-events-none"></div>
+</article>
