@@ -14,7 +14,7 @@ let menuItems = HeaderItems[currentLanguage] ?? HeaderItems['es']
 ---
 
 <header
-    class="top-[2%] left-[2.5%] w-[95%] h-[10svh] bg-[var(--bg-light)] dark:bg-[var(--bg-light)] text-[var(--bg-dark)] dark:text-[var(--bg-dark)] sticky z-[51] select-none rounded-[30px]"
+    class="top-[2%] left-[2.5%] w-[95%] h-[10svh] bg-(--bg-light) dark:bg-(--bg-light) text-(--bg-dark) dark:text-(--bg-dark) sticky z-51 select-none rounded-[30px]"
 >
     <nav class="h-full">
         <ul
@@ -65,7 +65,7 @@ let menuItems = HeaderItems[currentLanguage] ?? HeaderItems['es']
                     name="languages"
                     id="languages"
                     class="bg-transparent text-black outline-none border-none cursor-pointer"
-                    options={locales.map((locale) => {
+                    options={locales.map((locale: string) => {
                         return {
                             value: locale,
                             selected:
@@ -84,10 +84,10 @@ let menuItems = HeaderItems[currentLanguage] ?? HeaderItems['es']
         </ul>
     </nav>
 </header>
-<div class="navbar-menu relative z-[70] hidden pointer-events-auto">
+<div class="navbar-menu relative z-70 hidden pointer-events-auto">
     <div class="navbar-backdrop fixed inset-0 opacity-25"></div>
     <nav
-        class="fixed top-0 left-0 bottom-0 h-full flex flex-col w-5/6 max-w-sm py-6 px-1 border-r overflow-y-auto bg-[var(--bg-light)] dark:bg-[var(--bg-light)] text-[var(--bg-dark)] dark:text-[var(--bg-dark)] drop-shadow-[0_0_20px_var(--bg-light)] dark:drop-shadow-[0_0_20px_var(--bg-dark)]"
+        class="fixed top-0 left-0 bottom-0 h-full flex flex-col w-5/6 max-w-sm py-6 px-1 border-r overflow-y-auto bg-(--bg-light) dark:bg-(--bg-light) text-(--bg-dark) dark:text-(--bg-dark) drop-shadow-[0_0_20px_var(--bg-light) dark:drop-shadow-[0_0_20px_var(--bg-dark)]"
     >
         <ul
             class="flex flex-col justify-between pl-7 pr-2 h-full items-center text-2xl overflow-hidden"
@@ -102,7 +102,7 @@ let menuItems = HeaderItems[currentLanguage] ?? HeaderItems['es']
                 >
                 <button class="navbar-close">
                     <svg
-                        class="h-10 w-10 cursor-pointer hover:text-[var(--brown)]"
+                        class="h-10 w-10 cursor-pointer hover:text-(--brown)"
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
                         viewBox="0 0 24 24"

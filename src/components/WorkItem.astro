@@ -26,7 +26,7 @@ const { image, title, description, techs, date, link } = Astro.props
     <p class="text-base lg:text-xl opacity-90">{description}</p>
     <div class="flex flex-row flex-wrap gap-5">
         {
-            techs.map((item, index) => {
+            techs.map((item: string) => {
                 return <Badge icon={item}>{item}</Badge>
             })
         }

@@ -15,7 +15,7 @@ interface Props {
 
 const { options } = Astro.props
 const currentOption =
-    options.filter((obj) => {
+    options.filter((obj: { selected: boolean }) => {
         return obj.selected
     })[0] ?? options[0]
 ---
@@ -34,27 +34,34 @@ const currentOption =
 
     <div id="selector-data">
         {
-            options.map((option) => {
-                if (!option.isHTML)
-                    return (
-                        <button
-                            type="button"
-                            data-value={option.value}
-                            class={`button-select-${Astro.props.id} ${option.selected ? 'selected' : ''}`}
-                        >
-                            {option.label}
-                        </button>
-                    )
-                else
-                    return (
-                        <button
-                            type="button"
-                            data-value={option.value}
-                            class={`button-select-${Astro.props.id} ${option.selected ? 'selected' : ''}`}
-                            set:html={option.label}
-                        />
-                    )
-            })
+            options.map(
+                (option: {
+                    value: string
+                    selected: boolean
+                    label: string
+                    isHTML?: boolean
+                }) => {
+                    if (!option.isHTML)
+                        return (
+                            <button
+                                type="button"
+                                data-value={option.value}
+                                class={`button-select-${Astro.props.id} ${option.selected ? 'selected' : ''}`}
+                            >
+                                {option.label}
+                            </button>
+                        )
+                    else
+                        return (
+                            <button
+                                type="button"
+                                data-value={option.value}
+                                class={`button-select-${Astro.props.id} ${option.selected ? 'selected' : ''}`}
+                                set:html={option.label}
+                            />
+                        )
+                },
+            )
         }
     </div>
 </div>

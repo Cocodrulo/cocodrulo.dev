@@ -101,7 +101,7 @@ import Slider from '@/components/Slider.astro'
                     {
                         MyStudies.map((item) => {
                             return (
-                                <div class="size-2 -ml-[2.5px] mt-[10.4rem] md:mt-[11.5rem] first:mt-3 md:first:mt-4 bg-gray-400 rounded-full scroll" />
+                                <div class="size-2 -ml-[2.5px] mt-[10.4rem] md:mt-46 first:mt-3 md:first:mt-4 bg-gray-400 rounded-full scroll" />
                             )
                         })
                     }
@@ -137,18 +137,26 @@ import Slider from '@/components/Slider.astro'
                 Mis Certificados
             </h2>
             <p class="text-lg md:text-xl opacity-80 mb-8 max-w-3xl">
-                Certificaciones obtenidas en mi proceso de aprendizaje continuo en tecnologías modernas de desarrollo web.
+                Certificaciones obtenidas en mi proceso de aprendizaje continuo
+                en tecnologías modernas de desarrollo web.
             </p>
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
                 {
                     CERTIFICATES.map((certificate) => {
-                        const { label, certificate: cert, issuer, issuerWebsite } = certificate
+                        const {
+                            label,
+                            certificate: cert,
+                            issuer,
+                            issuerWebsite,
+                            issuerId,
+                        } = certificate
                         return (
                             <CertificateItem
                                 label={label.es}
                                 certificate={cert}
                                 issuer={issuer}
                                 issuerWebsite={issuerWebsite}
+                                issuerId={issuerId}
                             />
                         )
                     })

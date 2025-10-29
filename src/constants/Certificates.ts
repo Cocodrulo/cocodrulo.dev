@@ -7,6 +7,7 @@ export const CERTIFICATES = [
         certificate:
             '/certificates/red-hat-training-getting-started-with-linux-fundamentals-rh104-rha-ver-9-1.pdf',
         issuer: 'Red Hat',
+        issuerId: 'redhat',
         issuerWebsite: 'https://www.redhat.com/',
     },
     {
@@ -17,16 +18,18 @@ export const CERTIFICATES = [
         certificate:
             '/certificates/cisco-networking-academy-introduction-to-cybersecurity.pdf',
         issuer: 'Cisco Networking Academy',
+        issuerId: 'cisco',
         issuerWebsite: 'https://www.netacad.com/',
     },
     {
         label: {
-            es: 'Aprende lo últiimo de JavaScript (ES2023 & ES2024)',
+            es: 'Aprende lo último de JavaScript (ES2023 & ES2024)',
             en: 'Learn the latest of JavaScript (ES2023 & ES2024)',
         },
         certificate:
             '/certificates/aprende-lo-ultimo-de-javascript-es2023-es2024.pdf',
         issuer: 'midudev',
+        issuerId: 'midudev',
         issuerWebsite: 'https://midu.dev/',
     },
     {
@@ -37,6 +40,7 @@ export const CERTIFICATES = [
         certificate:
             '/certificates/crea-una-pwa-de-deteccion-de-objetos-con-angular-19-y-tensorflowjs.pdf',
         issuer: 'midudev',
+        issuerId: 'midudev',
         issuerWebsite: 'https://midu.dev/',
     },
     {
@@ -46,6 +50,7 @@ export const CERTIFICATES = [
         },
         certificate: '/certificates/css-desde-cero.pdf',
         issuer: 'midudev',
+        issuerId: 'midudev',
         issuerWebsite: 'https://midu.dev/',
     },
     {
@@ -56,6 +61,7 @@ export const CERTIFICATES = [
         certificate:
             '/certificates/crea-experiencias-3d-increibles-con-vue.pdf',
         issuer: 'midudev',
+        issuerId: 'midudev',
         issuerWebsite: 'https://midu.dev/',
     },
     {
@@ -65,6 +71,7 @@ export const CERTIFICATES = [
         },
         certificate: '/certificates/iniciacion-al-scraping-con-python.pdf',
         issuer: 'midudev',
+        issuerId: 'midudev',
         issuerWebsite: 'https://midu.dev/',
     },
     {
@@ -75,6 +82,7 @@ export const CERTIFICATES = [
         certificate:
             '/certificates/curso-intensivo-de-model-context-protocol.pdf',
         issuer: 'midudev',
+        issuerId: 'midudev',
         issuerWebsite: 'https://midu.dev/',
     },
     {
@@ -84,6 +92,7 @@ export const CERTIFICATES = [
         },
         certificate: '/certificates/promesas-en-javascript.pdf',
         issuer: 'midudev',
+        issuerId: 'midudev',
         issuerWebsite: 'https://midu.dev/',
     },
     {
@@ -93,6 +102,7 @@ export const CERTIFICATES = [
         },
         certificate: '/certificates/python-desde-cero.pdf',
         issuer: 'midudev',
+        issuerId: 'midudev',
         issuerWebsite: 'https://midu.dev/',
     },
     {
@@ -102,6 +112,7 @@ export const CERTIFICATES = [
         },
         certificate: '/certificates/curso-de-tailwind-desde-cero.pdf',
         issuer: 'midudev',
+        issuerId: 'midudev',
         issuerWebsite: 'https://midu.dev/',
     },
 ]
