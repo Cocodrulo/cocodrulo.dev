@@ -1,6 +1,26 @@
 export const CERTIFICATES = [
     {
         label: {
+            es: 'Red Hat Training: Introducción a los Fundamentos de Linux (RH104 - RHA) - Ver. 9.1',
+            en: 'Red Hat Training: Getting Started with Linux Fundamentals (RH104 - RHA) - Ver. 9.1',
+        },
+        certificate:
+            '/certificates/red-hat-training-getting-started-with-linux-fundamentals-rh104-rha-ver-9-1.pdf',
+        issuer: 'Red Hat',
+        issuerWebsite: 'https://www.redhat.com/',
+    },
+    {
+        label: {
+            es: 'Cisco Networking Academy: Introducción a la Ciberseguridad',
+            en: 'Cisco Networking Academy: Introduction to Cybersecurity',
+        },
+        certificate:
+            '/certificates/cisco-networking-academy-introduction-to-cybersecurity.pdf',
+        issuer: 'Cisco Networking Academy',
+        issuerWebsite: 'https://www.netacad.com/',
+    },
+    {
+        label: {
             es: 'Aprende lo últiimo de JavaScript (ES2023 & ES2024)',
             en: 'Learn the latest of JavaScript (ES2023 & ES2024)',
         },
@@ -83,16 +103,6 @@ export const CERTIFICATES = [
         certificate: '/certificates/curso-de-tailwind-desde-cero.pdf',
         issuer: 'midudev',
         issuerWebsite: 'https://midu.dev/',
-    },
-    {
-        label: {
-            es: 'Red Hat Training: Introducción a los Fundamentos de Linux (RH104 - RHA) - Ver. 9.1',
-            en: 'Red Hat Training: Getting Started with Linux Fundamentals (RH104 - RHA) - Ver. 9.1',
-        },
-        certificate:
-            '/certificates/red-hat-training-getting-started-with-linux-fundamentals-rh104-rha-ver-9-1.pdf',
-        issuer: 'Red Hat',
-        issuerWebsite: 'https://www.redhat.com/',
     },
 ]
 
