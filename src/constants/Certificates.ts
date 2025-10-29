@@ -23,6 +23,26 @@ export const CERTIFICATES = [
     },
     {
         label: {
+            es: 'Certificado en Inglés Avanzado (C1)',
+            en: 'Advanced English Certificate (C1)',
+        },
+        certificate: '/certificates/c1-english-cambridge.pdf',
+        issuer: 'Cambridge Assessment English',
+        issuerId: 'cambridge',
+        issuerWebsite: 'https://www.cambridgeenglish.org/',
+    },
+    {
+        label: {
+            es: 'Certificado de Nivel Intermedio (B2)',
+            en: 'Intermediate English Certificate (B2)',
+        },
+        certificate: '/certificates/b2-eoi.pdf',
+        issuer: 'Escuela Oficial de Idiomas 7 Palmas',
+        issuerId: 'eoi7palmas',
+        issuerWebsite: 'https://eoi7palmas.org/',
+    },
+    {
+        label: {
             es: 'Aprende lo último de JavaScript (ES2023 & ES2024)',
             en: 'Learn the latest of JavaScript (ES2023 & ES2024)',
         },
