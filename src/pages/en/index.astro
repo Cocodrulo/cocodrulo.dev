@@ -139,19 +139,26 @@ import Slider from '@/components/Slider.astro'
             </h2>
             <p class="text-lg md:text-xl opacity-80 mb-8 max-w-3xl">
                 Here are some of the certificates I have obtained from various
-                courses and training programs to enhance my skills and knowledge in
-                different areas of technology and development.
+                courses and training programs to enhance my skills and knowledge
+                in different areas of technology and development.
             </p>
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
                 {
                     CERTIFICATES.map((certificate) => {
-                        const { label, certificate: cert, issuer, issuerWebsite } = certificate
+                        const {
+                            label,
+                            certificate: cert,
+                            issuer,
+                            issuerWebsite,
+                            issuerId,
+                        } = certificate
                         return (
                             <CertificateItem
                                 label={label.en}
                                 certificate={cert}
                                 issuer={issuer}
                                 issuerWebsite={issuerWebsite}
+                                issuerId={issuerId}
                             />
                         )
                     })
