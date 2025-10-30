@@ -43,6 +43,16 @@ export const CERTIFICATES = [
     },
     {
         label: {
+            es: 'HTML desde Cero',
+            en: 'HTML from Scratch',
+        },
+        certificate: '/certificates/html-desde-cero.pdf',
+        issuer: 'midudev',
+        issuerId: 'midudev',
+        issuerWebsite: 'https://midu.dev/',
+    },
+    {
+        label: {
             es: 'Aprende lo último de JavaScript (ES2023 & ES2024)',
             en: 'Learn the latest of JavaScript (ES2023 & ES2024)',
         },
