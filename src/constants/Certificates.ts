@@ -43,6 +43,16 @@ export const CERTIFICATES = [
     },
     {
         label: {
+            es: 'Utility Types en TypeScript',
+            en: 'Utility Types in TypeScript',
+        },
+        certificate: '/certificates/utility-types-typescript.pdf',
+        issuer: 'midudev',
+        issuerId: 'midudev',
+        issuerWebsite: 'https://midu.dev/',
+    },
+    {
+        label: {
             es: 'HTML desde Cero',
             en: 'HTML from Scratch',
         },
