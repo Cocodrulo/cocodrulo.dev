@@ -12,6 +12,17 @@ export const CERTIFICATES = [
     },
     {
         label: {
+            es: 'Red Hat Training: Introducción a los Fundamentos de Linux (RH104 - RHA) - Ver. 9.1',
+            en: 'Red Hat Training: Getting Started with Linux Fundamentals (RH104 - RHA) - Ver. 9.1',
+        },
+        certificate:
+            '/certificates/red-hat-training-getting-started-with-linux-fundamentals-rh104-rha-ver-9-1.pdf',
+        issuer: 'Red Hat',
+        issuerId: 'redhat',
+        issuerWebsite: 'https://www.redhat.com/',
+    },
+    {
+        label: {
             es: 'Cisco Networking Academy: Introducción a la Ciberseguridad',
             en: 'Cisco Networking Academy: Introduction to Cybersecurity',
         },
