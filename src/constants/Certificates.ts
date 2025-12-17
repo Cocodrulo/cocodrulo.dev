@@ -1,11 +1,11 @@
 export const CERTIFICATES = [
     {
         label: {
-            es: 'Red Hat Training: Introducción a los Fundamentos de Linux (RH104 - RHA) - Ver. 9.1',
-            en: 'Red Hat Training: Getting Started with Linux Fundamentals (RH104 - RHA) - Ver. 9.1',
+            es: 'Red Hat Administrador de Sistemas I (RH124 - RHA) - Ver. 9.3',
+            en: 'Red Hat System Administration I (RH124 - RHA) - Ver. 9.3',
         },
         certificate:
-            '/certificates/red-hat-training-getting-started-with-linux-fundamentals-rh104-rha-ver-9-1.pdf',
+            '/certificates/red-hat-system-administration-i-rh124-rha-ver-9-3.pdf',
         issuer: 'Red Hat',
         issuerId: 'redhat',
         issuerWebsite: 'https://www.redhat.com/',
