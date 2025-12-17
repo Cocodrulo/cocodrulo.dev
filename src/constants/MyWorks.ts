@@ -6,14 +6,8 @@ export default [
             es: 'QBCore es un framework en constante actualización para Grand Theft Auto V que utiliza la plataforma FiveM. Ofrece una gran personalización, facilidad de uso, mantenimiento continuo y soporte activo.',
         },
 
-        techs: [
-            'HTML',
-            'CSS',
-            'JavaScript',
-            'Lua',
-            'MariaDB',
-        ],
-        date: '2024 - Actualmente',
+        techs: ['HTML', 'CSS', 'JavaScript', 'Lua', 'MariaDB'],
+        date: '2024 - 2025',
         link: 'https://github.com/qbcore-framework/',
         image: 'https://avatars.githubusercontent.com/u/81791099',
     },
