@@ -20,7 +20,7 @@ export default [
         icon: "Instagram",
     },
     {
-        nanme: "Credly",
+        name: "Credly",
         link: "https://www.credly.com/users/javier-perez-romero",
         icon: "Credly",
     },
