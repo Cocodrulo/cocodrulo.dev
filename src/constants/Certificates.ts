@@ -1,6 +1,17 @@
 export const CERTIFICATES = [
     {
         label: {
+            es: 'Red Hat Administrador de Sistemas II (RH124 - RHA) - Ver. 9.3',
+            en: 'Red Hat System Administration II (RH124 - RHA) - Ver. 9.3',
+        },
+        certificate:
+            '/certificates/red-hat-system-administration-ii-rh124-rha-ver-9-3.pdf',
+        issuer: 'Red Hat',
+        issuerId: 'redhat',
+        issuerWebsite: 'https://www.redhat.com/',
+    },
+    {
+        label: {
             es: 'Red Hat Administrador de Sistemas I (RH124 - RHA) - Ver. 9.3',
             en: 'Red Hat System Administration I (RH124 - RHA) - Ver. 9.3',
         },
