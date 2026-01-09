@@ -65,6 +65,17 @@ export const CERTIFICATES = [
     },
     {
         label: {
+            es: 'Claude Code en Acción',
+            en: 'Claude Code In Action',
+        },
+        certificate:
+            '/certificates/anthropic-education-claude-code-in-action.pdf',
+        issuer: 'Anthropic Education',
+        issuerId: 'anthropic',
+        issuerWebsite: 'https://www.anthropic.com/',
+    },
+    {
+        label: {
             es: 'Utility Types en TypeScript',
             en: 'Utility Types in TypeScript',
         },
