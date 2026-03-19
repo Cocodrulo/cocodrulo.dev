@@ -14,7 +14,7 @@
         "@tailwindcss/vite": "4.2.1",
         "@vercel/speed-insights": "2.0.0",
         "astro": "6.0.6",
-        "tailwindcss": "4.2.1",
+        "tailwindcss": "4.2.2",
         "typescript": "5.9.3"
     },
     "devDependencies": {
