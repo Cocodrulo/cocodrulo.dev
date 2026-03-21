@@ -1,6 +1,17 @@
 export const CERTIFICATES = [
     {
         label: {
+            es: 'Red Hat OpenShift Development I: Introducción a los Contenedores con Podman (DO188 - RHA) - Ver. 4.18',
+            en: 'Red Hat OpenShift Development I: Introduction to Containers with Podman (DO188 - RHA) - Ver. 4.18',
+        },
+        certificate:
+            '/certificates/red-hat-openshift-development-i-introduction-to-containers-with-podman-do188-rha-ver-4-18.pdf',
+        issuer: 'Red Hat',
+        issuerId: 'redhat',
+        issuerWebsite: 'https://www.redhat.com/',
+    },
+    {
+        label: {
             es: 'Red Hat Administrador de Sistemas II (RH124 - RHA) - Ver. 9.3',
             en: 'Red Hat System Administration II (RH124 - RHA) - Ver. 9.3',
         },
