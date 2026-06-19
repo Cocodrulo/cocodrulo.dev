@@ -2,6 +2,8 @@ import { defineConfig, sessionDrivers } from 'astro/config'
 import tailwindcss from '@tailwindcss/vite'
 import vercel from '@astrojs/vercel'
 import emdash, { s3 } from 'emdash/astro'
+import { github } from 'emdash/auth/providers/github'
+import { google } from 'emdash/auth/providers/google'
 import { postgres } from 'emdash/db'
 import react from '@astrojs/react'
 import { loadEnv } from 'vite'
@@ -33,6 +35,7 @@ export default defineConfig({
                 ssl: { rejectUnauthorized: false },
             }),
             storage: s3(),
+            authProviders: [github(), google()],
         }),
     ],
     vite: {
