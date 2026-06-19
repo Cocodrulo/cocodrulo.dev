@@ -11,6 +11,8 @@ process.env = {
     ...process.env,
 }
 
+console.log(process.env)
+
 // https://astro.build/config
 export default defineConfig({
     output: 'server',
