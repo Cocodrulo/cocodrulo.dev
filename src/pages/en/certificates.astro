@@ -1,0 +1,95 @@
+---
+import { getEmDashCollection } from "emdash";
+import Layout from "@layouts/Layout.astro";
+import Title from "@/components/Title.astro";
+
+const language = Astro.currentLocale || "en";
+const { entries: certificateEntries } = await getEmDashCollection("certificates", {
+    locale: language,
+});
+
+const certificates = (certificateEntries || []) as unknown as Array<{
+    data: {
+        title: string;
+        certificate_url: string;
+        issuer: string;
+        issuer_id: string;
+        issuer_website: string;
+    };
+}>;
+
+// Helper to assign colors to issuers for beautiful badges
+const getIssuerBadgeStyle = (issuerId: string) => {
+    switch (issuerId) {
+        case "redhat":
+            return "bg-red-500/20 text-red-300 border-red-500/30";
+        case "cisco":
+            return "bg-sky-500/20 text-sky-300 border-sky-500/30";
+        case "cambridge":
+            return "bg-emerald-500/20 text-emerald-300 border-emerald-500/30";
+        case "anthropic":
+            return "bg-amber-500/20 text-amber-300 border-amber-500/30";
+        case "midudev":
+            return "bg-yellow-500/20 text-yellow-300 border-yellow-500/30";
+        default:
+            return "bg-white/10 text-white/80 border-white/15";
+    }
+};
+---
+
+<Layout title="Certifications">
+    <div class="max-w-6xl mx-auto px-6 py-12">
+        <header class="mb-12 text-center">
+            <Title title="Certifications" />
+            <p class="text-white/60 max-w-xl mx-auto text-sm leading-relaxed">
+                Here are the certifications and courses I have completed throughout my professional and academic career.
+            </p>
+        </header>
+
+        {certificates.length === 0 ? (
+            <div class="text-center py-20 bg-white/5 rounded-2xl border border-white/10">
+                <p class="text-white/40">No certifications found in this language.</p>
+            </div>
+        ) : (
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {certificates.map((cert) => (
+                    <div class="group relative flex flex-col justify-between p-6 bg-white/5 hover:bg-white/10 backdrop-blur-md rounded-2xl border border-white/10 hover:border-white/20 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl">
+                        <!-- Background glow on hover -->
+                        <div class="absolute inset-0 bg-linear-to-r from-blue-500/0 via-indigo-500/0 to-purple-500/0 group-hover:from-blue-500/5 group-hover:to-purple-500/5 rounded-2xl transition-all duration-300 pointer-events-none"></div>
+                        
+                        <div>
+                            <div class="flex items-center justify-between mb-4">
+                                <a 
+                                    href={cert.data.issuer_website} 
+                                    target="_blank" 
+                                    rel="noopener noreferrer" 
+                                    class={`text-xs px-2.5 py-1 font-semibold rounded-full border ${getIssuerBadgeStyle(cert.data.issuer_id)} hover:brightness-110 transition-all`}
+                                >
+                                    {cert.data.issuer}
+                                </a>
+                            </div>
+
+                            <h3 class="text-base font-bold text-white leading-snug group-hover:text-blue-300 transition-colors duration-300 mb-6">
+                                {cert.data.title}
+                            </h3>
+                        </div>
+
+                        <div class="mt-auto">
+                            <a
+                                href={cert.data.certificate_url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                class="w-full inline-flex items-center justify-center px-4 py-2.5 text-xs font-semibold text-white bg-white/5 hover:bg-white hover:text-black border border-white/10 hover:border-white rounded-xl transition-all duration-300 group-hover:shadow-[0_0_15px_rgba(255,255,255,0.08)]"
+                            >
+                                View certificate PDF
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-3.5 h-3.5 ml-1.5 opacity-70 group-hover:translate-x-0.5 transition-transform">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                ))}
+            </div>
+        )}
+    </div>
+</Layout>

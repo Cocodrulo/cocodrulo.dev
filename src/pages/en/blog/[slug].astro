@@ -1,0 +1,152 @@
+---
+import { getEmDashEntry } from "emdash";
+import Layout from "@layouts/Layout.astro";
+import { Image, PortableText } from "emdash/ui";
+
+const { slug } = Astro.params;
+const language = Astro.currentLocale || "en";
+
+if (!slug) {
+    return Astro.redirect("/404");
+}
+
+const { entry: postEntry } = await getEmDashEntry("posts", slug, {
+    locale: language,
+});
+
+if (!postEntry) {
+    return Astro.redirect("/404");
+}
+
+const post = postEntry as unknown as {
+    data: {
+        title: string;
+        excerpt: string;
+        content: any;
+        published_at: string;
+        image?: any;
+        labels?: Array<{ label: string }>;
+    };
+};
+
+const formatDate = (dateStr: string, locale: string) => {
+    if (!dateStr) return "";
+    const date = new Date(dateStr);
+    const options: Intl.DateTimeFormatOptions = { day: "numeric", month: "long", year: "numeric" };
+    return date.toLocaleDateString(locale === "es" ? "es-ES" : "en-US", options);
+};
+---
+
+<Layout title={post.data.title}>
+    <div class="max-w-4xl mx-auto px-6 py-12">
+        {/* Back navigation link */}
+        <div class="mb-8">
+            <a 
+                href="/en/blog" 
+                class="inline-flex items-center text-xs font-semibold text-white/60 hover:text-white transition-colors gap-2"
+            >
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+                </svg>
+                Back to blog
+            </a>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+            {/* Left Info column (1/3 width) */}
+            <div class="md:col-span-1 flex flex-col gap-6">
+                {/* Post Cover Image */}
+                {post.data.image && (
+                    <div class="relative w-full aspect-video md:aspect-square overflow-hidden bg-white/5 border border-white/10 rounded-2xl">
+                        <Image
+                            image={post.data.image}
+                            width={400}
+                            height={400}
+                            alt={post.data.title}
+                            class="object-cover w-full h-full"
+                        />
+                    </div>
+                )}
+
+                {/* Post Metadata Card */}
+                <div class="bg-white/5 border border-white/10 rounded-2xl p-5 flex flex-col gap-4">
+                    <div>
+                        <h4 class="text-xs font-semibold uppercase tracking-wider text-white/40 mb-1">Published on</h4>
+                        <p class="text-sm font-semibold text-white">
+                            {formatDate(post.data.published_at, language)}
+                        </p>
+                    </div>
+
+                    {post.data.labels && post.data.labels.length > 0 && (
+                        <div>
+                            <h4 class="text-xs font-semibold uppercase tracking-wider text-white/40 mb-2">Tags</h4>
+                            <div class="flex flex-wrap gap-1.5">
+                                {post.data.labels.map((tag: any) => (
+                                    <span class="text-xs px-2.5 py-0.5 font-medium bg-white/5 text-white/70 border border-white/10 rounded-full">
+                                        {tag.label}
+                                    </span>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+                </div>
+            </div>
+
+            {/* Right Details column (2/3 width) */}
+            <div class="md:col-span-2 flex flex-col gap-6">
+                <div>
+                    <h1 class="text-3xl md:text-4xl font-extrabold text-white leading-tight mb-4">
+                        {post.data.title}
+                    </h1>
+                    <p class="text-white/70 text-base leading-relaxed italic border-l-2 border-white/20 pl-4 mb-2">
+                        {post.data.excerpt}
+                    </p>
+                </div>
+
+                {/* Rich text content */}
+                <div class="post-content text-white/80 leading-relaxed text-sm flex flex-col gap-4">
+                    <PortableText value={post.data.content} />
+                </div>
+            </div>
+        </div>
+    </div>
+</Layout>
+
+<style is:global>
+    /* Styling elements inside PortableText output for posts */
+    .post-content p {
+        margin-bottom: 1.25rem;
+    }
+    .post-content p:last-child {
+        margin-bottom: 0;
+    }
+    .post-content strong {
+        color: white;
+        font-weight: 600;
+    }
+    .post-content ul {
+        list-style-type: disc;
+        padding-left: 1.5rem;
+        margin-bottom: 1.25rem;
+        display: flex;
+        flex-direction: column;
+        gap: 1.5;
+    }
+    .post-content li {
+        color: rgba(255, 255, 255, 0.8);
+    }
+    .post-content h2 {
+        color: white;
+        font-size: 1.25rem;
+        font-weight: 700;
+        margin-top: 1.5rem;
+        margin-bottom: 0.5rem;
+    }
+    .post-content h3 {
+        color: white;
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin-top: 1.25rem;
+        margin-bottom: 0.5rem;
+    }
+</style>
