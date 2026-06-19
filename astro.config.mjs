@@ -6,7 +6,10 @@ import { postgres } from 'emdash/db'
 import react from '@astrojs/react'
 import { loadEnv } from 'vite'
 
-process.env = loadEnv(process.env.NODE_ENV, process.cwd(), '')
+process.env = {
+    ...loadEnv(process.env.NODE_ENV, process.cwd(), ''),
+    ...process.env,
+}
 
 // https://astro.build/config
 export default defineConfig({
