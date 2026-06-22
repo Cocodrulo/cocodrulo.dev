@@ -21,7 +21,7 @@
         "@tailwindcss/vite": "^4.3.1",
         "@vercel/speed-insights": "^2.0.0",
         "astro": "6.4.6",
-        "emdash": "^0.17.2",
+        "emdash": "^0.21.0",
         "pg": "^8.21.0",
         "react": "^19.2.7",
         "react-dom": "^19.2.7",
