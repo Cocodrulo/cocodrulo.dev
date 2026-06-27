@@ -1,25 +1,17 @@
-import { defineConfig, sessionDrivers } from 'astro/config'
+import { defineConfig } from 'astro/config'
 import tailwindcss from '@tailwindcss/vite'
-import vercel from '@astrojs/vercel'
-import emdash, { s3 } from 'emdash/astro'
+import emdash from 'emdash/astro'
 import { github } from 'emdash/auth/providers/github'
 import { google } from 'emdash/auth/providers/google'
-import { postgres } from 'emdash/db'
 import react from '@astrojs/react'
-import { loadEnv } from 'vite'
-
-process.env = {
-    ...loadEnv(process.env.NODE_ENV, process.cwd(), ''),
-    ...process.env,
-}
+import cloudflare from '@astrojs/cloudflare'
+import { d1, r2, kvCache } from 'emdash/db'
 
 // https://astro.build/config
 export default defineConfig({
     output: 'server',
-    adapter: vercel(),
-    session: {
-        driver: sessionDrivers.fs(),
-    },
+    adapter: cloudflare(),
+
     i18n: {
         locales: ['en', 'es'],
         defaultLocale: 'es',
@@ -27,17 +19,20 @@ export default defineConfig({
             prefixDefaultLocale: false,
         },
     },
+
     integrations: [
         react(),
         emdash({
-            database: postgres({
-                connectionString: process.env.DATABASE_URL,
-                ssl: { rejectUnauthorized: false },
+            database: d1({
+                binding: 'DB',
+                session: 'auto',
             }),
-            storage: s3(),
+            storage: r2({ binding: 'MEDIA' }),
+            objectCache: kvCache({ binding: 'CACHE' }),
             authProviders: [github(), google()],
         }),
     ],
+
     vite: {
         plugins: [tailwindcss()],
     },

@@ -1,0 +1,25 @@
+{
+    "$schema": "node_modules/wrangler/config-schema.json",
+    "name": "cocodrulo-dev",
+    "compatibility_date": "2025-01-15",
+    "compatibility_flags": ["nodejs_compat"],
+    "d1_databases": [
+        {
+            "binding": "DB",
+            "database_name": "cocodrulo-dev",
+            "database_id": "0183cef8-3468-4932-8220-ad08017f517e",
+        },
+    ],
+    "r2_buckets": [
+        {
+            "binding": "MEDIA",
+            "publicURL": "https://files.cocodrulo.dev",
+        },
+    ],
+    "kv_namespaces": [
+        {
+            "binding": "CACHE",
+            "id": "2cedb484e311422ca685bc8bb883cd9a",
+        },
+    ],
+}
