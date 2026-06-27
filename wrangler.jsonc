@@ -13,7 +13,7 @@
     "r2_buckets": [
         {
             "binding": "MEDIA",
-            "publicURL": "https://files.cocodrulo.dev",
+            "publicUrl": "https://files.cocodrulo.dev",
         },
     ],
     "kv_namespaces": [
