@@ -3,3 +3,6 @@ allowBuilds:
   esbuild: true
   sharp: true
   workerd: set this to true or false
+minimumReleaseAgeExclude:
+  - '@cloudflare/workers-types@4.20260627.1'
+  - prettier@3.9.0

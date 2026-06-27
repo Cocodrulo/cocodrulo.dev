@@ -5,7 +5,7 @@ import { github } from 'emdash/auth/providers/github'
 import { google } from 'emdash/auth/providers/google'
 import react from '@astrojs/react'
 import cloudflare from '@astrojs/cloudflare'
-import { d1, r2, kvCache } from 'emdash/db'
+import { d1, r2, kvCache } from '@emdash-cms/cloudflare'
 
 // https://astro.build/config
 export default defineConfig({
@@ -27,7 +27,10 @@ export default defineConfig({
                 binding: 'DB',
                 session: 'auto',
             }),
-            storage: r2({ binding: 'MEDIA' }),
+            storage: r2({
+                binding: 'MEDIA',
+                publicUrl: 'https://files.cocodrulo.dev',
+            }),
             objectCache: kvCache({ binding: 'CACHE' }),
             authProviders: [github(), google()],
         }),
