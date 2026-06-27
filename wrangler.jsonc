@@ -1,28 +1,30 @@
 {
-    "$schema": "node_modules/wrangler/config-schema.json",
-    "name": "cocodrulo-dev",
-    "compatibility_date": "2026-06-27",
-    "compatibility_flags": ["nodejs_compat"],
-    "d1_databases": [
-        {
-            "binding": "DB",
-            "database_name": "cocodrulo-dev",
-            "database_id": "f78299a1-d1c8-4a0f-9900-bb77d9d964e7",
-        },
-    ],
-    "r2_buckets": [
-        {
-            "binding": "MEDIA",
-            "bucket_name": "cocodrulo-dev",
-        },
-    ],
-    "kv_namespaces": [
-        {
-            "binding": "CACHE",
-            "id": "2cedb484e311422ca685bc8bb883cd9a",
-        },
-    ],
-    "observability": {
-        "enabled": true,
-    },
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "cocodrulo-dev",
+	"compatibility_date": "2026-06-27",
+	"compatibility_flags": [
+		"nodejs_compat"
+	],
+	"d1_databases": [
+		{
+			"binding": "DB",
+			"database_name": "cocodrulo-dev",
+			"database_id": "5e478008-6188-4169-b5fc-94af65f3dee2",
+		},
+	],
+	"r2_buckets": [
+		{
+			"binding": "MEDIA",
+			"bucket_name": "cocodrulo-dev",
+		},
+	],
+	"kv_namespaces": [
+		{
+			"binding": "CACHE",
+			"id": "0a6a50c9f17b42acafc393440cada60d",
+		},
+	],
+	"observability": {
+		"enabled": true,
+	},
 }

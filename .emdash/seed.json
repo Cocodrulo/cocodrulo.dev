@@ -1,1051 +1,1279 @@
 {
-	"$schema": "https://emdashcms.com/seed.schema.json",
-	"version": "1",
-	"meta": {
-		"name": "Exported Seed",
-		"description": "Exported from existing EmDash database"
-	},
-	"settings": {
-		"title": "cocodrulo.dev",
-		"tagline": "Javier Aday Pérez Romero - Software Developer Portfolio",
-		"dateFormat": "dd/MM/YYYY",
-		"social": {
-			"github": "Cocodrulo"
-		}
-	},
-	"collections": [
-		{
-			"slug": "about",
-			"label": "About Sections",
-			"labelSingular": "About Section",
-			"supports": [
-				"drafts",
-				"revisions"
-			],
-			"fields": [
-				{
-					"slug": "label",
-					"label": "Label",
-					"type": "string",
-					"required": true
-				},
-				{
-					"slug": "subtitle",
-					"label": "Subtitle",
-					"type": "string",
-					"required": true
-				},
-				{
-					"slug": "paragraphs",
-					"label": "Paragraphs",
-					"type": "json",
-					"required": true
-				}
-			]
-		},
-		{
-			"slug": "certificates",
-			"label": "Certificates",
-			"labelSingular": "Certificate",
-			"supports": [
-				"drafts",
-				"revisions"
-			],
-			"fields": [
-				{
-					"slug": "title",
-					"label": "Title",
-					"type": "string",
-					"required": true
-				},
-				{
-					"slug": "certificate_url",
-					"label": "Certificate PDF URL",
-					"type": "string",
-					"required": true
-				},
-				{
-					"slug": "issuer",
-					"label": "Issuer",
-					"type": "string",
-					"required": true
-				},
-				{
-					"slug": "issuer_id",
-					"label": "Issuer ID",
-					"type": "string",
-					"required": true
-				},
-				{
-					"slug": "issuer_website",
-					"label": "Issuer Website",
-					"type": "string",
-					"required": true
-				}
-			]
-		},
-		{
-			"slug": "posts",
-			"label": "Posts",
-			"labelSingular": "Post",
-			"description": "Posts en el blog de cocodrulo.dev",
-			"supports": [
-				"drafts",
-				"revisions",
-				"preview",
-				"search"
-			],
-			"fields": [
-				{
-					"slug": "title",
-					"label": "Título",
-					"type": "string",
-					"required": true,
-					"searchable": true
-				},
-				{
-					"slug": "excerpt",
-					"label": "Resumen",
-					"type": "text",
-					"required": true,
-					"searchable": true
-				},
-				{
-					"slug": "content",
-					"label": "Contenido",
-					"type": "portableText",
-					"required": true
-				},
-				{
-					"slug": "image",
-					"label": "Imagen de Portada",
-					"type": "image",
-					"required": true,
-					"validation": {
-						"allowedMimeTypes": [
-							"image/"
-						]
-					}
-				},
-				{
-					"slug": "labels",
-					"label": "Etiquetas",
-					"type": "repeater",
-					"required": true,
-					"validation": {
-						"subFields": [
-							{
-								"slug": "etiqueta",
-								"type": "string",
-								"label": "Etiqueta",
-								"required": true
-							}
-						],
-						"minItems": 1
-					}
-				}
-			]
-		},
-		{
-			"slug": "profile",
-			"label": "Profiles",
-			"labelSingular": "Profile",
-			"supports": [
-				"drafts",
-				"revisions"
-			],
-			"fields": [
-				{
-					"slug": "name",
-					"label": "Name",
-					"type": "string",
-					"required": true
-				},
-				{
-					"slug": "label",
-					"label": "Label",
-					"type": "string",
-					"required": true
-				}
-			]
-		},
-		{
-			"slug": "projects",
-			"label": "Projects",
-			"labelSingular": "Project",
-			"description": "Projects from cocodrulo",
-			"supports": [
-				"drafts",
-				"revisions",
-				"preview",
-				"search"
-			],
-			"urlPattern": "/projects/{slug}",
-			"fields": [
-				{
-					"slug": "title",
-					"label": "Título",
-					"type": "string",
-					"required": true,
-					"searchable": true
-				},
-				{
-					"slug": "description",
-					"label": "Descripción",
-					"type": "portableText",
-					"required": true
-				},
-				{
-					"slug": "url",
-					"label": "URL",
-					"type": "url"
-				},
-				{
-					"slug": "start_date",
-					"label": "Fecha Inicio",
-					"type": "datetime",
-					"required": true
-				},
-				{
-					"slug": "end_date",
-					"label": "Fecha de Fin",
-					"type": "datetime"
-				},
-				{
-					"slug": "labels",
-					"label": "Etiquetas",
-					"type": "repeater",
-					"required": true,
-					"validation": {
-						"subFields": [
-							{
-								"slug": "etiqueta",
-								"type": "string",
-								"label": "Etiqueta",
-								"required": true
-							}
-						],
-						"minItems": 1
-					}
-				},
-				{
-					"slug": "image",
-					"label": "Imagen",
-					"type": "image",
-					"required": true,
-					"validation": {
-						"allowedMimeTypes": [
-							"image/"
-						]
-					}
-				},
-				{
-					"slug": "featured",
-					"label": "Destacado",
-					"type": "boolean",
-					"required": true
-				}
-			]
-		},
-		{
-			"slug": "socials",
-			"label": "Social Links",
-			"labelSingular": "Social Link",
-			"supports": [
-				"drafts",
-				"revisions"
-			],
-			"fields": [
-				{
-					"slug": "name",
-					"label": "Name",
-					"type": "string",
-					"required": true
-				},
-				{
-					"slug": "label",
-					"label": "Label",
-					"type": "string",
-					"required": true
-				},
-				{
-					"slug": "url",
-					"label": "URL",
-					"type": "string",
-					"required": true
-				}
-			]
-		}
-	],
-	"taxonomies": [
-		{
-			"id": "tax:category:es",
-			"name": "category",
-			"label": "Categories",
-			"labelSingular": "Category",
-			"hierarchical": true,
-			"collections": [
-				"posts"
-			],
-			"locale": "es"
-		},
-		{
-			"id": "tax:tag:es",
-			"name": "tag",
-			"label": "Tags",
-			"labelSingular": "Tag",
-			"hierarchical": false,
-			"collections": [
-				"posts"
-			],
-			"locale": "es"
-		}
-	],
-	"menus": [
-		{
-			"id": "menu:primary:en",
-			"name": "primary",
-			"label": "Primary Navigation",
-			"items": [
-				{
-					"type": "custom",
-					"label": "Home",
-					"url": "/en",
-					"id": "item:primary:home:en",
-					"locale": "en"
-				},
-				{
-					"type": "custom",
-					"label": "About me",
-					"url": "/en/#about",
-					"id": "item:primary:about-me:en",
-					"locale": "en"
-				},
-				{
-					"type": "custom",
-					"label": "Projects",
-					"url": "/en/projects",
-					"id": "item:primary:projects:en",
-					"locale": "en"
-				},
-				{
-					"type": "custom",
-					"label": "Blog",
-					"url": "/en/blog",
-					"id": "item:primary:blog:en",
-					"locale": "en"
-				},
-				{
-					"type": "custom",
-					"label": "Certificates",
-					"url": "/en/certificates",
-					"id": "item:primary:certificates:en",
-					"locale": "en"
-				},
-				{
-					"type": "custom",
-					"label": "Contact",
-					"url": "/en/contact",
-					"id": "item:primary:contact:en",
-					"locale": "en"
-				}
-			],
-			"locale": "en"
-		},
-		{
-			"id": "menu:primary:es",
-			"name": "primary",
-			"label": "Primary Navigation",
-			"items": [
-				{
-					"type": "custom",
-					"label": "Inicio",
-					"url": "/",
-					"id": "item:primary:inicio:es",
-					"locale": "es"
-				},
-				{
-					"type": "custom",
-					"label": "Sobre mí",
-					"url": "/#about",
-					"id": "item:primary:sobre-mi:es",
-					"locale": "es"
-				},
-				{
-					"type": "custom",
-					"label": "Proyectos",
-					"url": "/projects",
-					"id": "item:primary:proyectos:es",
-					"locale": "es"
-				},
-				{
-					"type": "custom",
-					"label": "Blog",
-					"url": "/blog",
-					"id": "item:primary:blog:es",
-					"locale": "es"
-				},
-				{
-					"type": "custom",
-					"label": "Certificados",
-					"url": "/certificates",
-					"id": "item:primary:certificados:es",
-					"locale": "es"
-				},
-				{
-					"type": "custom",
-					"label": "Contacto",
-					"url": "/contact",
-					"id": "item:primary:contacto:es",
-					"locale": "es"
-				}
-			],
-			"locale": "es"
-		}
-	],
-	"widgetAreas": [],
-	"content": {
-		"about": [
-			{
-				"id": "about:about:en",
-				"slug": "about",
-				"status": "published",
-				"data": {
-					"label": "About me",
-					"subtitle": "Who is Javier Aday Pérez Romero?",
-					"paragraphs": [
-						"An technology enthusiast, with experience in software development. Currently a Computer Science student at the University of Las Palmas de Gran Canaria.",
-						"Since I was little I have liked to tinker with technology. I started by creating calculators in C# and Java, and little by little I got into the world of software development.",
-						"Thanks to technology, I have been able to meet many interesting people and participate in various projects, both personal and professional."
-					]
-				},
-				"locale": "en"
-			},
-			{
-				"id": "about:about:es",
-				"slug": "about",
-				"status": "published",
-				"data": {
-					"label": "Sobre mí",
-					"subtitle": "¿Quién es Javier Aday Pérez Romero?",
-					"paragraphs": [
-						"Un apasionado de la tecnología, con experiencia en el desarrollo de software. Actualmente estudiante de Ingeniería Informática en la Universidad de Las Palmas de Gran Canaria.",
-						"Desde pequeño me ha gustado trastear con la tecnología. Empecé creando calculadoras en C# y Java, y poco a poco me fui adentrando en el mundo del desarrollo de software.",
-						"Gracias a la tecnología he podido conocer a mucha gente interesante y he podido participar en varios proyectos, tanto personales como profesionales."
-					]
-				},
-				"locale": "es",
-				"translationOf": "about:about:en"
-			}
-		],
-		"certificates": [
-			{
-				"id": "certificates:tailwind-course-from-scratch-en:en",
-				"slug": "tailwind-course-from-scratch-en",
-				"status": "published",
-				"data": {
-					"title": "Tailwind Course from Scratch",
-					"certificate_url": "/certificates/curso-de-tailwind-desde-cero.pdf",
-					"issuer": "midudev",
-					"issuer_id": "midudev",
-					"issuer_website": "https://midu.dev/"
-				},
-				"locale": "en"
-			},
-			{
-				"id": "certificates:python-from-scratch-en:en",
-				"slug": "python-from-scratch-en",
-				"status": "published",
-				"data": {
-					"title": "Python from Scratch",
-					"certificate_url": "/certificates/python-desde-cero.pdf",
-					"issuer": "midudev",
-					"issuer_id": "midudev",
-					"issuer_website": "https://midu.dev/"
-				},
-				"locale": "en"
-			},
-			{
-				"id": "certificates:promises-in-javascript-en:en",
-				"slug": "promises-in-javascript-en",
-				"status": "published",
-				"data": {
-					"title": "Promises in JavaScript",
-					"certificate_url": "/certificates/promesas-javascript.pdf",
-					"issuer": "midudev",
-					"issuer_id": "midudev",
-					"issuer_website": "https://midu.dev/"
-				},
-				"locale": "en"
-			},
-			{
-				"id": "certificates:intensive-course-on-model-context-protocol-en:en",
-				"slug": "intensive-course-on-model-context-protocol-en",
-				"status": "published",
-				"data": {
-					"title": "Intensive Course on Model Context Protocol",
-					"certificate_url": "/certificates/curso-intensivo-de-model-context-protocol.pdf",
-					"issuer": "midudev",
-					"issuer_id": "midudev",
-					"issuer_website": "https://midu.dev/"
-				},
-				"locale": "en"
-			},
-			{
-				"id": "certificates:introduction-to-scraping-with-python-en:en",
-				"slug": "introduction-to-scraping-with-python-en",
-				"status": "published",
-				"data": {
-					"title": "Introduction to Scraping with Python",
-					"certificate_url": "/certificates/iniciacion-al-scraping-con-python.pdf",
-					"issuer": "midudev",
-					"issuer_id": "midudev",
-					"issuer_website": "https://midu.dev/"
-				},
-				"locale": "en"
-			},
-			{
-				"id": "certificates:create-amazing-3d-experiences-with-vue-en:en",
-				"slug": "create-amazing-3d-experiences-with-vue-en",
-				"status": "published",
-				"data": {
-					"title": "Create amazing 3D experiences with Vue",
-					"certificate_url": "/certificates/crea-experiencias-3d-increibles-con-vue.pdf",
-					"issuer": "midudev",
-					"issuer_id": "midudev",
-					"issuer_website": "https://midu.dev/"
-				},
-				"locale": "en"
-			},
-			{
-				"id": "certificates:css-from-scratch-en:en",
-				"slug": "css-from-scratch-en",
-				"status": "published",
-				"data": {
-					"title": "CSS from Scratch",
-					"certificate_url": "/certificates/css-desde-cero.pdf",
-					"issuer": "midudev",
-					"issuer_id": "midudev",
-					"issuer_website": "https://midu.dev/"
-				},
-				"locale": "en"
-			},
-			{
-				"id": "certificates:create-an-object-detection-pwa-with-angular-19-and-tensorflow-js-en:en",
-				"slug": "create-an-object-detection-pwa-with-angular-19-and-tensorflow-js-en",
-				"status": "published",
-				"data": {
-					"title": "Create an Object Detection PWA with Angular 19 and Tensorflow.js",
-					"certificate_url": "/certificates/crea-una-pwa-de-deteccion-de-objetos-con-angular-19-y-tensorflowjs.pdf",
-					"issuer": "midudev",
-					"issuer_id": "midudev",
-					"issuer_website": "https://midu.dev/"
-				},
-				"locale": "en"
-			},
-			{
-				"id": "certificates:learn-the-latest-of-javascript-es2023-es2024-en:en",
-				"slug": "learn-the-latest-of-javascript-es2023-es2024-en",
-				"status": "published",
-				"data": {
-					"title": "Learn the latest of JavaScript (ES2023 & ES2024)",
-					"certificate_url": "/certificates/aprende-lo-ultimo-de-javascript-es2023-es2024.pdf",
-					"issuer": "midudev",
-					"issuer_id": "midudev",
-					"issuer_website": "https://midu.dev/"
-				},
-				"locale": "en"
-			},
-			{
-				"id": "certificates:html-from-scratch-en:en",
-				"slug": "html-from-scratch-en",
-				"status": "published",
-				"data": {
-					"title": "HTML from Scratch",
-					"certificate_url": "/certificates/html-desde-cero.pdf",
-					"issuer": "midudev",
-					"issuer_id": "midudev",
-					"issuer_website": "https://midu.dev/"
-				},
-				"locale": "en"
-			},
-			{
-				"id": "certificates:utility-types-in-typescript-en:en",
-				"slug": "utility-types-in-typescript-en",
-				"status": "published",
-				"data": {
-					"title": "Utility Types in TypeScript",
-					"certificate_url": "/certificates/utility-types-typescript.pdf",
-					"issuer": "midudev",
-					"issuer_id": "midudev",
-					"issuer_website": "https://midu.dev/"
-				},
-				"locale": "en"
-			},
-			{
-				"id": "certificates:claude-code-in-action-en:en",
-				"slug": "claude-code-in-action-en",
-				"status": "published",
-				"data": {
-					"title": "Claude Code In Action",
-					"certificate_url": "/certificates/anthropic-education-claude-code-in-action.pdf",
-					"issuer": "Anthropic Education",
-					"issuer_id": "anthropic",
-					"issuer_website": "https://www.anthropic.com/"
-				},
-				"locale": "en"
-			},
-			{
-				"id": "certificates:intermediate-english-certificate-b2-en:en",
-				"slug": "intermediate-english-certificate-b2-en",
-				"status": "published",
-				"data": {
-					"title": "Intermediate English Certificate (B2)",
-					"certificate_url": "/certificates/b2-eoi.pdf",
-					"issuer": "Escuela Oficial de Idiomas 7 Palmas",
-					"issuer_id": "eoi7palmas",
-					"issuer_website": "https://eoi7palmas.org/"
-				},
-				"locale": "en"
-			},
-			{
-				"id": "certificates:advanced-english-certificate-c1-en:en",
-				"slug": "advanced-english-certificate-c1-en",
-				"status": "published",
-				"data": {
-					"title": "Advanced English Certificate (C1)",
-					"certificate_url": "/certificates/c1-english-cambridge.pdf",
-					"issuer": "Cambridge Assessment English",
-					"issuer_id": "cambridge",
-					"issuer_website": "https://www.cambridgeenglish.org/"
-				},
-				"locale": "en"
-			},
-			{
-				"id": "certificates:cisco-networking-academy-en:en",
-				"slug": "cisco-networking-academy-en",
-				"status": "published",
-				"data": {
-					"title": "Cisco Networking Academy: Introduction to Cybersecurity",
-					"certificate_url": "/certificates/cisco-networking-academy-introduction-to-cybersecurity.pdf",
-					"issuer": "Cisco Networking Academy",
-					"issuer_id": "cisco",
-					"issuer_website": "https://www.netacad.com/"
-				},
-				"locale": "en"
-			},
-			{
-				"id": "certificates:red-hat-training-en:en",
-				"slug": "red-hat-training-en",
-				"status": "published",
-				"data": {
-					"title": "Red Hat Training: Getting Started with Linux Fundamentals (RH104 - RHA) - Ver. 9.1",
-					"certificate_url": "/certificates/red-hat-training-getting-started-with-linux-fundamentals-rh104-rha-ver-9-1.pdf",
-					"issuer": "Red Hat",
-					"issuer_id": "redhat",
-					"issuer_website": "https://www.redhat.com/"
-				},
-				"locale": "en"
-			},
-			{
-				"id": "certificates:red-hat-system-administration-i-rh124-rha-ver-9-3-en:en",
-				"slug": "red-hat-system-administration-i-rh124-rha-ver-9-3-en",
-				"status": "published",
-				"data": {
-					"title": "Red Hat System Administration I (RH124 - RHA) - Ver. 9.3",
-					"certificate_url": "/certificates/red-hat-system-administration-i-rh124-rha-ver-9-3.pdf",
-					"issuer": "Red Hat",
-					"issuer_id": "redhat",
-					"issuer_website": "https://www.redhat.com/"
-				},
-				"locale": "en"
-			},
-			{
-				"id": "certificates:red-hat-system-administration-ii-rh124-rha-ver-9-3-en:en",
-				"slug": "red-hat-system-administration-ii-rh124-rha-ver-9-3-en",
-				"status": "published",
-				"data": {
-					"title": "Red Hat System Administration II (RH124 - RHA) - Ver. 9.3",
-					"certificate_url": "/certificates/red-hat-system-administration-ii-rh124-rha-ver-9-3.pdf",
-					"issuer": "Red Hat",
-					"issuer_id": "redhat",
-					"issuer_website": "https://www.redhat.com/"
-				},
-				"locale": "en"
-			},
-			{
-				"id": "certificates:red-hat-openshift-development-i-en:en",
-				"slug": "red-hat-openshift-development-i-en",
-				"status": "published",
-				"data": {
-					"title": "Red Hat OpenShift Development I: Introduction to Containers with Podman (DO188 - RHA) - Ver. 4.18",
-					"certificate_url": "/certificates/red-hat-openshift-development-i-introduction-to-containers-with-podman-do188-rha-ver-4-18.pdf",
-					"issuer": "Red Hat",
-					"issuer_id": "redhat",
-					"issuer_website": "https://www.redhat.com/"
-				},
-				"locale": "en"
-			},
-			{
-				"id": "certificates:tailwind-course-from-scratch-es:es",
-				"slug": "tailwind-course-from-scratch-es",
-				"status": "published",
-				"data": {
-					"title": "Curso de Tailwind desde Cero",
-					"certificate_url": "/certificates/curso-de-tailwind-desde-cero.pdf",
-					"issuer": "midudev",
-					"issuer_id": "midudev",
-					"issuer_website": "https://midu.dev/"
-				},
-				"locale": "es",
-				"translationOf": "certificates:tailwind-course-from-scratch-en:en"
-			},
-			{
-				"id": "certificates:python-from-scratch-es:es",
-				"slug": "python-from-scratch-es",
-				"status": "published",
-				"data": {
-					"title": "Python desde Cero",
-					"certificate_url": "/certificates/python-desde-cero.pdf",
-					"issuer": "midudev",
-					"issuer_id": "midudev",
-					"issuer_website": "https://midu.dev/"
-				},
-				"locale": "es",
-				"translationOf": "certificates:python-from-scratch-en:en"
-			},
-			{
-				"id": "certificates:promises-in-javascript-es:es",
-				"slug": "promises-in-javascript-es",
-				"status": "published",
-				"data": {
-					"title": "Promeses en JavaScript",
-					"certificate_url": "/certificates/promesas-javascript.pdf",
-					"issuer": "midudev",
-					"issuer_id": "midudev",
-					"issuer_website": "https://midu.dev/"
-				},
-				"locale": "es",
-				"translationOf": "certificates:promises-in-javascript-en:en"
-			},
-			{
-				"id": "certificates:intensive-course-on-model-context-protocol-es:es",
-				"slug": "intensive-course-on-model-context-protocol-es",
-				"status": "published",
-				"data": {
-					"title": "Curso Intensivo de Model Context Protocol",
-					"certificate_url": "/certificates/curso-intensivo-de-model-context-protocol.pdf",
-					"issuer": "midudev",
-					"issuer_id": "midudev",
-					"issuer_website": "https://midu.dev/"
-				},
-				"locale": "es",
-				"translationOf": "certificates:intensive-course-on-model-context-protocol-en:en"
-			},
-			{
-				"id": "certificates:introduction-to-scraping-with-python-es:es",
-				"slug": "introduction-to-scraping-with-python-es",
-				"status": "published",
-				"data": {
-					"title": "Iniciación al Scraping con Python",
-					"certificate_url": "/certificates/iniciacion-al-scraping-con-python.pdf",
-					"issuer": "midudev",
-					"issuer_id": "midudev",
-					"issuer_website": "https://midu.dev/"
-				},
-				"locale": "es",
-				"translationOf": "certificates:introduction-to-scraping-with-python-en:en"
-			},
-			{
-				"id": "certificates:create-amazing-3d-experiences-with-vue-es:es",
-				"slug": "create-amazing-3d-experiences-with-vue-es",
-				"status": "published",
-				"data": {
-					"title": "Crea experiencias 3D increíbles con Vue",
-					"certificate_url": "/certificates/crea-experiencias-3d-increibles-con-vue.pdf",
-					"issuer": "midudev",
-					"issuer_id": "midudev",
-					"issuer_website": "https://midu.dev/"
-				},
-				"locale": "es",
-				"translationOf": "certificates:create-amazing-3d-experiences-with-vue-en:en"
-			},
-			{
-				"id": "certificates:css-from-scratch-es:es",
-				"slug": "css-from-scratch-es",
-				"status": "published",
-				"data": {
-					"title": "CSS desde Cero",
-					"certificate_url": "/certificates/css-desde-cero.pdf",
-					"issuer": "midudev",
-					"issuer_id": "midudev",
-					"issuer_website": "https://midu.dev/"
-				},
-				"locale": "es",
-				"translationOf": "certificates:css-from-scratch-en:en"
-			},
-			{
-				"id": "certificates:create-an-object-detection-pwa-with-angular-19-and-tensorflow-js-es:es",
-				"slug": "create-an-object-detection-pwa-with-angular-19-and-tensorflow-js-es",
-				"status": "published",
-				"data": {
-					"title": "Crea una PWA de Detección de Objetos con Angular 19 y Tensorflow.js",
-					"certificate_url": "/certificates/crea-una-pwa-de-deteccion-de-objetos-con-angular-19-y-tensorflowjs.pdf",
-					"issuer": "midudev",
-					"issuer_id": "midudev",
-					"issuer_website": "https://midu.dev/"
-				},
-				"locale": "es",
-				"translationOf": "certificates:create-an-object-detection-pwa-with-angular-19-and-tensorflow-js-en:en"
-			},
-			{
-				"id": "certificates:learn-the-latest-of-javascript-es2023-es2024-es:es",
-				"slug": "learn-the-latest-of-javascript-es2023-es2024-es",
-				"status": "published",
-				"data": {
-					"title": "Aprende lo último de JavaScript (ES2023 & ES2024)",
-					"certificate_url": "/certificates/aprende-lo-ultimo-de-javascript-es2023-es2024.pdf",
-					"issuer": "midudev",
-					"issuer_id": "midudev",
-					"issuer_website": "https://midu.dev/"
-				},
-				"locale": "es",
-				"translationOf": "certificates:learn-the-latest-of-javascript-es2023-es2024-en:en"
-			},
-			{
-				"id": "certificates:html-from-scratch-es:es",
-				"slug": "html-from-scratch-es",
-				"status": "published",
-				"data": {
-					"title": "HTML desde Cero",
-					"certificate_url": "/certificates/html-desde-cero.pdf",
-					"issuer": "midudev",
-					"issuer_id": "midudev",
-					"issuer_website": "https://midu.dev/"
-				},
-				"locale": "es",
-				"translationOf": "certificates:html-from-scratch-en:en"
-			},
-			{
-				"id": "certificates:utility-types-in-typescript-es:es",
-				"slug": "utility-types-in-typescript-es",
-				"status": "published",
-				"data": {
-					"title": "Utility Types en TypeScript",
-					"certificate_url": "/certificates/utility-types-typescript.pdf",
-					"issuer": "midudev",
-					"issuer_id": "midudev",
-					"issuer_website": "https://midu.dev/"
-				},
-				"locale": "es",
-				"translationOf": "certificates:utility-types-in-typescript-en:en"
-			},
-			{
-				"id": "certificates:claude-code-in-action-es:es",
-				"slug": "claude-code-in-action-es",
-				"status": "published",
-				"data": {
-					"title": "Claude Code en Acción",
-					"certificate_url": "/certificates/anthropic-education-claude-code-in-action.pdf",
-					"issuer": "Anthropic Education",
-					"issuer_id": "anthropic",
-					"issuer_website": "https://www.anthropic.com/"
-				},
-				"locale": "es",
-				"translationOf": "certificates:claude-code-in-action-en:en"
-			},
-			{
-				"id": "certificates:intermediate-english-certificate-b2-es:es",
-				"slug": "intermediate-english-certificate-b2-es",
-				"status": "published",
-				"data": {
-					"title": "Certificado de Nivel Intermedio (B2)",
-					"certificate_url": "/certificates/b2-eoi.pdf",
-					"issuer": "Escuela Oficial de Idiomas 7 Palmas",
-					"issuer_id": "eoi7palmas",
-					"issuer_website": "https://eoi7palmas.org/"
-				},
-				"locale": "es",
-				"translationOf": "certificates:intermediate-english-certificate-b2-en:en"
-			},
-			{
-				"id": "certificates:advanced-english-certificate-c1-es:es",
-				"slug": "advanced-english-certificate-c1-es",
-				"status": "published",
-				"data": {
-					"title": "Certificado en Inglés Avanzado (C1)",
-					"certificate_url": "/certificates/c1-english-cambridge.pdf",
-					"issuer": "Cambridge Assessment English",
-					"issuer_id": "cambridge",
-					"issuer_website": "https://www.cambridgeenglish.org/"
-				},
-				"locale": "es",
-				"translationOf": "certificates:advanced-english-certificate-c1-en:en"
-			},
-			{
-				"id": "certificates:cisco-networking-academy-es:es",
-				"slug": "cisco-networking-academy-es",
-				"status": "published",
-				"data": {
-					"title": "Cisco Networking Academy: Introducción a la Ciberseguridad",
-					"certificate_url": "/certificates/cisco-networking-academy-introduction-to-cybersecurity.pdf",
-					"issuer": "Cisco Networking Academy",
-					"issuer_id": "cisco",
-					"issuer_website": "https://www.netacad.com/"
-				},
-				"locale": "es",
-				"translationOf": "certificates:cisco-networking-academy-en:en"
-			},
-			{
-				"id": "certificates:red-hat-training-es:es",
-				"slug": "red-hat-training-es",
-				"status": "published",
-				"data": {
-					"title": "Red Hat Training: Introducción a los Fundamentos de Linux (RH104 - RHA) - Ver. 9.1",
-					"certificate_url": "/certificates/red-hat-training-getting-started-with-linux-fundamentals-rh104-rha-ver-9-1.pdf",
-					"issuer": "Red Hat",
-					"issuer_id": "redhat",
-					"issuer_website": "https://www.redhat.com/"
-				},
-				"locale": "es",
-				"translationOf": "certificates:red-hat-training-en:en"
-			},
-			{
-				"id": "certificates:red-hat-system-administration-i-rh124-rha-ver-9-3-es:es",
-				"slug": "red-hat-system-administration-i-rh124-rha-ver-9-3-es",
-				"status": "published",
-				"data": {
-					"title": "Red Hat Administrador de Sistemas I (RH124 - RHA) - Ver. 9.3",
-					"certificate_url": "/certificates/red-hat-system-administration-i-rh124-rha-ver-9-3.pdf",
-					"issuer": "Red Hat",
-					"issuer_id": "redhat",
-					"issuer_website": "https://www.redhat.com/"
-				},
-				"locale": "es",
-				"translationOf": "certificates:red-hat-system-administration-i-rh124-rha-ver-9-3-en:en"
-			},
-			{
-				"id": "certificates:red-hat-system-administration-ii-rh124-rha-ver-9-3-es:es",
-				"slug": "red-hat-system-administration-ii-rh124-rha-ver-9-3-es",
-				"status": "published",
-				"data": {
-					"title": "Red Hat Administrador de Sistemas II (RH124 - RHA) - Ver. 9.3",
-					"certificate_url": "/certificates/red-hat-system-administration-ii-rh124-rha-ver-9-3.pdf",
-					"issuer": "Red Hat",
-					"issuer_id": "redhat",
-					"issuer_website": "https://www.redhat.com/"
-				},
-				"locale": "es",
-				"translationOf": "certificates:red-hat-system-administration-ii-rh124-rha-ver-9-3-en:en"
-			},
-			{
-				"id": "certificates:red-hat-openshift-development-i-es:es",
-				"slug": "red-hat-openshift-development-i-es",
-				"status": "published",
-				"data": {
-					"title": "Red Hat OpenShift Development I: Introducción a los Contenedores con Podman (DO188 - RHA) - Ver. 4.18",
-					"certificate_url": "/certificates/red-hat-openshift-development-i-introduction-to-containers-with-podman-do188-rha-ver-4-18.pdf",
-					"issuer": "Red Hat",
-					"issuer_id": "redhat",
-					"issuer_website": "https://www.redhat.com/"
-				},
-				"locale": "es",
-				"translationOf": "certificates:red-hat-openshift-development-i-en:en"
-			}
-		],
-		"profile": [
-			{
-				"id": "profile:profile:en",
-				"slug": "profile",
-				"status": "published",
-				"data": {
-					"name": "Javier Aday Pérez Romero",
-					"label": "Software developer and Computer Science student at ULPGC."
-				},
-				"locale": "en"
-			},
-			{
-				"id": "profile:profile:es",
-				"slug": "profile",
-				"status": "published",
-				"data": {
-					"name": "Javier Aday Pérez Romero",
-					"label": "Desarrollador de software y estudiante de Ingeniería Informática en la ULPGC."
-				},
-				"locale": "es",
-				"translationOf": "profile:profile:en"
-			}
-		],
-		"socials": [
-			{
-				"id": "socials:credly:en",
-				"slug": "credly",
-				"status": "published",
-				"data": {
-					"name": "credly",
-					"label": "Credly",
-					"url": "https://www.credly.com/users/javier-perez-romero/"
-				},
-				"locale": "en"
-			},
-			{
-				"id": "socials:linkedin:en",
-				"slug": "linkedin",
-				"status": "published",
-				"data": {
-					"name": "linkedin",
-					"label": "Linkedin",
-					"url": "https://www.linkedin.com/in/javier-aday-p%C3%A9rez-romero-b5636a291/"
-				},
-				"locale": "en"
-			},
-			{
-				"id": "socials:github:en",
-				"slug": "github",
-				"status": "published",
-				"data": {
-					"name": "github",
-					"label": "Github",
-					"url": "https://github.com/cocodrulo"
-				},
-				"locale": "en"
-			},
-			{
-				"id": "socials:credly:es",
-				"slug": "credly",
-				"status": "published",
-				"data": {
-					"name": "credly",
-					"label": "Credly",
-					"url": "https://www.credly.com/users/javier-perez-romero/"
-				},
-				"locale": "es",
-				"translationOf": "socials:credly:en"
-			},
-			{
-				"id": "socials:linkedin:es",
-				"slug": "linkedin",
-				"status": "published",
-				"data": {
-					"name": "linkedin",
-					"label": "Linkedin",
-					"url": "https://www.linkedin.com/in/javier-aday-p%C3%A9rez-romero-b5636a291/"
-				},
-				"locale": "es",
-				"translationOf": "socials:linkedin:en"
-			},
-			{
-				"id": "socials:github:es",
-				"slug": "github",
-				"status": "published",
-				"data": {
-					"name": "github",
-					"label": "Github",
-					"url": "https://github.com/cocodrulo"
-				},
-				"locale": "es",
-				"translationOf": "socials:github:en"
-			}
-		]
-	}
+    "$schema": "https://emdashcms.com/seed.schema.json",
+    "version": "1",
+    "meta": {
+        "name": "Exported Seed",
+        "description": "Exported from existing EmDash database"
+    },
+    "settings": {
+        "title": "cocodrulo.dev",
+        "tagline": "Javier Aday Pérez Romero - Software Developer Portfolio",
+        "dateFormat": "dd/MM/YYYY",
+        "social": {
+            "github": "Cocodrulo"
+        }
+    },
+    "collections": [
+        {
+            "slug": "about",
+            "label": "About Sections",
+            "labelSingular": "About Section",
+            "supports": [
+                "drafts",
+                "revisions"
+            ],
+            "fields": [
+                {
+                    "slug": "label",
+                    "label": "Label",
+                    "type": "string",
+                    "required": true
+                },
+                {
+                    "slug": "subtitle",
+                    "label": "Subtitle",
+                    "type": "string",
+                    "required": true
+                },
+                {
+                    "slug": "paragraphs",
+                    "label": "Paragraphs",
+                    "type": "json",
+                    "required": true
+                }
+            ]
+        },
+        {
+            "slug": "certificates",
+            "label": "Certificates",
+            "labelSingular": "Certificate",
+            "supports": [
+                "drafts",
+                "revisions"
+            ],
+            "fields": [
+                {
+                    "slug": "title",
+                    "label": "Title",
+                    "type": "string",
+                    "required": true
+                },
+                {
+                    "slug": "certificate_file",
+                    "label": "Certificate",
+                    "type": "file",
+                    "required": true
+                },
+                {
+                    "slug": "issuer",
+                    "label": "Issuer",
+                    "type": "string",
+                    "required": true
+                },
+                {
+                    "slug": "issuer_id",
+                    "label": "Issuer ID",
+                    "type": "string",
+                    "required": true
+                },
+                {
+                    "slug": "issuer_website",
+                    "label": "Issuer Website",
+                    "type": "string",
+                    "required": true
+                }
+            ]
+        },
+        {
+            "slug": "posts",
+            "label": "Posts",
+            "labelSingular": "Post",
+            "description": "Posts en el blog de cocodrulo.dev",
+            "supports": [
+                "drafts",
+                "revisions",
+                "preview",
+                "search"
+            ],
+            "fields": [
+                {
+                    "slug": "title",
+                    "label": "Título",
+                    "type": "string",
+                    "required": true,
+                    "searchable": true
+                },
+                {
+                    "slug": "excerpt",
+                    "label": "Resumen",
+                    "type": "text",
+                    "required": true,
+                    "searchable": true
+                },
+                {
+                    "slug": "content",
+                    "label": "Contenido",
+                    "type": "portableText",
+                    "required": true
+                },
+                {
+                    "slug": "image",
+                    "label": "Imagen de Portada",
+                    "type": "image",
+                    "required": true,
+                    "validation": {
+                        "allowedMimeTypes": [
+                            "image/"
+                        ]
+                    }
+                },
+                {
+                    "slug": "labels",
+                    "label": "Etiquetas",
+                    "type": "repeater",
+                    "required": true,
+                    "validation": {
+                        "subFields": [
+                            {
+                                "slug": "etiqueta",
+                                "type": "string",
+                                "label": "Etiqueta",
+                                "required": true
+                            }
+                        ],
+                        "minItems": 1
+                    }
+                }
+            ]
+        },
+        {
+            "slug": "profile",
+            "label": "Profiles",
+            "labelSingular": "Profile",
+            "supports": [
+                "drafts",
+                "revisions"
+            ],
+            "fields": [
+                {
+                    "slug": "name",
+                    "label": "Name",
+                    "type": "string",
+                    "required": true
+                },
+                {
+                    "slug": "label",
+                    "label": "Label",
+                    "type": "string",
+                    "required": true
+                }
+            ]
+        },
+        {
+            "slug": "projects",
+            "label": "Projects",
+            "labelSingular": "Project",
+            "description": "Projects from cocodrulo",
+            "supports": [
+                "drafts",
+                "revisions",
+                "preview",
+                "search"
+            ],
+            "urlPattern": "/projects/{slug}",
+            "fields": [
+                {
+                    "slug": "title",
+                    "label": "Título",
+                    "type": "string",
+                    "required": true,
+                    "searchable": true
+                },
+                {
+                    "slug": "description",
+                    "label": "Descripción",
+                    "type": "portableText",
+                    "required": true
+                },
+                {
+                    "slug": "url",
+                    "label": "URL",
+                    "type": "url"
+                },
+                {
+                    "slug": "start_date",
+                    "label": "Fecha Inicio",
+                    "type": "datetime",
+                    "required": true
+                },
+                {
+                    "slug": "end_date",
+                    "label": "Fecha de Fin",
+                    "type": "datetime"
+                },
+                {
+                    "slug": "labels",
+                    "label": "Etiquetas",
+                    "type": "repeater",
+                    "required": true,
+                    "validation": {
+                        "subFields": [
+                            {
+                                "slug": "etiqueta",
+                                "type": "string",
+                                "label": "Etiqueta",
+                                "required": true
+                            }
+                        ],
+                        "minItems": 1
+                    }
+                },
+                {
+                    "slug": "image",
+                    "label": "Imagen",
+                    "type": "image",
+                    "required": true,
+                    "validation": {
+                        "allowedMimeTypes": [
+                            "image/"
+                        ]
+                    }
+                },
+                {
+                    "slug": "featured",
+                    "label": "Destacado",
+                    "type": "boolean",
+                    "required": true
+                }
+            ]
+        },
+        {
+            "slug": "socials",
+            "label": "Social Links",
+            "labelSingular": "Social Link",
+            "supports": [
+                "drafts",
+                "revisions"
+            ],
+            "fields": [
+                {
+                    "slug": "name",
+                    "label": "Name",
+                    "type": "string",
+                    "required": true
+                },
+                {
+                    "slug": "label",
+                    "label": "Label",
+                    "type": "string",
+                    "required": true
+                },
+                {
+                    "slug": "url",
+                    "label": "URL",
+                    "type": "string",
+                    "required": true
+                }
+            ]
+        }
+    ],
+    "taxonomies": [
+        {
+            "id": "tax:category:es",
+            "name": "category",
+            "label": "Categories",
+            "labelSingular": "Category",
+            "hierarchical": true,
+            "collections": [
+                "posts"
+            ],
+            "locale": "es"
+        },
+        {
+            "id": "tax:tag:es",
+            "name": "tag",
+            "label": "Tags",
+            "labelSingular": "Tag",
+            "hierarchical": false,
+            "collections": [
+                "posts"
+            ],
+            "locale": "es"
+        }
+    ],
+    "menus": [
+        {
+            "id": "menu:primary:en",
+            "name": "primary",
+            "label": "Primary Navigation",
+            "items": [
+                {
+                    "type": "custom",
+                    "label": "Home",
+                    "url": "/en",
+                    "id": "item:primary:home:en",
+                    "locale": "en"
+                },
+                {
+                    "type": "custom",
+                    "label": "About me",
+                    "url": "/en/#about",
+                    "id": "item:primary:about-me:en",
+                    "locale": "en"
+                },
+                {
+                    "type": "custom",
+                    "label": "Projects",
+                    "url": "/en/projects",
+                    "id": "item:primary:projects:en",
+                    "locale": "en"
+                },
+                {
+                    "type": "custom",
+                    "label": "Blog",
+                    "url": "/en/blog",
+                    "id": "item:primary:blog:en",
+                    "locale": "en"
+                },
+                {
+                    "type": "custom",
+                    "label": "Certificates",
+                    "url": "/en/certificates",
+                    "id": "item:primary:certificates:en",
+                    "locale": "en"
+                },
+                {
+                    "type": "custom",
+                    "label": "Contact",
+                    "url": "/en/contact",
+                    "id": "item:primary:contact:en",
+                    "locale": "en"
+                }
+            ],
+            "locale": "en"
+        },
+        {
+            "id": "menu:primary:es",
+            "name": "primary",
+            "label": "Primary Navigation",
+            "items": [
+                {
+                    "type": "custom",
+                    "label": "Inicio",
+                    "url": "/",
+                    "id": "item:primary:inicio:es",
+                    "locale": "es"
+                },
+                {
+                    "type": "custom",
+                    "label": "Sobre mí",
+                    "url": "/#about",
+                    "id": "item:primary:sobre-mi:es",
+                    "locale": "es"
+                },
+                {
+                    "type": "custom",
+                    "label": "Proyectos",
+                    "url": "/projects",
+                    "id": "item:primary:proyectos:es",
+                    "locale": "es"
+                },
+                {
+                    "type": "custom",
+                    "label": "Blog",
+                    "url": "/blog",
+                    "id": "item:primary:blog:es",
+                    "locale": "es"
+                },
+                {
+                    "type": "custom",
+                    "label": "Certificados",
+                    "url": "/certificates",
+                    "id": "item:primary:certificados:es",
+                    "locale": "es"
+                },
+                {
+                    "type": "custom",
+                    "label": "Contacto",
+                    "url": "/contact",
+                    "id": "item:primary:contacto:es",
+                    "locale": "es"
+                }
+            ],
+            "locale": "es"
+        }
+    ],
+    "widgetAreas": [],
+    "content": {
+        "about": [
+            {
+                "id": "about:about:en",
+                "slug": "about",
+                "status": "published",
+                "data": {
+                    "label": "About me",
+                    "subtitle": "Who is Javier Aday Pérez Romero?",
+                    "paragraphs": [
+                        "An technology enthusiast, with experience in software development. Currently a Computer Science student at the University of Las Palmas de Gran Canaria.",
+                        "Since I was little I have liked to tinker with technology. I started by creating calculators in C# and Java, and little by little I got into the world of software development.",
+                        "Thanks to technology, I have been able to meet many interesting people and participate in various projects, both personal and professional."
+                    ]
+                },
+                "locale": "en"
+            },
+            {
+                "id": "about:about:es",
+                "slug": "about",
+                "status": "published",
+                "data": {
+                    "label": "Sobre mí",
+                    "subtitle": "¿Quién es Javier Aday Pérez Romero?",
+                    "paragraphs": [
+                        "Un apasionado de la tecnología, con experiencia en el desarrollo de software. Actualmente estudiante de Ingeniería Informática en la Universidad de Las Palmas de Gran Canaria.",
+                        "Desde pequeño me ha gustado trastear con la tecnología. Empecé creando calculadoras en C# y Java, y poco a poco me fui adentrando en el mundo del desarrollo de software.",
+                        "Gracias a la tecnología he podido conocer a mucha gente interesante y he podido participar en varios proyectos, tanto personales como profesionales."
+                    ]
+                },
+                "locale": "es",
+                "translationOf": "about:about:en"
+            }
+        ],
+        "certificates": [
+            {
+                "id": "certificates:tailwind-course-from-scratch-en:en",
+                "slug": "tailwind-course-from-scratch-en",
+                "status": "published",
+                "data": {
+                    "title": "Tailwind Course from Scratch",
+                    "issuer": "midudev",
+                    "issuer_id": "midudev",
+                    "issuer_website": "https://midu.dev/",
+                    "certificate_file": {
+                        "id": "01HNBKXGW3YEZC059T2A8XCRN1",
+                        "url": "/certificates/curso-de-tailwind-desde-cero.pdf",
+                        "filename": "curso-de-tailwind-desde-cero.pdf",
+                        "mimeType": "application/pdf",
+                        "size": 294280
+                    }
+                },
+                "locale": "en"
+            },
+            {
+                "id": "certificates:python-from-scratch-en:en",
+                "slug": "python-from-scratch-en",
+                "status": "published",
+                "data": {
+                    "title": "Python from Scratch",
+                    "issuer": "midudev",
+                    "issuer_id": "midudev",
+                    "issuer_website": "https://midu.dev/",
+                    "certificate_file": {
+                        "id": "01TXD16H81Y6880PZHT19YGQ1G",
+                        "url": "/certificates/python-desde-cero.pdf",
+                        "filename": "python-desde-cero.pdf",
+                        "mimeType": "application/pdf",
+                        "size": 293458
+                    }
+                },
+                "locale": "en"
+            },
+            {
+                "id": "certificates:promises-in-javascript-en:en",
+                "slug": "promises-in-javascript-en",
+                "status": "published",
+                "data": {
+                    "title": "Promises in JavaScript",
+                    "issuer": "midudev",
+                    "issuer_id": "midudev",
+                    "issuer_website": "https://midu.dev/",
+                    "certificate_file": {
+                        "id": "01RCY3EYX6GVWY9CDH59GYYN51",
+                        "url": "/certificates/promesas-en-javascript.pdf",
+                        "filename": "promesas-en-javascript.pdf",
+                        "mimeType": "application/pdf",
+                        "size": 293981
+                    }
+                },
+                "locale": "en"
+            },
+            {
+                "id": "certificates:intensive-course-on-model-context-protocol-en:en",
+                "slug": "intensive-course-on-model-context-protocol-en",
+                "status": "published",
+                "data": {
+                    "title": "Intensive Course on Model Context Protocol",
+                    "issuer": "midudev",
+                    "issuer_id": "midudev",
+                    "issuer_website": "https://midu.dev/",
+                    "certificate_file": {
+                        "id": "018Y24KRR3JWKXJ65HTCZ14931",
+                        "url": "/certificates/curso-intensivo-de-model-context-protocol.pdf",
+                        "filename": "curso-intensivo-de-model-context-protocol.pdf",
+                        "mimeType": "application/pdf",
+                        "size": 294124
+                    }
+                },
+                "locale": "en"
+            },
+            {
+                "id": "certificates:introduction-to-scraping-with-python-en:en",
+                "slug": "introduction-to-scraping-with-python-en",
+                "status": "published",
+                "data": {
+                    "title": "Introduction to Scraping with Python",
+                    "issuer": "midudev",
+                    "issuer_id": "midudev",
+                    "issuer_website": "https://midu.dev/",
+                    "certificate_file": {
+                        "id": "01D7WN3E8DQ7P0H4KAGXNS8REK",
+                        "url": "/certificates/iniciacion-al-scraping-con-python.pdf",
+                        "filename": "iniciacion-al-scraping-con-python.pdf",
+                        "mimeType": "application/pdf",
+                        "size": 294082
+                    }
+                },
+                "locale": "en"
+            },
+            {
+                "id": "certificates:create-amazing-3d-experiences-with-vue-en:en",
+                "slug": "create-amazing-3d-experiences-with-vue-en",
+                "status": "published",
+                "data": {
+                    "title": "Create amazing 3D experiences with Vue",
+                    "issuer": "midudev",
+                    "issuer_id": "midudev",
+                    "issuer_website": "https://midu.dev/",
+                    "certificate_file": {
+                        "id": "01DNZQQSDPEVMYZGAQ0KH3S0SK",
+                        "url": "/certificates/crea-experiencias-3d-increibles-con-vue.pdf",
+                        "filename": "crea-experiencias-3d-increibles-con-vue.pdf",
+                        "mimeType": "application/pdf",
+                        "size": 294852
+                    }
+                },
+                "locale": "en"
+            },
+            {
+                "id": "certificates:css-from-scratch-en:en",
+                "slug": "css-from-scratch-en",
+                "status": "published",
+                "data": {
+                    "title": "CSS from Scratch",
+                    "issuer": "midudev",
+                    "issuer_id": "midudev",
+                    "issuer_website": "https://midu.dev/",
+                    "certificate_file": {
+                        "id": "01CA4DPHFPT656D29JNPHHH6S6",
+                        "url": "/certificates/css-desde-cero.pdf",
+                        "filename": "css-desde-cero.pdf",
+                        "mimeType": "application/pdf",
+                        "size": 293769
+                    }
+                },
+                "locale": "en"
+            },
+            {
+                "id": "certificates:create-an-object-detection-pwa-with-angular-19-and-tensorflow-js-en:en",
+                "slug": "create-an-object-detection-pwa-with-angular-19-and-tensorflow-js-en",
+                "status": "published",
+                "data": {
+                    "title": "Create an Object Detection PWA with Angular 19 and Tensorflow.js",
+                    "issuer": "midudev",
+                    "issuer_id": "midudev",
+                    "issuer_website": "https://midu.dev/",
+                    "certificate_file": {
+                        "id": "01XNVMFEJ44PTABD58GEVATPSA",
+                        "url": "/certificates/crea-una-pwa-de-deteccion-de-objetos-con-angular-19-y-tensorflowjs.pdf",
+                        "filename": "crea-una-pwa-de-deteccion-de-objetos-con-angular-19-y-tensorflowjs.pdf",
+                        "mimeType": "application/pdf",
+                        "size": 295978
+                    }
+                },
+                "locale": "en"
+            },
+            {
+                "id": "certificates:learn-the-latest-of-javascript-es2023-es2024-en:en",
+                "slug": "learn-the-latest-of-javascript-es2023-es2024-en",
+                "status": "published",
+                "data": {
+                    "title": "Learn the latest of JavaScript (ES2023 & ES2024)",
+                    "issuer": "midudev",
+                    "issuer_id": "midudev",
+                    "issuer_website": "https://midu.dev/",
+                    "certificate_file": {
+                        "id": "01PRSZ2C161VW3VERDG9XG9TZ1",
+                        "url": "/certificates/aprende-lo-ultimo-de-javascript-es2023-es2024.pdf",
+                        "filename": "aprende-lo-ultimo-de-javascript-es2023-es2024.pdf",
+                        "mimeType": "application/pdf",
+                        "size": 295276
+                    }
+                },
+                "locale": "en"
+            },
+            {
+                "id": "certificates:html-from-scratch-en:en",
+                "slug": "html-from-scratch-en",
+                "status": "published",
+                "data": {
+                    "title": "HTML from Scratch",
+                    "issuer": "midudev",
+                    "issuer_id": "midudev",
+                    "issuer_website": "https://midu.dev/",
+                    "certificate_file": {
+                        "id": "01Y45GKHB3SYKBRTBXJB3MZWPP",
+                        "url": "/certificates/html-desde-cero.pdf",
+                        "filename": "html-desde-cero.pdf",
+                        "mimeType": "application/pdf",
+                        "size": 293859
+                    }
+                },
+                "locale": "en"
+            },
+            {
+                "id": "certificates:utility-types-in-typescript-en:en",
+                "slug": "utility-types-in-typescript-en",
+                "status": "published",
+                "data": {
+                    "title": "Utility Types in TypeScript",
+                    "issuer": "midudev",
+                    "issuer_id": "midudev",
+                    "issuer_website": "https://midu.dev/",
+                    "certificate_file": {
+                        "id": "01AGQGVC2NP7FSQNZVE9C3SY78",
+                        "url": "/certificates/utility-types-typescript.pdf",
+                        "filename": "utility-types-typescript.pdf",
+                        "mimeType": "application/pdf",
+                        "size": 294101
+                    }
+                },
+                "locale": "en"
+            },
+            {
+                "id": "certificates:claude-code-in-action-en:en",
+                "slug": "claude-code-in-action-en",
+                "status": "published",
+                "data": {
+                    "title": "Claude Code In Action",
+                    "issuer": "Anthropic Education",
+                    "issuer_id": "anthropic",
+                    "issuer_website": "https://www.anthropic.com/",
+                    "certificate_file": {
+                        "id": "01DSRNS34YZAB7MK90CAKABCXJ",
+                        "url": "/certificates/anthropic-education-claude-code-in-action.pdf",
+                        "filename": "anthropic-education-claude-code-in-action.pdf",
+                        "mimeType": "application/pdf",
+                        "size": 110906
+                    }
+                },
+                "locale": "en"
+            },
+            {
+                "id": "certificates:intermediate-english-certificate-b2-en:en",
+                "slug": "intermediate-english-certificate-b2-en",
+                "status": "published",
+                "data": {
+                    "title": "Intermediate English Certificate (B2)",
+                    "issuer": "Escuela Oficial de Idiomas 7 Palmas",
+                    "issuer_id": "eoi7palmas",
+                    "issuer_website": "https://eoi7palmas.org/",
+                    "certificate_file": {
+                        "id": "01H5EYBXD6XDM3EDWZF3A48T00",
+                        "url": "/certificates/b2-eoi.pdf",
+                        "filename": "b2-eoi.pdf",
+                        "mimeType": "application/pdf",
+                        "size": 456746
+                    }
+                },
+                "locale": "en"
+            },
+            {
+                "id": "certificates:advanced-english-certificate-c1-en:en",
+                "slug": "advanced-english-certificate-c1-en",
+                "status": "published",
+                "data": {
+                    "title": "Advanced English Certificate (C1)",
+                    "issuer": "Cambridge Assessment English",
+                    "issuer_id": "cambridge",
+                    "issuer_website": "https://www.cambridgeenglish.org/",
+                    "certificate_file": {
+                        "id": "01D3EHAM1C6ZR9N105SB2AC4B5",
+                        "url": "/certificates/c1-english-cambridge.pdf",
+                        "filename": "c1-english-cambridge.pdf",
+                        "mimeType": "application/pdf",
+                        "size": 4520675
+                    }
+                },
+                "locale": "en"
+            },
+            {
+                "id": "certificates:cisco-networking-academy-en:en",
+                "slug": "cisco-networking-academy-en",
+                "status": "published",
+                "data": {
+                    "title": "Cisco Networking Academy: Introduction to Cybersecurity",
+                    "issuer": "Cisco Networking Academy",
+                    "issuer_id": "cisco",
+                    "issuer_website": "https://www.netacad.com/",
+                    "certificate_file": {
+                        "id": "01EK2RZ0ZE7BRWN3R2TPG0QYQ8",
+                        "url": "/certificates/cisco-networking-academy-introduction-to-cybersecurity.pdf",
+                        "filename": "cisco-networking-academy-introduction-to-cybersecurity.pdf",
+                        "mimeType": "application/pdf",
+                        "size": 1094282
+                    }
+                },
+                "locale": "en"
+            },
+            {
+                "id": "certificates:red-hat-training-en:en",
+                "slug": "red-hat-training-en",
+                "status": "published",
+                "data": {
+                    "title": "Red Hat Training: Getting Started with Linux Fundamentals (RH104 - RHA) - Ver. 9.1",
+                    "issuer": "Red Hat",
+                    "issuer_id": "redhat",
+                    "issuer_website": "https://www.redhat.com/",
+                    "certificate_file": {
+                        "id": "011Z35VJWY53ZSGJJ96EN6VRSF",
+                        "url": "/certificates/red-hat-training-getting-started-with-linux-fundamentals-rh104-rha-ver-9-1.pdf",
+                        "filename": "red-hat-training-getting-started-with-linux-fundamentals-rh104-rha-ver-9-1.pdf",
+                        "mimeType": "application/pdf",
+                        "size": 55798
+                    }
+                },
+                "locale": "en"
+            },
+            {
+                "id": "certificates:red-hat-system-administration-i-rh124-rha-ver-9-3-en:en",
+                "slug": "red-hat-system-administration-i-rh124-rha-ver-9-3-en",
+                "status": "published",
+                "data": {
+                    "title": "Red Hat System Administration I (RH124 - RHA) - Ver. 9.3",
+                    "issuer": "Red Hat",
+                    "issuer_id": "redhat",
+                    "issuer_website": "https://www.redhat.com/",
+                    "certificate_file": {
+                        "id": "0173KWJ88Z6EP8445JYA40H5X3",
+                        "url": "/certificates/red-hat-system-administration-i-rh124-rha-ver-9-3.pdf",
+                        "filename": "red-hat-system-administration-i-rh124-rha-ver-9-3.pdf",
+                        "mimeType": "application/pdf",
+                        "size": 55612
+                    }
+                },
+                "locale": "en"
+            },
+            {
+                "id": "certificates:red-hat-system-administration-ii-rh124-rha-ver-9-3-en:en",
+                "slug": "red-hat-system-administration-ii-rh124-rha-ver-9-3-en",
+                "status": "published",
+                "data": {
+                    "title": "Red Hat System Administration II (RH124 - RHA) - Ver. 9.3",
+                    "issuer": "Red Hat",
+                    "issuer_id": "redhat",
+                    "issuer_website": "https://www.redhat.com/",
+                    "certificate_file": {
+                        "id": "01EYQ7DV3R0GQYD5BX4AZG6QV3",
+                        "url": "/certificates/red-hat-system-administration-ii-rh124-rha-ver-9-3.pdf",
+                        "filename": "red-hat-system-administration-ii-rh124-rha-ver-9-3.pdf",
+                        "mimeType": "application/pdf",
+                        "size": 55598
+                    }
+                },
+                "locale": "en"
+            },
+            {
+                "id": "certificates:red-hat-openshift-development-i-en:en",
+                "slug": "red-hat-openshift-development-i-en",
+                "status": "published",
+                "data": {
+                    "title": "Red Hat OpenShift Development I: Introduction to Containers with Podman (DO188 - RHA) - Ver. 4.18",
+                    "issuer": "Red Hat",
+                    "issuer_id": "redhat",
+                    "issuer_website": "https://www.redhat.com/",
+                    "certificate_file": {
+                        "id": "01KDPDT6WVJXR70FD4G79MQTR2",
+                        "url": "/certificates/red-hat-openshift-development-i-introduction-to-containers-with-podman-do188-rha-ver-4-18.pdf",
+                        "filename": "red-hat-openshift-development-i-introduction-to-containers-with-podman-do188-rha-ver-4-18.pdf",
+                        "mimeType": "application/pdf",
+                        "size": 55582
+                    }
+                },
+                "locale": "en"
+            },
+            {
+                "id": "certificates:tailwind-course-from-scratch-es:es",
+                "slug": "tailwind-course-from-scratch-es",
+                "status": "published",
+                "data": {
+                    "title": "Curso de Tailwind desde Cero",
+                    "issuer": "midudev",
+                    "issuer_id": "midudev",
+                    "issuer_website": "https://midu.dev/",
+                    "certificate_file": {
+                        "id": "01HNBKXGW3YEZC059T2A8XCRN1",
+                        "url": "/certificates/curso-de-tailwind-desde-cero.pdf",
+                        "filename": "curso-de-tailwind-desde-cero.pdf",
+                        "mimeType": "application/pdf",
+                        "size": 294280
+                    }
+                },
+                "locale": "es",
+                "translationOf": "certificates:tailwind-course-from-scratch-en:en"
+            },
+            {
+                "id": "certificates:python-from-scratch-es:es",
+                "slug": "python-from-scratch-es",
+                "status": "published",
+                "data": {
+                    "title": "Python desde Cero",
+                    "issuer": "midudev",
+                    "issuer_id": "midudev",
+                    "issuer_website": "https://midu.dev/",
+                    "certificate_file": {
+                        "id": "01TXD16H81Y6880PZHT19YGQ1G",
+                        "url": "/certificates/python-desde-cero.pdf",
+                        "filename": "python-desde-cero.pdf",
+                        "mimeType": "application/pdf",
+                        "size": 293458
+                    }
+                },
+                "locale": "es",
+                "translationOf": "certificates:python-from-scratch-en:en"
+            },
+            {
+                "id": "certificates:promises-in-javascript-es:es",
+                "slug": "promises-in-javascript-es",
+                "status": "published",
+                "data": {
+                    "title": "Promeses en JavaScript",
+                    "issuer": "midudev",
+                    "issuer_id": "midudev",
+                    "issuer_website": "https://midu.dev/",
+                    "certificate_file": {
+                        "id": "01RCY3EYX6GVWY9CDH59GYYN51",
+                        "url": "/certificates/promesas-en-javascript.pdf",
+                        "filename": "promesas-en-javascript.pdf",
+                        "mimeType": "application/pdf",
+                        "size": 293981
+                    }
+                },
+                "locale": "es",
+                "translationOf": "certificates:promises-in-javascript-en:en"
+            },
+            {
+                "id": "certificates:intensive-course-on-model-context-protocol-es:es",
+                "slug": "intensive-course-on-model-context-protocol-es",
+                "status": "published",
+                "data": {
+                    "title": "Curso Intensivo de Model Context Protocol",
+                    "issuer": "midudev",
+                    "issuer_id": "midudev",
+                    "issuer_website": "https://midu.dev/",
+                    "certificate_file": {
+                        "id": "018Y24KRR3JWKXJ65HTCZ14931",
+                        "url": "/certificates/curso-intensivo-de-model-context-protocol.pdf",
+                        "filename": "curso-intensivo-de-model-context-protocol.pdf",
+                        "mimeType": "application/pdf",
+                        "size": 294124
+                    }
+                },
+                "locale": "es",
+                "translationOf": "certificates:intensive-course-on-model-context-protocol-en:en"
+            },
+            {
+                "id": "certificates:introduction-to-scraping-with-python-es:es",
+                "slug": "introduction-to-scraping-with-python-es",
+                "status": "published",
+                "data": {
+                    "title": "Iniciación al Scraping con Python",
+                    "issuer": "midudev",
+                    "issuer_id": "midudev",
+                    "issuer_website": "https://midu.dev/",
+                    "certificate_file": {
+                        "id": "01D7WN3E8DQ7P0H4KAGXNS8REK",
+                        "url": "/certificates/iniciacion-al-scraping-con-python.pdf",
+                        "filename": "iniciacion-al-scraping-con-python.pdf",
+                        "mimeType": "application/pdf",
+                        "size": 294082
+                    }
+                },
+                "locale": "es",
+                "translationOf": "certificates:introduction-to-scraping-with-python-en:en"
+            },
+            {
+                "id": "certificates:create-amazing-3d-experiences-with-vue-es:es",
+                "slug": "create-amazing-3d-experiences-with-vue-es",
+                "status": "published",
+                "data": {
+                    "title": "Crea experiencias 3D increíbles con Vue",
+                    "issuer": "midudev",
+                    "issuer_id": "midudev",
+                    "issuer_website": "https://midu.dev/",
+                    "certificate_file": {
+                        "id": "01DNZQQSDPEVMYZGAQ0KH3S0SK",
+                        "url": "/certificates/crea-experiencias-3d-increibles-con-vue.pdf",
+                        "filename": "crea-experiencias-3d-increibles-con-vue.pdf",
+                        "mimeType": "application/pdf",
+                        "size": 294852
+                    }
+                },
+                "locale": "es",
+                "translationOf": "certificates:create-amazing-3d-experiences-with-vue-en:en"
+            },
+            {
+                "id": "certificates:css-from-scratch-es:es",
+                "slug": "css-from-scratch-es",
+                "status": "published",
+                "data": {
+                    "title": "CSS desde Cero",
+                    "issuer": "midudev",
+                    "issuer_id": "midudev",
+                    "issuer_website": "https://midu.dev/",
+                    "certificate_file": {
+                        "id": "01CA4DPHFPT656D29JNPHHH6S6",
+                        "url": "/certificates/css-desde-cero.pdf",
+                        "filename": "css-desde-cero.pdf",
+                        "mimeType": "application/pdf",
+                        "size": 293769
+                    }
+                },
+                "locale": "es",
+                "translationOf": "certificates:css-from-scratch-en:en"
+            },
+            {
+                "id": "certificates:create-an-object-detection-pwa-with-angular-19-and-tensorflow-js-es:es",
+                "slug": "create-an-object-detection-pwa-with-angular-19-and-tensorflow-js-es",
+                "status": "published",
+                "data": {
+                    "title": "Crea una PWA de Detección de Objetos con Angular 19 y Tensorflow.js",
+                    "issuer": "midudev",
+                    "issuer_id": "midudev",
+                    "issuer_website": "https://midu.dev/",
+                    "certificate_file": {
+                        "id": "01XNVMFEJ44PTABD58GEVATPSA",
+                        "url": "/certificates/crea-una-pwa-de-deteccion-de-objetos-con-angular-19-y-tensorflowjs.pdf",
+                        "filename": "crea-una-pwa-de-deteccion-de-objetos-con-angular-19-y-tensorflowjs.pdf",
+                        "mimeType": "application/pdf",
+                        "size": 295978
+                    }
+                },
+                "locale": "es",
+                "translationOf": "certificates:create-an-object-detection-pwa-with-angular-19-and-tensorflow-js-en:en"
+            },
+            {
+                "id": "certificates:learn-the-latest-of-javascript-es2023-es2024-es:es",
+                "slug": "learn-the-latest-of-javascript-es2023-es2024-es",
+                "status": "published",
+                "data": {
+                    "title": "Aprende lo último de JavaScript (ES2023 & ES2024)",
+                    "issuer": "midudev",
+                    "issuer_id": "midudev",
+                    "issuer_website": "https://midu.dev/",
+                    "certificate_file": {
+                        "id": "01PRSZ2C161VW3VERDG9XG9TZ1",
+                        "url": "/certificates/aprende-lo-ultimo-de-javascript-es2023-es2024.pdf",
+                        "filename": "aprende-lo-ultimo-de-javascript-es2023-es2024.pdf",
+                        "mimeType": "application/pdf",
+                        "size": 295276
+                    }
+                },
+                "locale": "es",
+                "translationOf": "certificates:learn-the-latest-of-javascript-es2023-es2024-en:en"
+            },
+            {
+                "id": "certificates:html-from-scratch-es:es",
+                "slug": "html-from-scratch-es",
+                "status": "published",
+                "data": {
+                    "title": "HTML desde Cero",
+                    "issuer": "midudev",
+                    "issuer_id": "midudev",
+                    "issuer_website": "https://midu.dev/",
+                    "certificate_file": {
+                        "id": "01Y45GKHB3SYKBRTBXJB3MZWPP",
+                        "url": "/certificates/html-desde-cero.pdf",
+                        "filename": "html-desde-cero.pdf",
+                        "mimeType": "application/pdf",
+                        "size": 293859
+                    }
+                },
+                "locale": "es",
+                "translationOf": "certificates:html-from-scratch-en:en"
+            },
+            {
+                "id": "certificates:utility-types-in-typescript-es:es",
+                "slug": "utility-types-in-typescript-es",
+                "status": "published",
+                "data": {
+                    "title": "Utility Types en TypeScript",
+                    "issuer": "midudev",
+                    "issuer_id": "midudev",
+                    "issuer_website": "https://midu.dev/",
+                    "certificate_file": {
+                        "id": "01AGQGVC2NP7FSQNZVE9C3SY78",
+                        "url": "/certificates/utility-types-typescript.pdf",
+                        "filename": "utility-types-typescript.pdf",
+                        "mimeType": "application/pdf",
+                        "size": 294101
+                    }
+                },
+                "locale": "es",
+                "translationOf": "certificates:utility-types-in-typescript-en:en"
+            },
+            {
+                "id": "certificates:claude-code-in-action-es:es",
+                "slug": "claude-code-in-action-es",
+                "status": "published",
+                "data": {
+                    "title": "Claude Code en Acción",
+                    "issuer": "Anthropic Education",
+                    "issuer_id": "anthropic",
+                    "issuer_website": "https://www.anthropic.com/",
+                    "certificate_file": {
+                        "id": "01DSRNS34YZAB7MK90CAKABCXJ",
+                        "url": "/certificates/anthropic-education-claude-code-in-action.pdf",
+                        "filename": "anthropic-education-claude-code-in-action.pdf",
+                        "mimeType": "application/pdf",
+                        "size": 110906
+                    }
+                },
+                "locale": "es",
+                "translationOf": "certificates:claude-code-in-action-en:en"
+            },
+            {
+                "id": "certificates:intermediate-english-certificate-b2-es:es",
+                "slug": "intermediate-english-certificate-b2-es",
+                "status": "published",
+                "data": {
+                    "title": "Certificado de Nivel Intermedio (B2)",
+                    "issuer": "Escuela Oficial de Idiomas 7 Palmas",
+                    "issuer_id": "eoi7palmas",
+                    "issuer_website": "https://eoi7palmas.org/",
+                    "certificate_file": {
+                        "id": "01H5EYBXD6XDM3EDWZF3A48T00",
+                        "url": "/certificates/b2-eoi.pdf",
+                        "filename": "b2-eoi.pdf",
+                        "mimeType": "application/pdf",
+                        "size": 456746
+                    }
+                },
+                "locale": "es",
+                "translationOf": "certificates:intermediate-english-certificate-b2-en:en"
+            },
+            {
+                "id": "certificates:advanced-english-certificate-c1-es:es",
+                "slug": "advanced-english-certificate-c1-es",
+                "status": "published",
+                "data": {
+                    "title": "Certificado en Inglés Avanzado (C1)",
+                    "issuer": "Cambridge Assessment English",
+                    "issuer_id": "cambridge",
+                    "issuer_website": "https://www.cambridgeenglish.org/",
+                    "certificate_file": {
+                        "id": "01D3EHAM1C6ZR9N105SB2AC4B5",
+                        "url": "/certificates/c1-english-cambridge.pdf",
+                        "filename": "c1-english-cambridge.pdf",
+                        "mimeType": "application/pdf",
+                        "size": 4520675
+                    }
+                },
+                "locale": "es",
+                "translationOf": "certificates:advanced-english-certificate-c1-en:en"
+            },
+            {
+                "id": "certificates:cisco-networking-academy-es:es",
+                "slug": "cisco-networking-academy-es",
+                "status": "published",
+                "data": {
+                    "title": "Cisco Networking Academy: Introducción a la Ciberseguridad",
+                    "issuer": "Cisco Networking Academy",
+                    "issuer_id": "cisco",
+                    "issuer_website": "https://www.netacad.com/",
+                    "certificate_file": {
+                        "id": "01EK2RZ0ZE7BRWN3R2TPG0QYQ8",
+                        "url": "/certificates/cisco-networking-academy-introduction-to-cybersecurity.pdf",
+                        "filename": "cisco-networking-academy-introduction-to-cybersecurity.pdf",
+                        "mimeType": "application/pdf",
+                        "size": 1094282
+                    }
+                },
+                "locale": "es",
+                "translationOf": "certificates:cisco-networking-academy-en:en"
+            },
+            {
+                "id": "certificates:red-hat-training-es:es",
+                "slug": "red-hat-training-es",
+                "status": "published",
+                "data": {
+                    "title": "Red Hat Training: Introducción a los Fundamentos de Linux (RH104 - RHA) - Ver. 9.1",
+                    "issuer": "Red Hat",
+                    "issuer_id": "redhat",
+                    "issuer_website": "https://www.redhat.com/",
+                    "certificate_file": {
+                        "id": "011Z35VJWY53ZSGJJ96EN6VRSF",
+                        "url": "/certificates/red-hat-training-getting-started-with-linux-fundamentals-rh104-rha-ver-9-1.pdf",
+                        "filename": "red-hat-training-getting-started-with-linux-fundamentals-rh104-rha-ver-9-1.pdf",
+                        "mimeType": "application/pdf",
+                        "size": 55798
+                    }
+                },
+                "locale": "es",
+                "translationOf": "certificates:red-hat-training-en:en"
+            },
+            {
+                "id": "certificates:red-hat-system-administration-i-rh124-rha-ver-9-3-es:es",
+                "slug": "red-hat-system-administration-i-rh124-rha-ver-9-3-es",
+                "status": "published",
+                "data": {
+                    "title": "Red Hat Administrador de Sistemas I (RH124 - RHA) - Ver. 9.3",
+                    "issuer": "Red Hat",
+                    "issuer_id": "redhat",
+                    "issuer_website": "https://www.redhat.com/",
+                    "certificate_file": {
+                        "id": "0173KWJ88Z6EP8445JYA40H5X3",
+                        "url": "/certificates/red-hat-system-administration-i-rh124-rha-ver-9-3.pdf",
+                        "filename": "red-hat-system-administration-i-rh124-rha-ver-9-3.pdf",
+                        "mimeType": "application/pdf",
+                        "size": 55612
+                    }
+                },
+                "locale": "es",
+                "translationOf": "certificates:red-hat-system-administration-i-rh124-rha-ver-9-3-en:en"
+            },
+            {
+                "id": "certificates:red-hat-system-administration-ii-rh124-rha-ver-9-3-es:es",
+                "slug": "red-hat-system-administration-ii-rh124-rha-ver-9-3-es",
+                "status": "published",
+                "data": {
+                    "title": "Red Hat Administrador de Sistemas II (RH124 - RHA) - Ver. 9.3",
+                    "issuer": "Red Hat",
+                    "issuer_id": "redhat",
+                    "issuer_website": "https://www.redhat.com/",
+                    "certificate_file": {
+                        "id": "01EYQ7DV3R0GQYD5BX4AZG6QV3",
+                        "url": "/certificates/red-hat-system-administration-ii-rh124-rha-ver-9-3.pdf",
+                        "filename": "red-hat-system-administration-ii-rh124-rha-ver-9-3.pdf",
+                        "mimeType": "application/pdf",
+                        "size": 55598
+                    }
+                },
+                "locale": "es",
+                "translationOf": "certificates:red-hat-system-administration-ii-rh124-rha-ver-9-3-en:en"
+            },
+            {
+                "id": "certificates:red-hat-openshift-development-i-es:es",
+                "slug": "red-hat-openshift-development-i-es",
+                "status": "published",
+                "data": {
+                    "title": "Red Hat OpenShift Development I: Introducción a los Contenedores con Podman (DO188 - RHA) - Ver. 4.18",
+                    "issuer": "Red Hat",
+                    "issuer_id": "redhat",
+                    "issuer_website": "https://www.redhat.com/",
+                    "certificate_file": {
+                        "id": "01KDPDT6WVJXR70FD4G79MQTR2",
+                        "url": "/certificates/red-hat-openshift-development-i-introduction-to-containers-with-podman-do188-rha-ver-4-18.pdf",
+                        "filename": "red-hat-openshift-development-i-introduction-to-containers-with-podman-do188-rha-ver-4-18.pdf",
+                        "mimeType": "application/pdf",
+                        "size": 55582
+                    }
+                },
+                "locale": "es",
+                "translationOf": "certificates:red-hat-openshift-development-i-en:en"
+            }
+        ],
+        "profile": [
+            {
+                "id": "profile:profile:en",
+                "slug": "profile",
+                "status": "published",
+                "data": {
+                    "name": "Javier Aday Pérez Romero",
+                    "label": "Software developer and Computer Science student at ULPGC."
+                },
+                "locale": "en"
+            },
+            {
+                "id": "profile:profile:es",
+                "slug": "profile",
+                "status": "published",
+                "data": {
+                    "name": "Javier Aday Pérez Romero",
+                    "label": "Desarrollador de software y estudiante de Ingeniería Informática en la ULPGC."
+                },
+                "locale": "es",
+                "translationOf": "profile:profile:en"
+            }
+        ],
+        "socials": [
+            {
+                "id": "socials:credly:en",
+                "slug": "credly",
+                "status": "published",
+                "data": {
+                    "name": "credly",
+                    "label": "Credly",
+                    "url": "https://www.credly.com/users/javier-perez-romero/"
+                },
+                "locale": "en"
+            },
+            {
+                "id": "socials:linkedin:en",
+                "slug": "linkedin",
+                "status": "published",
+                "data": {
+                    "name": "linkedin",
+                    "label": "Linkedin",
+                    "url": "https://www.linkedin.com/in/javier-aday-p%C3%A9rez-romero-b5636a291/"
+                },
+                "locale": "en"
+            },
+            {
+                "id": "socials:github:en",
+                "slug": "github",
+                "status": "published",
+                "data": {
+                    "name": "github",
+                    "label": "Github",
+                    "url": "https://github.com/cocodrulo"
+                },
+                "locale": "en"
+            },
+            {
+                "id": "socials:credly:es",
+                "slug": "credly",
+                "status": "published",
+                "data": {
+                    "name": "credly",
+                    "label": "Credly",
+                    "url": "https://www.credly.com/users/javier-perez-romero/"
+                },
+                "locale": "es",
+                "translationOf": "socials:credly:en"
+            },
+            {
+                "id": "socials:linkedin:es",
+                "slug": "linkedin",
+                "status": "published",
+                "data": {
+                    "name": "linkedin",
+                    "label": "Linkedin",
+                    "url": "https://www.linkedin.com/in/javier-aday-p%C3%A9rez-romero-b5636a291/"
+                },
+                "locale": "es",
+                "translationOf": "socials:linkedin:en"
+            },
+            {
+                "id": "socials:github:es",
+                "slug": "github",
+                "status": "published",
+                "data": {
+                    "name": "github",
+                    "label": "Github",
+                    "url": "https://github.com/cocodrulo"
+                },
+                "locale": "es",
+                "translationOf": "socials:github:en"
+            }
+        ]
+    }
 }
