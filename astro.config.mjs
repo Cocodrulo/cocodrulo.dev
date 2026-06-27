@@ -32,7 +32,16 @@ export default defineConfig({
                 publicUrl: 'https://files.cocodrulo.dev',
             }),
             objectCache: kvCache({ binding: 'CACHE' }),
-            authProviders: [github(), google()],
+            authProviders: [
+                github({
+                    clientId: process.env.GITHUB_CLIENT_ID,
+                    clientSecret: process.env.GITHUB_CLIENT_SECRET,
+                }),
+                google({
+                    clientId: process.env.GOOGLE_CLIENT_ID,
+                    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+                }),
+            ],
         }),
     ],
 

@@ -23,8 +23,23 @@
 			"binding": "CACHE",
 			"id": "0a6a50c9f17b42acafc393440cada60d",
 		},
+		{
+			"id": "a86de4a7c0da4a6992faae71239bcaa7",
+			"binding": "SESSION"
+		},
 	],
 	"observability": {
 		"enabled": true,
 	},
+	"routes": [
+		{
+			"pattern": "cocodrulo.dev",
+			"zone_name": "cocodrulo.dev",
+			"custom_domain": true,
+			"enabled": true,
+			"previews_enabled": false
+		}
+	],
+	"workers_dev": true,
+	"preview_urls": true,
 }

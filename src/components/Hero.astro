@@ -1,26 +1,26 @@
 ---
-import { getEmDashEntry, getEmDashCollection } from "emdash";
-import IconsHandler from "@/assets/icons/IconsHandler";
+import { getEmDashEntry, getEmDashCollection } from 'emdash'
+import IconsHandler from '@/assets/icons/IconsHandler'
 
-const language = Astro.currentLocale || "es";
+const language = Astro.currentLocale || 'es'
 
-const { entry: profileEntry } = await getEmDashEntry("profile", "profile", {
+const { entry: profileEntry } = await getEmDashEntry('profile', 'profile', {
     locale: language,
-});
-const profile = (profileEntry?.data || { name: "", label: "" }) as {
-    name: string;
-    label: string;
-};
+})
+const profile = (profileEntry?.data || { name: '', label: '' }) as {
+    name: string
+    label: string
+}
 
-const { entries: socialEntries } = await getEmDashCollection("socials", {
+const { entries: socialEntries } = await getEmDashCollection('socials', {
     locale: language,
-});
+})
 const socials = (socialEntries || []) as unknown as Array<{
-    data: { name: string; url: string; label: string };
-}>;
+    data: { name: string; url: string; label: string }
+}>
 ---
 
-<section id="hero" class="relative h-96 px-20">
+<section id="hero" class="relative h-[70dvh] px-20">
     <div
         class="px-6 max-w-2xl h-full flex flex-col items-start justify-center text-start">
         <h1 class="text-5xl mb-3 text-white">{profile.name}</h1>
@@ -32,15 +32,15 @@ const socials = (socialEntries || []) as unknown as Array<{
                 socials.map((social) => {
                     const key =
                         social.data.name.charAt(0).toUpperCase() +
-                        social.data.name.slice(1);
-                    const Icon = IconsHandler[key as keyof typeof IconsHandler];
+                        social.data.name.slice(1)
+                    const Icon = IconsHandler[key as keyof typeof IconsHandler]
                     return (
                         <a href={social.data.url}>
                             {Icon && (
                                 <Icon class="w-6 h-6 text-white/70 hover:text-white transition-colors duration-300" />
                             )}
                         </a>
-                    );
+                    )
                 })
             }
         </div>
