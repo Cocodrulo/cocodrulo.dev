@@ -3,9 +3,107 @@
 
 /// <reference types="emdash/locals" />
 
-import type { ContentBylineCredit, TaxonomyTerm } from "emdash";
+import type { ContentBylineCredit, TaxonomyTerm, PortableTextBlock } from "emdash";
+
+export interface About {
+  id: string;
+  slug: string | null;
+  status: string;
+  label: string;
+  subtitle: string;
+  paragraphs: unknown;
+  createdAt: Date;
+  updatedAt: Date;
+  publishedAt: Date | null;
+  bylines?: ContentBylineCredit[];
+  terms?: Record<string, TaxonomyTerm[]>;
+}
+
+export interface Certificate {
+  id: string;
+  slug: string | null;
+  status: string;
+  title: string;
+  certificate_file: { id: string; src?: string; filename?: string; mimeType?: string; size?: number; provider?: string; meta?: Record<string, unknown> };
+  issuer: string;
+  issuer_id: string;
+  issuer_website: string;
+  createdAt: Date;
+  updatedAt: Date;
+  publishedAt: Date | null;
+  bylines?: ContentBylineCredit[];
+  terms?: Record<string, TaxonomyTerm[]>;
+}
+
+export interface Post {
+  id: string;
+  slug: string | null;
+  status: string;
+  title: string;
+  excerpt: string;
+  content: PortableTextBlock[];
+  image: { id: string; src?: string; alt?: string; width?: number; height?: number; provider?: string; previewUrl?: string; meta?: Record<string, unknown> };
+  labels: unknown;
+  createdAt: Date;
+  updatedAt: Date;
+  publishedAt: Date | null;
+  bylines?: ContentBylineCredit[];
+  terms?: Record<string, TaxonomyTerm[]>;
+}
+
+export interface Profile {
+  id: string;
+  slug: string | null;
+  status: string;
+  name: string;
+  label: string;
+  createdAt: Date;
+  updatedAt: Date;
+  publishedAt: Date | null;
+  bylines?: ContentBylineCredit[];
+  terms?: Record<string, TaxonomyTerm[]>;
+}
+
+export interface Project {
+  id: string;
+  slug: string | null;
+  status: string;
+  title: string;
+  description: PortableTextBlock[];
+  url?: string;
+  start_date: string;
+  end_date?: string;
+  labels: unknown;
+  image: { id: string; src?: string; alt?: string; width?: number; height?: number; provider?: string; previewUrl?: string; meta?: Record<string, unknown> };
+  featured: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+  publishedAt: Date | null;
+  bylines?: ContentBylineCredit[];
+  terms?: Record<string, TaxonomyTerm[]>;
+}
+
+export interface Social {
+  id: string;
+  slug: string | null;
+  status: string;
+  name: string;
+  label: string;
+  url: string;
+  createdAt: Date;
+  updatedAt: Date;
+  publishedAt: Date | null;
+  bylines?: ContentBylineCredit[];
+  terms?: Record<string, TaxonomyTerm[]>;
+}
 
 declare module "emdash" {
   interface EmDashCollections {
+    about: About;
+    certificates: Certificate;
+    posts: Post;
+    profile: Profile;
+    projects: Project;
+    socials: Social;
   }
 }

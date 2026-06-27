@@ -1,183 +1,166 @@
 ---
-import { getEmDashEntry } from "emdash";
-import Layout from "@layouts/Layout.astro";
-import Title from "@/components/Title.astro";
-import { Image, PortableText } from "emdash/ui";
+import { getEmDashEntry } from 'emdash'
+import Layout from '@layouts/Layout.astro'
+import Title from '@/components/Title.astro'
+import { Image, PortableText } from 'emdash/ui'
 
-const { slug } = Astro.params;
-const language = Astro.currentLocale || "es";
+const { slug } = Astro.params
+const language = Astro.currentLocale || 'es'
 
 if (!slug) {
-    return Astro.redirect("/404");
+    return Astro.redirect('/404')
 }
 
-const { entry: projectEntry } = await getEmDashEntry("projects", slug, {
+const { entry: projectEntry } = await getEmDashEntry('projects', slug, {
     locale: language,
-});
+})
 
 if (!projectEntry) {
-    return Astro.redirect("/404");
+    return Astro.redirect('/404')
 }
 
 const project = projectEntry as unknown as {
     data: {
-        title: string;
-        description: any;
-        url?: string;
-        start_date: string;
-        end_date?: string;
-        labels: Array<{ etiqueta?: string; label?: string }>;
-        image: any;
-    };
-};
+        title: string
+        description: any
+        url?: string
+        start_date: string
+        end_date?: string
+        labels: Array<{ etiqueta?: string; label?: string }>
+        image: any
+    }
+}
 
 const formatDate = (dateStr: string, locale: string) => {
-    if (!dateStr) return "";
-    const date = new Date(dateStr);
-    const options: Intl.DateTimeFormatOptions = { month: "short", year: "numeric" };
-    const formatted = date.toLocaleDateString(locale === "es" ? "es-ES" : "en-US", options);
-    return formatted.charAt(0).toUpperCase() + formatted.slice(1);
-};
+    if (!dateStr) return ''
+    const date = new Date(dateStr)
+    const options: Intl.DateTimeFormatOptions = {
+        month: 'short',
+        year: 'numeric',
+    }
+    const formatted = date.toLocaleDateString(
+        locale === 'es' ? 'es-ES' : 'en-US',
+        options,
+    )
+    return formatted.charAt(0).toUpperCase() + formatted.slice(1)
+}
 
 const getExcerpt = (description: any) => {
-    if (!Array.isArray(description)) return "";
-    const firstBlock = description[0];
-    if (!firstBlock || !Array.isArray(firstBlock.children)) return "";
-    const text = firstBlock.children.map((child: any) => child.text).join("");
-    return text.length > 150 ? text.slice(0, 150) + "..." : text;
-};
+    if (!Array.isArray(description)) return ''
+    const firstBlock = description[0]
+    if (!firstBlock || !Array.isArray(firstBlock.children)) return ''
+    const text = firstBlock.children.map((child: any) => child.text).join('')
+    return text.length > 150 ? text.slice(0, 150) + '...' : text
+}
 ---
 
-<Layout 
+<Layout
     title={project.data.title}
     description={getExcerpt(project.data.description)}
-    ogImage={project.data.image}
->
-    <div class="max-w-5xl mx-auto px-6 py-12">
-        <!-- Back navigation link -->
+    ogImage={project.data.image}>
+    <div class="max-w-7xl mx-auto px-6 py-12">
         <div class="mb-8">
-            <a 
-                href="/projects" 
-                class="group inline-flex items-center text-xs font-semibold text-white/60 hover:text-white transition-colors gap-2"
-            >
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4 group-hover:-translate-x-1 transition-transform">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+            <a
+                href="/projects"
+                class="group inline-flex items-center text-xs font-medium text-neutral-400 hover:text-white transition-colors gap-1.5">
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="2"
+                    stroke="currentColor"
+                    class="w-4 h-4 group-hover:-translate-x-0.5 transition-transform">
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"></path>
                 </svg>
                 Volver a proyectos
             </a>
         </div>
 
-        <!-- Hero Header -->
-        <header class="mb-8 text-center md:text-left">
-            <div class="flex flex-col gap-3">
-                <Title title={project.data.title} />
-                
-                {project.data.url && (
-                    <div class="flex flex-wrap items-center justify-center md:justify-start gap-3 mt-1">
+        <header class="mb-8 text-left max-w-3xl mx-auto">
+            <div class="flex flex-col gap-2">
+                <h1 class="text-3xl sm:text-4xl font-semibold tracking-tight text-white">
+                    {project.data.title}
+                </h1>
+            </div>
+        </header>
+
+        <!-- Horizontal Metadata Row -->
+        <div class="flex flex-wrap gap-x-10 gap-y-6 py-6 border-y border-neutral-900 max-w-3xl mx-auto mb-10 text-sm">
+            <div>
+                <span class="text-[10px] font-semibold uppercase tracking-widest text-neutral-500 block mb-1">Duración</span>
+                <span class="text-neutral-300 font-medium">
+                    {formatDate(project.data.start_date, language)} — {
+                        project.data.end_date
+                            ? formatDate(project.data.end_date, language)
+                            : 'Presente'
+                    }
+                </span>
+            </div>
+            {
+                project.data.labels && project.data.labels.length > 0 && (
+                    <div class="flex-1 min-w-[200px]">
+                        <span class="text-[10px] font-semibold uppercase tracking-widest text-neutral-500 block mb-1">Tecnologías</span>
+                        <div class="flex flex-wrap gap-1.5 mt-1">
+                            {project.data.labels.map((tag: any) => (
+                                <span class="text-xs text-neutral-400 bg-neutral-900 border border-neutral-800 px-2.5 py-0.5 rounded-md">
+                                    {tag.etiqueta || tag.label}
+                                </span>
+                            ))}
+                        </div>
+                    </div>
+                )
+            }
+            {
+                project.data.url && (
+                    <div class="flex items-end">
                         <a
                             href={project.data.url}
                             target="_blank"
                             rel="noopener noreferrer"
-                            class="inline-flex items-center text-xs font-bold text-blue-400 hover:text-blue-300 hover:underline gap-1.5 transition-colors"
-                        >
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-3.5 h-3.5">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
+                            class="group inline-flex items-center text-xs font-semibold text-neutral-200 bg-neutral-950 border border-neutral-800 hover:bg-neutral-900 hover:text-white px-4 py-2 rounded-lg transition-all duration-200 gap-1.5">
+                            Visitar sitio web
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke-width="2"
+                                stroke="currentColor"
+                                class="w-3.5 h-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform">
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"
+                                />
                             </svg>
-                            {project.data.url.replace(/^https?:\/\/(www\.)?/, "")}
                         </a>
                     </div>
-                )}
-            </div>
-        </header>
-
-        <!-- Main Showcase Image -->
-        <div class="relative w-full aspect-video overflow-hidden bg-neutral-950 border border-white/10 rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.3)] mb-12 hover:border-blue-500/20 transition-all duration-500 group">
-            {/* Soft backdrop glow */}
-            <div class="absolute inset-0 bg-linear-to-b from-transparent via-transparent to-black/30 group-hover:to-black/10 transition-all duration-500 z-10 pointer-events-none"></div>
-            {project.data.image && (
-                <Image
-                    image={project.data.image}
-                    width={1200}
-                    height={675}
-                    alt={project.data.title}
-                    class="object-cover w-full h-full group-hover:scale-[1.01] transition-transform duration-700 ease-out"
-                />
-            )}
+                )
+            }
         </div>
 
-        <!-- Content & Info Columns -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
-            <!-- Left: Description (2/3 width) -->
-            <div class="md:col-span-2 flex flex-col gap-6">
-                <div class="project-description text-white/85 leading-relaxed text-sm flex flex-col gap-4 bg-white/[0.02] border border-white/[0.06] rounded-2xl p-6 md:p-8 backdrop-blur-xs">
-                    <PortableText value={project.data.description} />
-                </div>
-            </div>
+        <div
+            class="relative w-full aspect-video overflow-hidden bg-neutral-950 border border-neutral-900 rounded-xl mb-12 max-w-3xl mx-auto">
+            {
+                project.data.image && (
+                    <Image
+                        image={project.data.image}
+                        width={1200}
+                        height={675}
+                        alt={project.data.title}
+                        class="object-cover w-full h-full"
+                    />
+                )
+            }
+        </div>
 
-            <!-- Right: Sidebar Info (1/3 width) -->
-            <div class="md:col-span-1 flex flex-col gap-6">
-                <!-- Metadata Card -->
-                <div class="bg-neutral-900/40 backdrop-blur-md border border-white/10 rounded-2xl p-6 flex flex-col gap-5 hover:border-blue-500/20 transition-all duration-300 shadow-xl">
-                    <div>
-                        <span class="text-xs font-semibold uppercase tracking-wider text-white/40 mb-1 block">Duración</span>
-                        <p class="text-sm font-semibold text-white">
-                            {formatDate(project.data.start_date, language)} — {project.data.end_date ? formatDate(project.data.end_date, language) : "Presente"}
-                        </p>
-                    </div>
-
-                    {project.data.labels && project.data.labels.length > 0 && (
-                        <div>
-                            <span class="text-xs font-semibold uppercase tracking-wider text-white/40 mb-3 block">Tecnologías</span>
-                            <div class="flex flex-wrap gap-1.5">
-                                {project.data.labels.map((tag: any) => (
-                                    <span class="text-xs font-bold tracking-wider uppercase px-3 py-1 bg-blue-500/10 text-blue-300 border border-blue-500/20 rounded-md hover:bg-blue-500/20 transition-all">
-                                        {tag.etiqueta || tag.label}
-                                    </span>
-                                ))}
-                            </div>
-                        </div>
-                    )}
-                </div>
-
-                <!-- Project URL (External link button) -->
-                {project.data.url && (
-                    <a
-                        href={project.data.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        class="group inline-flex items-center justify-center w-full px-5 py-3 text-xs font-bold text-black bg-white hover:bg-neutral-100 rounded-xl transition-all duration-300 gap-2 shadow-[0_0_15px_rgba(255,255,255,0.05)] hover:shadow-[0_0_20px_rgba(255,255,255,0.15)]"
-                    >
-                        Visitar sitio web
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-3.5 h-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
-                        </svg>
-                    </a>
-                )}
+        <div class="max-w-3xl mx-auto w-full mb-20">
+            <div
+                class="project-description text-neutral-300 leading-relaxed text-base flex flex-col gap-6 prose prose-neutral prose-invert max-w-none">
+                <PortableText value={project.data.description} />
             </div>
         </div>
     </div>
 </Layout>
-
-<style is:global>
-    /* Styling elements inside PortableText output */
-    .project-description p {
-        margin-bottom: 1.25rem;
-    }
-    .project-description p:last-child {
-        margin-bottom: 0;
-    }
-    .project-description strong {
-        color: white;
-        font-weight: 600;
-    }
-    .project-description ul {
-        list-style-type: disc;
-        padding-left: 1.5rem;
-        margin-bottom: 1.25rem;
-        display: flex;
-        flex-col: gap-1.5;
-    }
-    .project-description li {
-        color: rgba(255, 255, 255, 0.8);
-    }
-</style>

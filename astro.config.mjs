@@ -11,7 +11,14 @@ import { d1, r2, kvCache } from '@emdash-cms/cloudflare'
 export default defineConfig({
     site: 'https://cocodrulo.dev',
     output: 'server',
-    adapter: cloudflare(),
+    adapter: cloudflare({
+        platformProxy: {
+            enabled: true,
+            persist: {
+                path: 'remote',
+            },
+        },
+    }),
 
     i18n: {
         locales: ['en', 'es'],
