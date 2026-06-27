@@ -37,7 +37,12 @@ const formatDate = (dateStr: string, locale: string) => {
 };
 ---
 
-<Layout title={post.data.title}>
+<Layout 
+    title={post.data.title}
+    description={post.data.excerpt}
+    ogImage={post.data.image}
+    ogType="article"
+>
     <div class="max-w-4xl mx-auto px-6 py-12">
         {/* Back navigation link */}
         <div class="mb-8">
@@ -71,7 +76,7 @@ const formatDate = (dateStr: string, locale: string) => {
                 {/* Post Metadata Card */}
                 <div class="bg-white/5 border border-white/10 rounded-2xl p-5 flex flex-col gap-4">
                     <div>
-                        <h4 class="text-xs font-semibold uppercase tracking-wider text-white/40 mb-1">Publicado el</h4>
+                        <span class="text-xs font-semibold uppercase tracking-wider text-white/40 mb-1 block">Publicado el</span>
                         <p class="text-sm font-semibold text-white">
                             {formatDate(post.data.published_at, language)}
                         </p>
@@ -79,7 +84,7 @@ const formatDate = (dateStr: string, locale: string) => {
 
                     {post.data.labels && post.data.labels.length > 0 && (
                         <div>
-                            <h4 class="text-xs font-semibold uppercase tracking-wider text-white/40 mb-2">Etiquetas</h4>
+                            <span class="text-xs font-semibold uppercase tracking-wider text-white/40 mb-2 block">Etiquetas</span>
                             <div class="flex flex-wrap gap-1.5">
                                 {post.data.labels.map((tag: any) => (
                                     <span class="text-xs px-2.5 py-0.5 font-medium bg-white/5 text-white/70 border border-white/10 rounded-full">

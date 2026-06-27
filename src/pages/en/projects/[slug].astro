@@ -38,9 +38,21 @@ const formatDate = (dateStr: string, locale: string) => {
     const formatted = date.toLocaleDateString(locale === "es" ? "es-ES" : "en-US", options);
     return formatted.charAt(0).toUpperCase() + formatted.slice(1);
 };
+
+const getExcerpt = (description: any) => {
+    if (!Array.isArray(description)) return "";
+    const firstBlock = description[0];
+    if (!firstBlock || !Array.isArray(firstBlock.children)) return "";
+    const text = firstBlock.children.map((child: any) => child.text).join("");
+    return text.length > 150 ? text.slice(0, 150) + "..." : text;
+};
 ---
 
-<Layout title={project.data.title}>
+<Layout 
+    title={project.data.title}
+    description={getExcerpt(project.data.description)}
+    ogImage={project.data.image}
+>
     <div class="max-w-5xl mx-auto px-6 py-12">
         <!-- Back navigation link -->
         <div class="mb-8">
@@ -107,7 +119,7 @@ const formatDate = (dateStr: string, locale: string) => {
                 <!-- Metadata Card -->
                 <div class="bg-neutral-900/40 backdrop-blur-md border border-white/10 rounded-2xl p-6 flex flex-col gap-5 hover:border-blue-500/20 transition-all duration-300 shadow-xl">
                     <div>
-                        <h4 class="text-xs font-semibold uppercase tracking-wider text-white/40 mb-1">Duration</h4>
+                        <span class="text-xs font-semibold uppercase tracking-wider text-white/40 mb-1 block">Duration</span>
                         <p class="text-sm font-semibold text-white">
                             {formatDate(project.data.start_date, language)} — {project.data.end_date ? formatDate(project.data.end_date, language) : "Present"}
                         </p>
@@ -115,7 +127,7 @@ const formatDate = (dateStr: string, locale: string) => {
 
                     {project.data.labels && project.data.labels.length > 0 && (
                         <div>
-                            <h4 class="text-xs font-semibold uppercase tracking-wider text-white/40 mb-3">Technologies</h4>
+                            <span class="text-xs font-semibold uppercase tracking-wider text-white/40 mb-3 block">Technologies</span>
                             <div class="flex flex-wrap gap-1.5">
                                 {project.data.labels.map((tag: any) => (
                                     <span class="text-xs font-bold tracking-wider uppercase px-3 py-1 bg-blue-500/10 text-blue-300 border border-blue-500/20 rounded-md hover:bg-blue-500/20 transition-all">

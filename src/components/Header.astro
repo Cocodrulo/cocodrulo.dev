@@ -3,6 +3,11 @@ import { getMenu } from "emdash";
 const language = Astro.currentLocale || "es";
 const primaryMenu = await getMenu("primary", { locale: language });
 const menuItems = primaryMenu?.items || [];
+
+const currentPathname = Astro.url.pathname;
+const targetUrl = language === "es"
+    ? (currentPathname === "/" ? "/en" : `/en${currentPathname}`)
+    : (currentPathname.startsWith("/en/") ? currentPathname.slice(3) : (currentPathname === "/en" ? "/" : currentPathname));
 ---
 
 <header class="flex justify-between items-center px-7 py-4">
@@ -25,6 +30,15 @@ const menuItems = primaryMenu?.items || [];
                     </li>
                 ))
             }
+            <li class="border-l border-white/20 pl-6">
+                <a
+                    href={targetUrl}
+                    class="flex items-center gap-1 text-xs font-semibold tracking-wider px-3 py-1 rounded-full border border-white/20 text-white/80 hover:text-white hover:border-white/40 hover:bg-white/5 transition-all duration-300"
+                    aria-label={language === "es" ? "Change to English" : "Cambiar a Español"}
+                >
+                    {language === "es" ? "EN" : "ES"}
+                </a>
+            </li>
         </ul>
     </nav>
 </header>

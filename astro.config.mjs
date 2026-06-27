@@ -9,6 +9,7 @@ import { d1, r2, kvCache } from '@emdash-cms/cloudflare'
 
 // https://astro.build/config
 export default defineConfig({
+    site: 'https://cocodrulo.dev',
     output: 'server',
     adapter: cloudflare(),
 

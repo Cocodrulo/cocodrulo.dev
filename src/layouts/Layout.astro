@@ -1,8 +1,4 @@
 ---
-function getLocaleFromUrl(url: URL) {
-    throw new Error("Function not implemented.");
-}
-
 import Header from "@components/Header.astro";
 import Footer from "@components/Footer.astro";
 import SpeedInsights from "@vercel/speed-insights/astro";
@@ -10,39 +6,116 @@ import "@/styles/global.css";
 
 interface Props {
     title?: string;
+    description?: string;
+    ogImage?: string | object;
+    canonicalURL?: string;
+    ogType?: string;
+    noindex?: boolean;
 }
 
 const pageURL = Astro.request.url;
-const { title } = Astro.props;
+const { title, description: customDescription, ogImage: customOgImage, canonicalURL, ogType = "website", noindex = false } = Astro.props;
 
 const language = Astro.currentLocale || "es";
+
+// Localized fallback descriptions
+const defaultDescription = language === "es"
+    ? "Sitio web oficial de Javier Aday Pérez Romero (Cocodrulo) - Desarrollador de software y creador. Explora mis proyectos, artículos de blog y certificaciones."
+    : "Official website of Javier Aday Pérez Romero (Cocodrulo) - Software developer and creator. Explore my projects, blog posts, and certifications.";
+
+const description = customDescription || defaultDescription;
+
+// Resolve canonical URL
+const canonical = canonicalURL || pageURL;
+
+// Helper to resolve dynamic or static image URLs to absolute URLs
+const getPublicImageUrl = (imageObj: any) => {
+    if (!imageObj) return "https://cocodrulo.dev/images/Logo.png";
+    if (typeof imageObj === "string") {
+        if (imageObj.startsWith("http")) return imageObj;
+        return `https://cocodrulo.dev${imageObj.startsWith("/") ? "" : "/"}${imageObj}`;
+    }
+    
+    if (imageObj.url) {
+        if (imageObj.url.startsWith("http")) return imageObj.url;
+        return `https://cocodrulo.dev${imageObj.url.startsWith("/") ? "" : "/"}${imageObj.url}`;
+    }
+    
+    const storageKey = imageObj.meta?.storageKey;
+    if (storageKey) {
+        if (Astro.locals.emdash?.getPublicMediaUrl) {
+            const url = Astro.locals.emdash.getPublicMediaUrl(storageKey);
+            if (url.startsWith("http")) return url;
+            return `https://cocodrulo.dev${url.startsWith("/") ? "" : "/"}${url}`;
+        }
+        return `https://files.cocodrulo.dev/${storageKey}`;
+    }
+    
+    if (imageObj.id) {
+        return `https://cocodrulo.dev/_emdash/api/media/file/${imageObj.id}`;
+    }
+    
+    return "https://cocodrulo.dev/images/Logo.png";
+};
+
+const ogImage = getPublicImageUrl(customOgImage);
+
+// Calculate alternate links for localization
+const path = new URL(pageURL).pathname;
+
+const getAlternatePath = (currentPath: string, currentLang: string) => {
+    if (currentLang === "es") {
+        // Alt is English, prefix with /en
+        return `/en${currentPath === "/" ? "" : currentPath}`;
+    } else {
+        // Alt is Spanish, remove leading /en
+        const stripped = currentPath.replace(/^\/en/, "");
+        return stripped === "" ? "/" : stripped;
+    }
+};
+
+const alternateEsPath = language === "es" ? path : getAlternatePath(path, "en");
+const alternateEnPath = language === "en" ? path : getAlternatePath(path, "es");
+
+const alternateEsUrl = `https://cocodrulo.dev${alternateEsPath}`;
+const alternateEnUrl = `https://cocodrulo.dev${alternateEnPath}`;
 ---
 
 <!doctype html>
 <html lang={language}>
     <head>
         <meta charset="UTF-8" />
-        <meta name="description" content="Javier Aday Pérez Romero" />
+        <meta name="description" content={description} />
         <meta name="viewport" content="width=device-width" />
         <link rel="icon" type="image/svg+xml" href="/images/Logo.svg" />
+        <link rel="canonical" href={canonical} />
 
+        {noindex && <meta name="robots" content="noindex, follow" />}
+
+        {/* Alternate hreflang versions for localized SEO */}
+        <link rel="alternate" hreflang="es" href={alternateEsUrl} />
+        <link rel="alternate" hreflang="en" href={alternateEnUrl} />
+        <link rel="alternate" hreflang="x-default" href={alternateEsUrl} />
+
+        {/* Open Graph / Facebook */}
         <meta
             property="og:title"
             content={title ? `${title} - Cocodrulo` : "Cocodrulo"}
         />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content={pageURL ?? "https://cocodrulo.dev/"} />
-        <meta
-            property="og:image"
-            content={"https://cocodrulo.dev/images/Logo.png"}
-        />
+        <meta property="og:type" content={ogType} />
+        <meta property="og:url" content={pageURL} />
+        <meta property="og:image" content={ogImage} />
         <meta property="og:image:type" content="image/png" />
-        <meta property="og:locale" content="es_ES" />
-        <meta property="og:locale:alternate" content="en_GB" />
-        <meta
-            property="og:description"
-            content="Página web oficial de Cocodrulo donde encontrarás todo lo relacionado con este creador."
-        />
+        <meta property="og:locale" content={language === "es" ? "es_ES" : "en_US"} />
+        <meta property="og:locale:alternate" content={language === "es" ? "en_GB" : "es_ES"} />
+        <meta property="og:description" content={description} />
+
+        {/* Twitter */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={title ? `${title} - Cocodrulo` : "Cocodrulo"} />
+        <meta name="twitter:description" content={description} />
+        <meta name="twitter:image" content={ogImage} />
+
         <SpeedInsights />
         <title>{title ? `${title} - Cocodrulo` : "Cocodrulo"}</title>
     </head>

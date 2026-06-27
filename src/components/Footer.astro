@@ -1,0 +1,150 @@
+---
+const language = Astro.currentLocale || 'es'
+
+// Base paths depending on language
+const getPath = (path: string) => {
+    return language === 'es' ? path : `/en${path === '/' ? '' : path}`
+}
+
+const t = {
+    es: {
+        description:
+            'Desarrollador de software y creador de experiencias web interactivas y eficientes.',
+        navigation: 'Navegación',
+        social: 'Redes Sociales',
+        contact: 'Contacto',
+        projects: 'Proyectos',
+        blog: 'Blog',
+        certificates: 'Certificaciones',
+        home: 'Inicio',
+        rights: `Cocodrulo.`,
+    },
+    en: {
+        description:
+            'Software developer and creator of interactive and efficient web experiences.',
+        navigation: 'Navigation',
+        social: 'Social Media',
+        contact: 'Contact',
+        projects: 'Projects',
+        blog: 'Blog',
+        certificates: 'Certifications',
+        home: 'Home',
+        rights: `Cocodrulo.`,
+    },
+}[language as 'es' | 'en'] || {
+    description:
+        'Software developer and creator of interactive and efficient web experiences.',
+    navigation: 'Navigation',
+    social: 'Social Media',
+    contact: 'Contact',
+    projects: 'Projects',
+    blog: 'Blog',
+    certificates: 'Certifications',
+    home: 'Home',
+    rights: `Cocodrulo`,
+}
+---
+
+<footer
+    class="w-full bg-neutral-950/60 border-t border-white/5 py-12 px-6 md:px-12 mt-auto">
+    <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+        <!-- Logo & Description -->
+        <div class="col-span-1 md:col-span-2 flex flex-col gap-4">
+            <a href={getPath('/')} class="flex items-center gap-2">
+                <img
+                    src="/images/Logo.svg"
+                    class="h-8 opacity-85 hover:opacity-100 transition-opacity duration-300"
+                    alt="Cocodrulo Logo"
+                />
+                <span class="text-white font-bold text-lg tracking-wider"
+                    >COCODRULO</span
+                >
+            </a>
+            <p class="text-white/50 text-sm max-w-sm leading-relaxed">
+                {t.description}
+            </p>
+        </div>
+
+        <!-- Links Navigation -->
+        <div class="flex flex-col gap-4">
+            <h3
+                class="text-white font-semibold text-sm uppercase tracking-wider">
+                {t.navigation}
+            </h3>
+            <ul class="flex flex-col gap-2">
+                <li>
+                    <a
+                        href={getPath('/')}
+                        class="text-white/60 hover:text-white text-sm transition-colors duration-300">
+                        {t.home}
+                    </a>
+                </li>
+                <li>
+                    <a
+                        href={getPath('/projects')}
+                        class="text-white/60 hover:text-white text-sm transition-colors duration-300">
+                        {t.projects}
+                    </a>
+                </li>
+                <li>
+                    <a
+                        href={getPath('/blog')}
+                        class="text-white/60 hover:text-white text-sm transition-colors duration-300">
+                        {t.blog}
+                    </a>
+                </li>
+                <li>
+                    <a
+                        href={getPath('/certificates')}
+                        class="text-white/60 hover:text-white text-sm transition-colors duration-300">
+                        {t.certificates}
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Contact & Socials -->
+        <div class="flex flex-col gap-4">
+            <h3
+                class="text-white font-semibold text-sm uppercase tracking-wider">
+                {t.social}
+            </h3>
+            <ul class="flex flex-col gap-2">
+                <li>
+                    <a
+                        href="https://github.com/cocodrulo"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="text-white/60 hover:text-white text-sm transition-colors duration-300 flex items-center gap-2">
+                        GitHub
+                    </a>
+                </li>
+                <li>
+                    <a
+                        href="https://linkedin.com"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="text-white/60 hover:text-white text-sm transition-colors duration-300 flex items-center gap-2">
+                        LinkedIn
+                    </a>
+                </li>
+                <li>
+                    <a
+                        href={getPath('/contact')}
+                        class="text-white/60 hover:text-white text-sm transition-colors duration-300 flex items-center gap-2">
+                        {t.contact}
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Bottom Copyright -->
+    <div
+        class="max-w-6xl mx-auto pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4">
+        <p class="text-white/30 text-xs">
+            {t.rights}
+        </p>
+        <p class="text-white/20 text-[10px]">Built with Astro & Tailwind</p>
+    </div>
+</footer>
