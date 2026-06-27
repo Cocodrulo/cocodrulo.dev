@@ -4,7 +4,8 @@ dist/
 # generated types
 .astro/
 .vercel/
-.emdash/
+.emdash/*
+!.emdash/seed.json
 
 # dependencies
 node_modules/
