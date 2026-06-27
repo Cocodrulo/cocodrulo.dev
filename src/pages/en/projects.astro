@@ -24,27 +24,8 @@ const projects = (projectEntries || []) as unknown as Array<{
     }
 }>
 
-const formatDate = (dateStr: string, locale: string) => {
-    if (!dateStr) return ''
-    const date = new Date(dateStr)
-    const options: Intl.DateTimeFormatOptions = {
-        month: 'short',
-        year: 'numeric',
-    }
-    const formatted = date.toLocaleDateString(
-        locale === 'es' ? 'es-ES' : 'en-US',
-        options,
-    )
-    return formatted.charAt(0).toUpperCase() + formatted.slice(1)
-}
-
-const getExcerpt = (description: any) => {
-    if (!Array.isArray(description)) return ''
-    const firstBlock = description[0]
-    if (!firstBlock || !Array.isArray(firstBlock.children)) return ''
-    const text = firstBlock.children.map((child: any) => child.text).join('')
-    return text.length > 120 ? text.slice(0, 120) + '...' : text
-}
+// Cache for 5 minutes
+Astro.response.headers.set('Cache-Control', 'public, max-age=300')
 ---
 
 <Layout

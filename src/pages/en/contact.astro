@@ -1,9 +1,13 @@
 ---
 import Layout from '@layouts/Layout.astro'
 import Title from '@/components/Title.astro'
+
+export const prerender = true
 ---
 
-<Layout title="Contact" description="Get in touch with Javier Aday Pérez Romero (Cocodrulo). If you have a project idea, business inquiry, or want to collaborate, write to me here.">
+<Layout
+    title="Contact"
+    description="Get in touch with Javier Aday Pérez Romero (Cocodrulo). If you have a project idea, business inquiry, or want to collaborate, write to me here.">
     <div class="max-w-xl mx-auto px-6 py-12">
         <header class="mb-10 text-center">
             <Title title="Contact" />
@@ -15,7 +19,6 @@ import Title from '@/components/Title.astro'
 
         <div
             class="bg-neutral-900/40 backdrop-blur-md border border-white/10 rounded-2xl p-6 md:p-8 shadow-2xl hover:border-blue-500/20 transition-all duration-300">
-            <!-- Success status block (initially hidden) -->
             <div
                 id="status-success"
                 class="hidden text-center py-8 flex flex-col items-center gap-4">

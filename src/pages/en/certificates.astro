@@ -67,6 +67,9 @@ const getCertificateUrl = (fileObj: typeof certificates[number]["data"]["certifi
 
     return "";
 };
+
+// Cache for 5 minutes
+Astro.response.headers.set("Cache-Control", "public, max-age=300");
 ---
 
 <Layout title="Certifications" description="Professional and academic certifications of Javier Aday Pérez Romero (Cocodrulo). Official courses and certificates from Red Hat, Cisco, Cambridge, and more.">

@@ -22,6 +22,9 @@ const projects = (projectEntries || []) as unknown as Array<{
         image: any
     }
 }>
+
+// Cache for 5 minutes
+Astro.response.headers.set('Cache-Control', 'public, max-age=300')
 ---
 
 <Layout
