@@ -81,16 +81,21 @@ const getExcerpt = (description: any) => {
 
         <header class="mb-8 text-left max-w-3xl mx-auto">
             <div class="flex flex-col gap-2">
-                <h1 class="text-3xl sm:text-4xl font-semibold tracking-tight text-white">
+                <h1
+                    class="text-3xl sm:text-4xl font-semibold tracking-tight text-white">
                     {project.data.title}
                 </h1>
             </div>
         </header>
 
         <!-- Horizontal Metadata Row -->
-        <div class="flex flex-wrap gap-x-10 gap-y-6 py-6 border-y border-neutral-900 max-w-3xl mx-auto mb-10 text-sm">
+        <div
+            class="flex flex-wrap gap-x-10 gap-y-6 py-6 border-y border-neutral-900 max-w-3xl mx-auto mb-10 text-sm">
             <div>
-                <span class="text-[10px] font-semibold uppercase tracking-widest text-neutral-500 block mb-1">Duration</span>
+                <span
+                    class="text-[10px] font-semibold uppercase tracking-widest text-neutral-500 block mb-1"
+                    >Duration</span
+                >
                 <span class="text-neutral-300 font-medium">
                     {formatDate(project.data.start_date, language)} — {
                         project.data.end_date
@@ -102,7 +107,9 @@ const getExcerpt = (description: any) => {
             {
                 project.data.labels && project.data.labels.length > 0 && (
                     <div class="flex-1 min-w-[200px]">
-                        <span class="text-[10px] font-semibold uppercase tracking-widest text-neutral-500 block mb-1">Technologies</span>
+                        <span class="text-[10px] font-semibold uppercase tracking-widest text-neutral-500 block mb-1">
+                            Technologies
+                        </span>
                         <div class="flex flex-wrap gap-1.5 mt-1">
                             {project.data.labels.map((tag: any) => (
                                 <span class="text-xs text-neutral-400 bg-neutral-900 border border-neutral-800 px-2.5 py-0.5 rounded-md">
@@ -158,7 +165,7 @@ const getExcerpt = (description: any) => {
 
         <div class="max-w-3xl mx-auto w-full mb-20">
             <div
-                class="project-description text-neutral-300 leading-relaxed text-base flex flex-col gap-6 prose prose-neutral prose-invert max-w-none">
+                class="project-description text-neutral-300 leading-relaxed text-base flex flex-col gap-6 prose prose-neutral prose-invert max-w-none prose-p:my-1 prose-p:text-pretty prose-headings:my-1 prose-h1:mt-0 prose-h2:mt-0 prose-h3:mt-0 prose-h4:mt-0 prose-h5:mt-0 prose-h6:mt-0">
                 <PortableText value={project.data.description} />
             </div>
         </div>

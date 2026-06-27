@@ -1,311 +1,438 @@
 ---
-import { getEmDashCollection } from "emdash";
-import { Image } from "emdash/ui";
-import Title from "./Title.astro";
+import { getEmDashCollection } from 'emdash'
+import { Image } from 'emdash/ui'
+import Title from './Title.astro'
 
-const language = Astro.currentLocale || "es";
+const language = Astro.currentLocale || 'es'
+
+interface Project {
+    slug: string
+    data: {
+        title: string
+        description: any
+        url?: string
+        start_date: string
+        end_date?: string
+        labels: Array<{ etiqueta?: string; label?: string }>
+        image: any
+        featured?: boolean
+    }
+}
+
+interface Post {
+    slug: string
+    data: {
+        title: string
+        excerpt: string
+        content: any
+        published_at: string
+        image?: any
+        labels?: Array<{ label: string }>
+    }
+}
 
 // Fetch featured projects
-const { entries: projectEntries } = await getEmDashCollection("projects", {
+const { entries: projects } = (await getEmDashCollection('projects', {
     locale: language,
-    status: "published",
-});
+    status: 'published',
+    where: { featured: '1' },
+    limit: 3,
+})) as unknown as { entries: Project[] }
 
-const projects = (projectEntries || [])
-    .filter((project: any) => project.data && project.data.featured === true)
-    .slice(0, 3) as unknown as Array<{
-        slug: string;
-        data: {
-            title: string;
-            description: any;
-            url?: string;
-            start_date: string;
-            end_date?: string;
-            labels: Array<{ etiqueta?: string; label?: string }>;
-            image: any;
-            featured?: boolean;
-        };
-    }>;
+// const projects = (projectEntries || [])
+//     .filter((project: any) => project.data && project.data.featured === true)
+//     .slice(0, 3) as unknown as Array<{
+//     slug: string
+//     data: {
+//         title: string
+//         description: any
+//         url?: string
+//         start_date: string
+//         end_date?: string
+//         labels: Array<{ etiqueta?: string; label?: string }>
+//         image: any
+//         featured?: boolean
+//     }
+// }>
 
 // Fetch latest blog posts
-const { entries: postEntries } = await getEmDashCollection("posts", {
+const { entries: posts } = (await getEmDashCollection('posts', {
     locale: language,
-    orderBy: { published_at: "desc" },
-});
+    orderBy: { published_at: 'desc' },
+    limit: 3,
+})) as unknown as { entries: Post[] }
 
-const posts = (postEntries || [])
-    .slice(0, 3) as unknown as Array<{
-        slug: string;
-        data: {
-            title: string;
-            excerpt: string;
-            content: any;
-            published_at: string;
-            image?: any;
-            labels?: Array<{ label: string }>;
-        };
-    }>;
+// const posts = (postEntries || []).slice(0, 3) as unknown as Array<{
+//     slug: string
+//     data: {
+//         title: string
+//         excerpt: string
+//         content: any
+//         published_at: string
+//         image?: any
+//         labels?: Array<{ label: string }>
+//     }
+// }>
 
 const formatDate = (dateStr: string, locale: string) => {
-    if (!dateStr) return "";
-    const date = new Date(dateStr);
-    const options: Intl.DateTimeFormatOptions = { month: "short", year: "numeric" };
-    const formatted = date.toLocaleDateString(locale === "es" ? "es-ES" : "en-US", options);
-    return formatted.charAt(0).toUpperCase() + formatted.slice(1);
-};
+    if (!dateStr) return ''
+    const date = new Date(dateStr)
+    const options: Intl.DateTimeFormatOptions = {
+        month: 'short',
+        year: 'numeric',
+    }
+    const formatted = date.toLocaleDateString(
+        locale === 'es' ? 'es-ES' : 'en-US',
+        options,
+    )
+    return formatted.charAt(0).toUpperCase() + formatted.slice(1)
+}
 
 const formatPostDate = (dateStr: string, locale: string) => {
-    if (!dateStr) return "";
-    const date = new Date(dateStr);
-    const options: Intl.DateTimeFormatOptions = { day: "numeric", month: "long", year: "numeric" };
-    return date.toLocaleDateString(locale === "es" ? "es-ES" : "en-US", options);
-};
+    if (!dateStr) return ''
+    const date = new Date(dateStr)
+    const options: Intl.DateTimeFormatOptions = {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric',
+    }
+    return date.toLocaleDateString(locale === 'es' ? 'es-ES' : 'en-US', options)
+}
 
 const getExcerpt = (description: any) => {
-    if (!Array.isArray(description)) return "";
-    const firstBlock = description[0];
-    if (!firstBlock || !Array.isArray(firstBlock.children)) return "";
-    const text = firstBlock.children.map((child: any) => child.text).join("");
-    return text.length > 120 ? text.slice(0, 120) + "..." : text;
-};
+    if (!Array.isArray(description)) return ''
+    const firstBlock = description[0]
+    if (!firstBlock || !Array.isArray(firstBlock.children)) return ''
+    const text = firstBlock.children.map((child: any) => child.text).join('')
+    return text.length > 120 ? text.slice(0, 120) + '...' : text
+}
 
 // Localized strings
 const t = {
     es: {
-        projectsTitle: "Proyectos Destacados",
-        projectsSubtitle: "Una selección de mis trabajos más relevantes y destacados.",
-        viewAllProjects: "Ver todos los proyectos",
-        moreInfo: "Más información",
-        visitWeb: "Visitar sitio web",
-        postsTitle: "Últimas Publicaciones",
-        postsSubtitle: "Mis artículos, tutoriales y reflexiones más recientes sobre tecnología.",
-        viewAllPosts: "Ver todos los artículos",
-        readPost: "Leer artículo",
-        noPosts: "No se encontraron artículos publicados aún.",
-        noProjects: "No se encontraron proyectos destacados.",
-        present: "Presente"
+        projectsTitle: 'Proyectos Destacados',
+        projectsSubtitle:
+            'Una selección de mis trabajos más relevantes y destacados.',
+        viewAllProjects: 'Ver todos los proyectos',
+        moreInfo: 'Más información',
+        visitWeb: 'Visitar sitio web',
+        postsTitle: 'Últimas Publicaciones',
+        postsSubtitle:
+            'Mis artículos, tutoriales y reflexiones más recientes sobre tecnología.',
+        viewAllPosts: 'Ver todos los artículos',
+        readPost: 'Leer artículo',
+        noPosts: 'No se encontraron artículos publicados aún.',
+        noProjects: 'No se encontraron proyectos destacados.',
+        present: 'Presente',
     },
     en: {
-        projectsTitle: "Featured Projects",
-        projectsSubtitle: "A selection of my most relevant and highlighted works.",
-        viewAllProjects: "View all projects",
-        moreInfo: "More information",
-        visitWeb: "Visit website",
-        postsTitle: "Latest Posts",
-        postsSubtitle: "My most recent articles, tutorials, and thoughts on technology.",
-        viewAllPosts: "View all articles",
-        readPost: "Read article",
-        noPosts: "No published articles found yet.",
-        noProjects: "No featured projects found.",
-        present: "Present"
-    }
-}[language as "es" | "en"] || {
-    projectsTitle: "Proyectos Destacados",
-    projectsSubtitle: "Una selección de mis trabajos más relevantes y destacados.",
-    viewAllProjects: "Ver todos los proyectos",
-    moreInfo: "Más información",
-    visitWeb: "Visitar sitio web",
-    postsTitle: "Últimas Publicaciones",
-    postsSubtitle: "Mis artículos, tutoriales y reflexiones más recientes sobre tecnología.",
-    viewAllPosts: "Ver todos los artículos",
-    readPost: "Leer artículo",
-    noPosts: "No se encontraron artículos publicados aún.",
-    noProjects: "No se encontraron proyectos destacados.",
-    present: "Presente"
-};
+        projectsTitle: 'Featured Projects',
+        projectsSubtitle:
+            'A selection of my most relevant and highlighted works.',
+        viewAllProjects: 'View all projects',
+        moreInfo: 'More information',
+        visitWeb: 'Visit website',
+        postsTitle: 'Latest Posts',
+        postsSubtitle:
+            'My most recent articles, tutorials, and thoughts on technology.',
+        viewAllPosts: 'View all articles',
+        readPost: 'Read article',
+        noPosts: 'No published articles found yet.',
+        noProjects: 'No featured projects found.',
+        present: 'Present',
+    },
+}[language as 'es' | 'en'] || {
+    projectsTitle: 'Proyectos Destacados',
+    projectsSubtitle:
+        'Una selección de mis trabajos más relevantes y destacados.',
+    viewAllProjects: 'Ver todos los proyectos',
+    moreInfo: 'Más información',
+    visitWeb: 'Visitar sitio web',
+    postsTitle: 'Últimas Publicaciones',
+    postsSubtitle:
+        'Mis artículos, tutoriales y reflexiones más recientes sobre tecnología.',
+    viewAllPosts: 'Ver todos los artículos',
+    readPost: 'Leer artículo',
+    noPosts: 'No se encontraron artículos publicados aún.',
+    noProjects: 'No se encontraron proyectos destacados.',
+    present: 'Presente',
+}
 
-const projectLinkPrefix = language === "en" ? "/en/projects" : "/projects";
-const blogLinkPrefix = language === "en" ? "/en/blog" : "/blog";
+const projectLinkPrefix = language === 'en' ? '/en/projects' : '/projects'
+const blogLinkPrefix = language === 'en' ? '/en/blog' : '/blog'
 ---
 
-<div class="max-w-6xl mx-auto px-6 py-16 flex flex-col gap-24 border-t border-white/5" id="featured-and-latest">
+<div
+    class="max-w-6xl mx-auto px-6 py-16 flex flex-col gap-24 border-t border-white/5"
+    id="featured-and-latest">
     {/* Featured Projects Section */}
-    {projects.length > 0 && (
-        <section id="featured-projects">
-            <header class="mb-12 text-center">
-                <Title title={t.projectsTitle} as="h2" />
-                <p class="text-white/60 max-w-xl mx-auto text-sm leading-relaxed mt-3">
-                    {t.projectsSubtitle}
-                </p>
-            </header>
+    {
+        projects.length > 0 && (
+            <section id="featured-projects">
+                <header class="mb-12 text-center">
+                    <Title title={t.projectsTitle} as="h2" />
+                    <p class="text-white/60 max-w-xl mx-auto text-sm leading-relaxed mt-3">
+                        {t.projectsSubtitle}
+                    </p>
+                </header>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {projects.map((project) => (
-                    <div class="group relative flex flex-col justify-between bg-neutral-900/40 backdrop-blur-md rounded-2xl border border-white/10 hover:border-blue-500/30 hover:shadow-[0_0_30px_rgba(59,130,246,0.1)] transition-all duration-300 hover:-translate-y-1 overflow-hidden">
-                        {/* Background glow on hover */}
-                        <div class="absolute inset-0 bg-linear-to-r from-blue-500/0 via-indigo-500/0 to-purple-500/0 group-hover:from-blue-500/5 group-hover:to-purple-500/5 rounded-2xl transition-all duration-300 pointer-events-none"></div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    {projects.map((project) => (
+                        <div class="group relative flex flex-col justify-between bg-neutral-900/40 backdrop-blur-md rounded-2xl border border-white/10 hover:border-blue-500/30 hover:shadow-[0_0_30px_rgba(59,130,246,0.1)] transition-all duration-300 hover:-translate-y-1 overflow-hidden">
+                            {/* Background glow on hover */}
+                            <div class="absolute inset-0 bg-linear-to-r from-blue-500/0 via-indigo-500/0 to-purple-500/0 group-hover:from-blue-500/5 group-hover:to-purple-500/5 rounded-2xl transition-all duration-300 pointer-events-none" />
 
-                        <div>
-                            <div class="relative aspect-video w-full overflow-hidden bg-white/5 border-b border-white/10">
-                                {project.data.image && (
-                                    <Image
-                                        image={project.data.image}
-                                        width={600}
-                                        height={338}
-                                        alt={project.data.title}
-                                        class="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500 ease-out"
-                                    />
-                                )}
-                            </div>
-
-                            <div class="p-6 relative z-10">
-                                <div class="flex items-center justify-between gap-2 mb-3">
-                                    <span class="text-xs font-semibold text-white/50">
-                                        {formatDate(project.data.start_date, language)} — {project.data.end_date ? formatDate(project.data.end_date, language) : t.present}
-                                    </span>
+                            <div>
+                                <div class="relative aspect-video w-full overflow-hidden bg-white/5 border-b border-white/10">
+                                    {project.data.image && (
+                                        <Image
+                                            image={project.data.image}
+                                            width={600}
+                                            height={338}
+                                            alt={project.data.title}
+                                            class="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500 ease-out"
+                                        />
+                                    )}
                                 </div>
 
-                                <h3 class="text-xl font-bold text-white leading-snug group-hover:text-blue-300 transition-colors duration-300 mb-3">
-                                    <a href={`${projectLinkPrefix}/${project.slug}`}>{project.data.title}</a>
-                                </h3>
-
-                                <p class="text-white/60 text-sm mb-4 leading-relaxed">
-                                    {getExcerpt(project.data.description)}
-                                </p>
-
-                                <div class="flex flex-wrap gap-1.5 mb-2">
-                                    {project.data.labels?.map((tag) => (
-                                        <span class="text-[10px] font-bold tracking-wider uppercase px-2.5 py-1 bg-blue-500/10 text-blue-300 border border-blue-500/20 rounded-md hover:bg-blue-500/20 transition-all">
-                                            {tag.etiqueta || tag.label}
+                                <div class="p-6 relative z-10">
+                                    <div class="flex items-center justify-between gap-2 mb-3">
+                                        <span class="text-xs font-semibold text-white/50">
+                                            {formatDate(
+                                                project.data.start_date,
+                                                language,
+                                            )}{' '}
+                                            —{' '}
+                                            {project.data.end_date
+                                                ? formatDate(
+                                                      project.data.end_date,
+                                                      language,
+                                                  )
+                                                : t.present}
                                         </span>
-                                    ))}
+                                    </div>
+
+                                    <h3 class="text-xl font-bold text-white leading-snug group-hover:text-blue-300 transition-colors duration-300 mb-3">
+                                        <a
+                                            href={`${projectLinkPrefix}/${project.slug}`}>
+                                            {project.data.title}
+                                        </a>
+                                    </h3>
+
+                                    <p class="text-white/60 text-sm mb-4 leading-relaxed">
+                                        {getExcerpt(project.data.description)}
+                                    </p>
+
+                                    <div class="flex flex-wrap gap-1.5 mb-2">
+                                        {project.data.labels?.map((tag) => (
+                                            <span class="text-[10px] font-bold tracking-wider uppercase px-2.5 py-1 bg-blue-500/10 text-blue-300 border border-blue-500/20 rounded-md hover:bg-blue-500/20 transition-all">
+                                                {tag.etiqueta || tag.label}
+                                            </span>
+                                        ))}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <div class="px-6 pb-6 pt-0 mt-auto flex items-center justify-between gap-4 relative z-10">
-                            <a
-                                href={`${projectLinkPrefix}/${project.slug}`}
-                                class="inline-flex items-center text-xs font-semibold text-white hover:text-blue-300 transition-colors"
-                            >
-                                {t.moreInfo}
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-3.5 h-3.5 ml-1 opacity-70 group-hover:translate-x-0.5 transition-transform">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
-                                </svg>
-                            </a>
-                            {project.data.url && (
+                            <div class="px-6 pb-6 pt-0 mt-auto flex items-center justify-between gap-4 relative z-10">
                                 <a
-                                    href={project.data.url}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    class="inline-flex items-center justify-center p-2 text-white/70 hover:text-white bg-white/5 hover:bg-white/10 rounded-lg border border-white/10 transition-colors"
-                                    title={t.visitWeb}
-                                >
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
+                                    href={`${projectLinkPrefix}/${project.slug}`}
+                                    class="inline-flex items-center text-xs font-semibold text-white hover:text-blue-300 transition-colors">
+                                    {t.moreInfo}
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke-width="2.5"
+                                        stroke="currentColor"
+                                        class="w-3.5 h-3.5 ml-1 opacity-70 group-hover:translate-x-0.5 transition-transform">
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"
+                                        />
                                     </svg>
                                 </a>
-                            )}
+                                {project.data.url && (
+                                    <a
+                                        href={project.data.url}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        class="inline-flex items-center justify-center p-2 text-white/70 hover:text-white bg-white/5 hover:bg-white/10 rounded-lg border border-white/10 transition-colors"
+                                        title={t.visitWeb}>
+                                        <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            fill="none"
+                                            viewBox="0 0 24 24"
+                                            stroke-width="2.5"
+                                            stroke="currentColor"
+                                            class="w-4 h-4">
+                                            <path
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                                d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"
+                                            />
+                                        </svg>
+                                    </a>
+                                )}
+                            </div>
                         </div>
-                    </div>
-                ))}
-            </div>
+                    ))}
+                </div>
 
-            <div class="mt-12 text-center">
-                <a
-                    href={projectLinkPrefix}
-                    class="inline-flex items-center justify-center px-6 py-3 text-sm font-semibold text-white bg-white/5 hover:bg-white hover:text-black border border-white/10 hover:border-white rounded-xl transition-all duration-300"
-                >
-                    {t.viewAllProjects}
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4 ml-2 opacity-70">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
-                    </svg>
-                </a>
-            </div>
-        </section>
-    )}
+                <div class="mt-12 text-center">
+                    <a
+                        href={projectLinkPrefix}
+                        class="inline-flex items-center justify-center px-6 py-3 text-sm font-semibold text-white bg-white/5 hover:bg-white hover:text-black border border-white/10 hover:border-white rounded-xl transition-all duration-300">
+                        {t.viewAllProjects}
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke-width="2.5"
+                            stroke="currentColor"
+                            class="w-4 h-4 ml-2 opacity-70">
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"
+                            />
+                        </svg>
+                    </a>
+                </div>
+            </section>
+        )
+    }
 
     {/* Latest Blog Posts Section */}
     <section id="latest-posts">
         <header class="mb-12 text-center">
             <Title title={t.postsTitle} as="h2" />
-            <p class="text-white/60 max-w-xl mx-auto text-sm leading-relaxed mt-3">
+            <p
+                class="text-white/60 max-w-xl mx-auto text-sm leading-relaxed mt-3">
                 {t.postsSubtitle}
             </p>
         </header>
 
-        {posts.length === 0 ? (
-            <div class="text-center py-16 bg-white/5 rounded-2xl border border-white/10">
-                <p class="text-white/40">{t.noPosts}</p>
-            </div>
-        ) : (
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {posts.map((post) => (
-                    <article class="group relative flex flex-col justify-between bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 hover:border-white/20 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl overflow-hidden">
-                        {/* Background glow on hover */}
-                        <div class="absolute inset-0 bg-linear-to-r from-blue-500/0 via-indigo-500/0 to-purple-500/0 group-hover:from-blue-500/5 group-hover:to-purple-500/5 rounded-2xl transition-all duration-300 pointer-events-none"></div>
+        {
+            posts.length === 0 ? (
+                <div class="text-center py-16 bg-white/5 rounded-2xl border border-white/10">
+                    <p class="text-white/40">{t.noPosts}</p>
+                </div>
+            ) : (
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    {posts.map((post) => (
+                        <article class="group relative flex flex-col justify-between bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 hover:border-white/20 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl overflow-hidden">
+                            {/* Background glow on hover */}
+                            <div class="absolute inset-0 bg-linear-to-r from-blue-500/0 via-indigo-500/0 to-purple-500/0 group-hover:from-blue-500/5 group-hover:to-purple-500/5 rounded-2xl transition-all duration-300 pointer-events-none" />
 
-                        <div>
-                            {/* Cover image */}
-                            <div class="relative aspect-video w-full overflow-hidden bg-white/5 border-b border-white/10">
-                                {post.data.image ? (
-                                    <Image
-                                        image={post.data.image}
-                                        width={600}
-                                        height={338}
-                                        alt={post.data.title}
-                                        class="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500 ease-out"
-                                    />
-                                ) : (
-                                    <div class="w-full h-full flex items-center justify-center bg-linear-to-br from-blue-500/10 to-purple-500/10">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 h-10 text-white/20">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 7.5h1.5m-1.5 3h1.5m-7.5 3h7.5m-7.5 3h7.5m3-9h3.375c.621 0 1.125.504 1.125 1.125V18a2.25 2.25 0 0 1-2.25 2.25M16.5 7.5V18a2.25 2.25 0 0 0 2.25 2.25M16.5 7.5V4.875c0-.621-.504-1.125-1.125-1.125H4.125C3.504 3.75 3 4.254 3 4.875V18a2.25 2.25 0 0 0 2.25 2.25h13.5M6 7.5h3v3H6v-3Z" />
-                                        </svg>
-                                    </div>
-                                )}
-                            </div>
-
-                            <div class="p-6">
-                                <div class="mb-3">
-                                    <time class="text-xs font-semibold text-white/50" datetime={post.data.published_at}>
-                                        {formatPostDate(post.data.published_at, language)}
-                                    </time>
+                            <div>
+                                {/* Cover image */}
+                                <div class="relative aspect-video w-full overflow-hidden bg-white/5 border-b border-white/10">
+                                    {post.data.image ? (
+                                        <Image
+                                            image={post.data.image}
+                                            width={600}
+                                            height={338}
+                                            alt={post.data.title}
+                                            class="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500 ease-out"
+                                        />
+                                    ) : (
+                                        <div class="w-full h-full flex items-center justify-center bg-linear-to-br from-blue-500/10 to-purple-500/10">
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                fill="none"
+                                                viewBox="0 0 24 24"
+                                                stroke-width="1.5"
+                                                stroke="currentColor"
+                                                class="w-10 h-10 text-white/20">
+                                                <path
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                    d="M12 7.5h1.5m-1.5 3h1.5m-7.5 3h7.5m-7.5 3h7.5m3-9h3.375c.621 0 1.125.504 1.125 1.125V18a2.25 2.25 0 0 1-2.25 2.25M16.5 7.5V18a2.25 2.25 0 0 0 2.25 2.25M16.5 7.5V4.875c0-.621-.504-1.125-1.125-1.125H4.125C3.504 3.75 3 4.254 3 4.875V18a2.25 2.25 0 0 0 2.25 2.25h13.5M6 7.5h3v3H6v-3Z"
+                                                />
+                                            </svg>
+                                        </div>
+                                    )}
                                 </div>
 
-                                <h3 class="text-xl font-bold text-white leading-snug group-hover:text-blue-300 transition-colors duration-300 mb-3">
-                                    <a href={`${blogLinkPrefix}/${post.slug}`}>{post.data.title}</a>
-                                </h3>
-
-                                <p class="text-white/60 text-sm mb-4 leading-relaxed line-clamp-3">
-                                    {post.data.excerpt}
-                                </p>
-
-                                {post.data.labels && post.data.labels.length > 0 && (
-                                    <div class="flex flex-wrap gap-1.5 mb-2">
-                                        {post.data.labels.map((tag) => (
-                                            <span class="text-[10px] px-2.5 py-0.5 font-medium bg-white/5 text-white/70 border border-white/10 rounded-full">
-                                                {tag.label}
-                                            </span>
-                                        ))}
+                                <div class="p-6">
+                                    <div class="mb-3">
+                                        <time
+                                            class="text-xs font-semibold text-white/50"
+                                            datetime={post.data.published_at}>
+                                            {formatPostDate(
+                                                post.data.published_at,
+                                                language,
+                                            )}
+                                        </time>
                                     </div>
-                                )}
-                            </div>
-                        </div>
 
-                        <div class="px-6 pb-6 pt-0 mt-auto">
-                            <a
-                                href={`${blogLinkPrefix}/${post.slug}`}
-                                class="inline-flex items-center text-xs font-semibold text-white hover:text-blue-300 transition-colors"
-                            >
-                                {t.readPost}
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-3.5 h-3.5 ml-1 opacity-70 group-hover:translate-x-0.5 transition-transform">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
-                                </svg>
-                            </a>
-                        </div>
-                    </article>
-                ))}
-            </div>
-        )}
+                                    <h3 class="text-xl font-bold text-white leading-snug group-hover:text-blue-300 transition-colors duration-300 mb-3">
+                                        <a
+                                            href={`${blogLinkPrefix}/${post.slug}`}>
+                                            {post.data.title}
+                                        </a>
+                                    </h3>
+
+                                    <p class="text-white/60 text-sm mb-4 leading-relaxed line-clamp-3">
+                                        {post.data.excerpt}
+                                    </p>
+
+                                    {post.data.labels &&
+                                        post.data.labels.length > 0 && (
+                                            <div class="flex flex-wrap gap-1.5 mb-2">
+                                                {post.data.labels.map((tag) => (
+                                                    <span class="text-[10px] px-2.5 py-0.5 font-medium bg-white/5 text-white/70 border border-white/10 rounded-full">
+                                                        {tag.label}
+                                                    </span>
+                                                ))}
+                                            </div>
+                                        )}
+                                </div>
+                            </div>
+
+                            <div class="px-6 pb-6 pt-0 mt-auto">
+                                <a
+                                    href={`${blogLinkPrefix}/${post.slug}`}
+                                    class="inline-flex items-center text-xs font-semibold text-white hover:text-blue-300 transition-colors">
+                                    {t.readPost}
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke-width="2.5"
+                                        stroke="currentColor"
+                                        class="w-3.5 h-3.5 ml-1 opacity-70 group-hover:translate-x-0.5 transition-transform">
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"
+                                        />
+                                    </svg>
+                                </a>
+                            </div>
+                        </article>
+                    ))}
+                </div>
+            )
+        }
 
         <div class="mt-12 text-center">
             <a
                 href={blogLinkPrefix}
-                class="inline-flex items-center justify-center px-6 py-3 text-sm font-semibold text-white bg-white/5 hover:bg-white hover:text-black border border-white/10 hover:border-white rounded-xl transition-all duration-300"
-            >
+                class="inline-flex items-center justify-center px-6 py-3 text-sm font-semibold text-white bg-white/5 hover:bg-white hover:text-black border border-white/10 hover:border-white rounded-xl transition-all duration-300">
                 {t.viewAllPosts}
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4 ml-2 opacity-70">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="2.5"
+                    stroke="currentColor"
+                    class="w-4 h-4 ml-2 opacity-70">
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"></path>
                 </svg>
             </a>
         </div>

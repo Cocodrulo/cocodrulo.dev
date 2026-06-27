@@ -75,7 +75,7 @@ export interface Project {
   end_date?: string;
   labels: unknown;
   image: { id: string; src?: string; alt?: string; width?: number; height?: number; provider?: string; previewUrl?: string; meta?: Record<string, unknown> };
-  featured: boolean;
+  featured?: boolean;
   createdAt: Date;
   updatedAt: Date;
   publishedAt: Date | null;

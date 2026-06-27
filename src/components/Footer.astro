@@ -17,7 +17,6 @@ const t = {
         blog: 'Blog',
         certificates: 'Certificaciones',
         home: 'Inicio',
-        rights: `Cocodrulo.`,
     },
     en: {
         description:
@@ -29,7 +28,6 @@ const t = {
         blog: 'Blog',
         certificates: 'Certifications',
         home: 'Home',
-        rights: `Cocodrulo.`,
     },
 }[language as 'es' | 'en'] || {
     description:
@@ -41,7 +39,6 @@ const t = {
     blog: 'Blog',
     certificates: 'Certifications',
     home: 'Home',
-    rights: `Cocodrulo`,
 }
 ---
 
@@ -142,9 +139,6 @@ const t = {
     <!-- Bottom Copyright -->
     <div
         class="max-w-6xl mx-auto pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4">
-        <p class="text-white/30 text-xs">
-            {t.rights}
-        </p>
         <p class="text-white/20 text-[10px]">Built with Astro & Tailwind</p>
     </div>
 </footer>
