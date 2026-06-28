@@ -24,7 +24,7 @@ const project = projectEntry as unknown as {
         title: string
         description: any
         url?: string
-        start_date: string
+        start_date?: string
         end_date?: string
         labels: Array<{ etiqueta?: string; label?: string }>
         image: any
@@ -91,19 +91,21 @@ const getExcerpt = (description: any) => {
         <!-- Horizontal Metadata Row -->
         <div
             class="flex flex-wrap gap-x-10 gap-y-6 py-6 border-y border-neutral-900 max-w-3xl mx-auto mb-10 text-sm">
-            <div>
-                <span
-                    class="text-[10px] font-semibold uppercase tracking-widest text-neutral-500 block mb-1"
-                    >Duración</span
-                >
-                <span class="text-neutral-300 font-medium">
-                    {formatDate(project.data.start_date, language)} — {
-                        project.data.end_date
-                            ? formatDate(project.data.end_date, language)
-                            : 'Presente'
-                    }
-                </span>
-            </div>
+            {project.data.start_date && (
+                <div>
+                    <span
+                        class="text-[10px] font-semibold uppercase tracking-widest text-neutral-500 block mb-1"
+                        >Duración</span
+                    >
+                    <span class="text-neutral-300 font-medium">
+                        {formatDate(project.data.start_date, language)} — {
+                            project.data.end_date
+                                ? formatDate(project.data.end_date, language)
+                                : 'Presente'
+                        }
+                    </span>
+                </div>
+            )}
             {
                 project.data.labels && project.data.labels.length > 0 && (
                     <div class="flex-1 min-w-[200px]">
