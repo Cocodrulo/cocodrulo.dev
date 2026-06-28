@@ -1,4 +1,4 @@
-import { defineConfig } from 'astro/config'
+import { defineConfig, envField } from 'astro/config'
 import tailwindcss from '@tailwindcss/vite'
 import emdash from 'emdash/astro'
 import { github } from 'emdash/auth/providers/github'
@@ -55,5 +55,14 @@ export default defineConfig({
 
     vite: {
         plugins: [tailwindcss()],
+    },
+
+    env: {
+        schema: {
+            GITHUB_TOKEN: envField.string({
+                context: 'server',
+                access: 'secret',
+            }),
+        },
     },
 })

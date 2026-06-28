@@ -1,11 +1,16 @@
 ---
-import Layout from "@layouts/Layout.astro";
-import Hero from "@components/Hero.astro";
-import About from "@components/About.astro";
-import FeaturedAndLatest from "@components/FeaturedAndLatest.astro";
+import Layout from '@layouts/Layout.astro'
+import Hero from '@components/Hero.astro'
+import About from '@components/About.astro'
+import FeaturedAndLatest from '@components/FeaturedAndLatest.astro'
+
+// Cache for 5 minutes
+Astro.response.headers.set('Cache-Control', 'public, max-age=300')
 ---
 
-<Layout title="Home" description="Official website of Javier Aday Pérez Romero (Cocodrulo) - Software developer and creator. Explore my projects, blog posts, and certifications.">
+<Layout
+    title="Home"
+    description="Official website of Javier Aday Pérez Romero (Cocodrulo) - Software developer and creator. Explore my projects, blog posts, and certifications.">
     <Hero />
     <About />
     <FeaturedAndLatest />

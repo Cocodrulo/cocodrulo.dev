@@ -1,17 +1,27 @@
 ---
-import { getMenu } from "emdash";
-const language = Astro.currentLocale || "es";
-const primaryMenu = await getMenu("primary", { locale: language });
-const menuItems = primaryMenu?.items || [];
+import { getMenu } from 'emdash'
+import IconHandler from '@/assets/icons/IconsHandler'
 
-const currentPathname = Astro.url.pathname;
-const targetUrl = language === "es"
-    ? (currentPathname === "/" ? "/en" : `/en${currentPathname}`)
-    : (currentPathname.startsWith("/en/") ? currentPathname.slice(3) : (currentPathname === "/en" ? "/" : currentPathname));
+const language = Astro.currentLocale || 'es'
+const primaryMenu = await getMenu('primary', { locale: language })
+const menuItems = primaryMenu?.items || []
+
+const currentPathname = Astro.url.pathname
+const targetUrl =
+    language === 'es'
+        ? currentPathname === '/'
+            ? '/en'
+            : `/en${currentPathname}`
+        : currentPathname.startsWith('/en/')
+          ? currentPathname.slice(3)
+          : currentPathname === '/en'
+            ? '/'
+            : currentPathname
 ---
 
-<header class="flex justify-between items-center px-7 py-4">
-    <a href="/">
+<header
+    class="flex justify-between items-center px-7 py-4 w-screen overflow-hidden">
+    <a href="/" class="z-50 relative">
         <img
             src="/images/Logo.svg"
             class="h-12 opacity-85 hover:opacity-100 transition-opacity duration-300"
@@ -19,14 +29,20 @@ const targetUrl = language === "es"
         />
     </a>
 
+    <button
+        id="mobile-menu-btn"
+        class="md:hidden text-white focus:outline-none z-50 absolute top-7 right-8"
+        aria-label="Menu">
+        <IconHandler.Hamburger class="w-8 h-8" id="hamburger" />
+        <IconHandler.X class="hidden w-8 h-8" id="x" />
+    </button>
+
     <nav>
-        <ul class="flex items-center gap-10">
+        <ul class="items-center gap-10 hidden md:flex">
             {
                 menuItems.map((item) => (
                     <li class="text-white/70 hover:text-white transition-colors duration-300">
-                        <a href={item.url}>
-                            {item.label}
-                        </a>
+                        <a href={item.url}>{item.label}</a>
                     </li>
                 ))
             }
@@ -34,11 +50,73 @@ const targetUrl = language === "es"
                 <a
                     href={targetUrl}
                     class="flex items-center gap-1 text-xs font-semibold tracking-wider px-3 py-1 rounded-full border border-white/20 text-white/80 hover:text-white hover:border-white/40 hover:bg-white/5 transition-all duration-300"
-                    aria-label={language === "es" ? "Change to English" : "Cambiar a Español"}
-                >
-                    {language === "es" ? "EN" : "ES"}
+                    aria-label={language === 'es'
+                        ? 'Change to English'
+                        : 'Cambiar a Español'}>
+                    {language === 'es' ? 'EN' : 'ES'}
                 </a>
             </li>
         </ul>
+
+        <div
+            id="mobile-menu"
+            class="fixed inset-0 bg-black/95 flex flex-col items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300 z-40 md:hidden">
+            <ul class="flex flex-col items-center gap-8 text-2xl">
+                {
+                    menuItems.map((item) => (
+                        <li class="text-white/70 hover:text-white transition-colors duration-300">
+                            <a href={item.url} class="mobile-link">
+                                {item.label}
+                            </a>
+                        </li>
+                    ))
+                }
+                <li class="mt-4">
+                    <a
+                        href={targetUrl}
+                        class="flex items-center gap-1 text-sm font-semibold tracking-wider px-6 py-2 rounded-full border border-white/20 text-white/80 hover:text-white hover:border-white/40 hover:bg-white/5 transition-all duration-300 mobile-link"
+                        aria-label={language === 'es'
+                            ? 'Change to English'
+                            : 'Cambiar a Español'}>
+                        {language === 'es' ? 'EN' : 'ES'}
+                    </a>
+                </li>
+            </ul>
+        </div>
     </nav>
 </header>
+
+<script>
+    const btn = document.getElementById('mobile-menu-btn')
+    const menu = document.getElementById('mobile-menu')
+    const hamburger = document.getElementById('hamburger')
+    const x = document.getElementById('x')
+    const links = document.querySelectorAll('.mobile-link')
+
+    let isMenuOpen = false
+
+    function toggleMenu() {
+        isMenuOpen = !isMenuOpen
+        if (isMenuOpen) {
+            menu?.classList.remove('opacity-0', 'pointer-events-none')
+            menu?.classList.add('opacity-100', 'pointer-events-auto')
+            hamburger?.classList.add('hidden')
+            x?.classList.remove('hidden')
+            document.body.style.overflow = 'hidden'
+        } else {
+            menu?.classList.remove('opacity-100', 'pointer-events-auto')
+            menu?.classList.add('opacity-0', 'pointer-events-none')
+            hamburger?.classList.remove('hidden')
+            x?.classList.add('hidden')
+            document.body.style.overflow = ''
+        }
+    }
+
+    btn?.addEventListener('click', toggleMenu)
+
+    links.forEach((link) => {
+        link.addEventListener('click', () => {
+            if (isMenuOpen) toggleMenu()
+        })
+    })
+</script>

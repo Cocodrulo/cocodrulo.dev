@@ -1,0 +1,227 @@
+---
+import type { ContributionWeek } from '@/types/Github'
+
+interface Props {
+    weeks: ContributionWeek[]
+    totalContributions: number
+    lang?: 'es' | 'en'
+}
+
+const { weeks, totalContributions, lang = 'es' } = Astro.props
+
+const locale = lang === 'es' ? 'es-ES' : 'en-US'
+
+const i18n = {
+    es: {
+        total: (n: number) => `${n.toLocaleString('es-ES')} contribuciones en el último año`,
+        noData: 'No se pudo cargar el gráfico de contribuciones.',
+        dayLabels: ['', 'Lun', '', 'Mié', '', 'Vie', ''],
+        less: 'Menos',
+        more: 'Más',
+        tooltip: (count: number, date: string) =>
+            `${count} contribución${count !== 1 ? 'es' : ''} el ${date}`,
+    },
+    en: {
+        total: (n: number) => `${n.toLocaleString('en-US')} contributions in the last year`,
+        noData: 'Could not load the contribution graph.',
+        dayLabels: ['', 'Mon', '', 'Wed', '', 'Fri', ''],
+        less: 'Less',
+        more: 'More',
+        tooltip: (count: number, date: string) =>
+            `${count} contribution${count !== 1 ? 's' : ''} on ${date}`,
+    },
+} as const
+
+const t = i18n[lang]
+
+const CONTRIB_COLORS = ['#161b22', '#0e4429', '#006d32', '#26a641', '#39d353'] as const
+
+// Build month labels from the week data
+const monthLabels: { label: string; weekIdx: number }[] = []
+let prevMonth = -1
+weeks.forEach((week, wi) => {
+    const firstDay = week.contributionDays[0]
+    if (!firstDay) return
+    const d = new Date(firstDay.date + 'T12:00:00')
+    const mo = d.getMonth()
+    if (mo !== prevMonth) {
+        prevMonth = mo
+        monthLabels.push({
+            label: d.toLocaleDateString(locale, { month: 'short' }),
+            weekIdx: wi,
+        })
+    }
+})
+
+const fmtDate = (s: string) =>
+    new Date(s + 'T12:00:00').toLocaleDateString(locale, {
+        day: 'numeric',
+        month: 'long',
+    })
+---
+
+<section class="gh-card">
+    <div class="gh-card-header">
+        <h2 class="gh-card-title">
+            {totalContributions > 0 ? t.total(totalContributions) : t.total(0)}
+        </h2>
+    </div>
+
+    {
+        weeks.length > 0 ? (
+            <div class="gh-graph-wrap">
+                <!-- Month labels -->
+                <div class="gh-months">
+                    {monthLabels.map(({ label, weekIdx }) => (
+                        <span class="gh-month-label" style={`left: ${weekIdx * 16}px`}>
+                            {label}
+                        </span>
+                    ))}
+                </div>
+
+                <!-- Day labels + grid -->
+                <div class="gh-grid-outer">
+                    <div class="gh-day-labels" aria-hidden="true">
+                        {t.dayLabels.map((label) => (
+                            <span>{label}</span>
+                        ))}
+                    </div>
+
+                    <div class="gh-grid" role="grid" aria-label="Contribution calendar">
+                        {weeks.map((week) => (
+                            <div class="gh-week" role="row">
+                                {Array.from({ length: 7 }, (_, dayIdx) => {
+                                    const day = week.contributionDays.find(
+                                        (d) => new Date(d.date + 'T12:00:00').getDay() === dayIdx,
+                                    )
+                                    return day ? (
+                                        <div
+                                            class="gh-cell"
+                                            role="gridcell"
+                                            style={`background:${CONTRIB_COLORS[day.level]}`}
+                                            title={t.tooltip(day.count, fmtDate(day.date))}
+                                            aria-label={t.tooltip(day.count, fmtDate(day.date))}
+                                        />
+                                    ) : (
+                                        <div class="gh-cell gh-cell-empty" role="gridcell" />
+                                    )
+                                })}
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
+                <!-- Legend -->
+                <div class="gh-legend">
+                    <span>{t.less}</span>
+                    {([0, 1, 2, 3, 4] as Array<0 | 1 | 2 | 3 | 4>).map((lvl) => (
+                        <div class="gh-legend-cell" style={`background:${CONTRIB_COLORS[lvl]}`} />
+                    ))}
+                    <span>{t.more}</span>
+                </div>
+            </div>
+        ) : (
+            <p class="gh-empty">{t.noData}</p>
+        )
+    }
+</section>
+
+<style>
+    .gh-card {
+        background: #161b22;
+        border: 1px solid #30363d;
+        border-radius: 6px;
+        overflow: hidden;
+    }
+    .gh-card-header {
+        padding: 1rem 1.25rem;
+        border-bottom: 1px solid #30363d;
+    }
+    .gh-card-title {
+        font-size: 14px;
+        font-weight: 600;
+        color: #e6edf3;
+        margin: 0;
+    }
+    .gh-empty {
+        padding: 2rem 1.25rem;
+        color: #8b949e;
+        text-align: center;
+        margin: 0;
+    }
+    .gh-graph-wrap {
+        padding: 1rem 1.25rem 0.75rem;
+    }
+    .gh-months {
+        position: relative;
+        height: 20px;
+        margin-left: 28px;
+        margin-bottom: 4px;
+        overflow: hidden;
+    }
+    .gh-month-label {
+        position: absolute;
+        font-size: 11px;
+        color: #8b949e;
+        white-space: nowrap;
+    }
+    .gh-grid-outer {
+        display: flex;
+        gap: 4px;
+        overflow-x: auto;
+        padding-bottom: 4px;
+    }
+    .gh-day-labels {
+        display: grid;
+        grid-template-rows: repeat(7, 13px);
+        gap: 3px;
+        flex-shrink: 0;
+    }
+    .gh-day-labels span {
+        font-size: 9px;
+        color: #8b949e;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        padding-right: 4px;
+        white-space: nowrap;
+        line-height: 1;
+    }
+    .gh-grid {
+        display: flex;
+        gap: 3px;
+    }
+    .gh-week {
+        display: grid;
+        grid-template-rows: repeat(7, 13px);
+        gap: 3px;
+    }
+    .gh-cell {
+        width: 13px;
+        height: 13px;
+        border-radius: 2px;
+        cursor: default;
+        transition: outline 0.08s;
+    }
+    .gh-cell:hover {
+        outline: 1px solid rgba(255, 255, 255, 0.4);
+        outline-offset: 1px;
+    }
+    .gh-cell-empty {
+        background: transparent !important;
+    }
+    .gh-legend {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 4px;
+        margin-top: 0.75rem;
+        font-size: 11px;
+        color: #8b949e;
+    }
+    .gh-legend-cell {
+        width: 13px;
+        height: 13px;
+        border-radius: 2px;
+    }
+</style>

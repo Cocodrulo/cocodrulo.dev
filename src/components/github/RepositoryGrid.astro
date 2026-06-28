@@ -1,0 +1,192 @@
+---
+import type { GHRepo } from '@/types/Github'
+
+interface Props {
+    repos: GHRepo[]
+    lang?: 'es' | 'en'
+}
+
+const { repos, lang = 'es' } = Astro.props
+
+const i18n = {
+    es: { empty: 'No se encontraron repositorios.', viewAll: 'Ver todos en GitHub →' },
+    en: { empty: 'No repositories found.', viewAll: 'View all on GitHub →' },
+} as const
+
+const t = i18n[lang]
+---
+
+<div class="gh-repo-list">
+    {
+        repos.length === 0 ? (
+            <p class="gh-empty">{t.empty}</p>
+        ) : (
+            repos.map((repo) => (
+                <a href={repo.url} target="_blank" rel="noopener" class="gh-repo-card">
+                    <div class="gh-repo-top">
+                        <div class="gh-repo-name-row">
+                            <svg width="14" height="14" viewBox="0 0 16 16" fill="#8b949e" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                <path d="M2 2.5A2.5 2.5 0 0 1 4.5 0h8.75a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1 0-1.5h1.75v-2h-8a1 1 0 0 0-.714 1.7.75.75 0 1 1-1.072 1.05A2.495 2.495 0 0 1 2 11.5Zm10.5-1h-8a1 1 0 0 0-1 1v6.708A2.486 2.486 0 0 1 4.5 9h8Z" />
+                            </svg>
+                            <span class="gh-repo-name">{repo.name}</span>
+                        </div>
+                        <span class="gh-repo-visibility">{repo.visibility.toLowerCase()}</span>
+                    </div>
+
+                    {repo.description && (
+                        <p class="gh-repo-desc">{repo.description}</p>
+                    )}
+
+                    <div class="gh-repo-stats">
+                        {repo.primaryLanguage && (
+                            <span class="gh-repo-lang">
+                                <!-- Color comes directly from the GraphQL API -->
+                                <span
+                                    class="gh-lang-dot"
+                                    style={`background:${repo.primaryLanguage.color}`}
+                                />
+                                {repo.primaryLanguage.name}
+                            </span>
+                        )}
+                        {repo.stargazerCount > 0 && (
+                            <span class="gh-repo-stat">
+                                <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                    <path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Z" />
+                                </svg>
+                                {repo.stargazerCount}
+                            </span>
+                        )}
+                        {repo.forkCount > 0 && (
+                            <span class="gh-repo-stat">
+                                <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                    <path d="M5 5.372v.878c0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75v-.878a2.25 2.25 0 1 1 1.5 0v.878a2.25 2.25 0 0 1-2.25 2.25h-1.5v2.128a2.251 2.251 0 1 1-1.5 0V8.5h-1.5A2.25 2.25 0 0 1 3.5 6.25v-.878a2.25 2.25 0 1 1 1.5 0ZM5 3.25a.75.75 0 1 0-1.5 0 .75.75 0 0 0 1.5 0Zm6.75.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Zm-3 8.75a.75.75 0 1 0-1.5 0 .75.75 0 0 0 1.5 0Z" />
+                                </svg>
+                                {repo.forkCount}
+                            </span>
+                        )}
+                    </div>
+                </a>
+            ))
+        )
+    }
+
+    <div class="gh-list-footer">
+        <a
+            href="https://github.com/Cocodrulo?tab=repositories"
+            target="_blank"
+            rel="noopener"
+            class="gh-footer-link"
+        >
+            {t.viewAll}
+        </a>
+    </div>
+</div>
+
+<style>
+    .gh-repo-list {
+        display: flex;
+        flex-direction: column;
+        border: 1px solid #30363d;
+        border-radius: 6px;
+        overflow: hidden;
+        background: #0d1117;
+    }
+    .gh-empty {
+        padding: 2rem 1.25rem;
+        color: #8b949e;
+        text-align: center;
+        margin: 0;
+    }
+    .gh-repo-card {
+        display: flex;
+        flex-direction: column;
+        gap: 0.4rem;
+        padding: 0.875rem 1rem;
+        border-top: 1px solid #21262d;
+        text-decoration: none;
+        transition: background 0.15s;
+        background: #0d1117;
+    }
+    .gh-repo-card:first-child {
+        border-top: none;
+    }
+    .gh-repo-card:hover {
+        background: #161b22;
+    }
+    .gh-repo-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.5rem;
+    }
+    .gh-repo-name-row {
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        min-width: 0;
+    }
+    .gh-repo-name {
+        font-size: 13px;
+        font-weight: 600;
+        color: #58a6ff;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .gh-repo-visibility {
+        font-size: 10px;
+        color: #8b949e;
+        border: 1px solid #30363d;
+        border-radius: 20px;
+        padding: 1px 6px;
+        flex-shrink: 0;
+    }
+    .gh-repo-desc {
+        font-size: 12px;
+        color: #8b949e;
+        margin: 0;
+        line-height: 1.4;
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
+    }
+    .gh-repo-stats {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+    .gh-repo-lang {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        font-size: 11px;
+        color: #8b949e;
+    }
+    .gh-lang-dot {
+        width: 11px;
+        height: 11px;
+        border-radius: 50%;
+        flex-shrink: 0;
+    }
+    .gh-repo-stat {
+        display: flex;
+        align-items: center;
+        gap: 3px;
+        font-size: 11px;
+        color: #8b949e;
+    }
+    .gh-list-footer {
+        padding: 0.625rem 1rem;
+        border-top: 1px solid #30363d;
+        background: #161b22;
+    }
+    .gh-footer-link {
+        color: #58a6ff;
+        font-size: 12px;
+        text-decoration: none;
+    }
+    .gh-footer-link:hover {
+        text-decoration: underline;
+    }
+</style>

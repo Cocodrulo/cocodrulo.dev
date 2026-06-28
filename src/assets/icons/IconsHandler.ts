@@ -19,6 +19,8 @@ import Github from './Github.astro'
 import ArrowIcon from './ArrowIcon.astro'
 import Credly from './Credly.astro'
 import Mail from './Mail.astro'
+import Hamburger from './Hamburger.astro'
+import X from './X.astro'
 
 export default {
     Astro: AstroIcon,
@@ -42,4 +44,6 @@ export default {
     ArrowIcon: ArrowIcon,
     Credly: Credly,
     Mail: Mail,
+    Hamburger: Hamburger,
+    X: X,
 }

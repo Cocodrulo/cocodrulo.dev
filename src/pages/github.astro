@@ -1,0 +1,266 @@
+---
+import type { ContributionWeek, GHPullRequest, GHRepo } from '@/types/Github'
+import Layout from '@layouts/Layout.astro'
+import ContributionGraph from '@components/github/ContributionGraph.astro'
+import PullRequestList from '@components/github/PullRequestList.astro'
+import RepositoryGrid from '@components/github/RepositoryGrid.astro'
+import { getSecret } from 'astro:env/server'
+
+const GH_QUERY = `
+    query GitHubProfile {
+        user(login: "Cocodrulo") {
+            contributionsCollection {
+                contributionCalendar {
+                    totalContributions
+                    weeks {
+                        contributionDays {
+                            date
+                            contributionCount
+                            contributionLevel
+                        }
+                    }
+                }
+            }
+            repositories(
+                first: 10
+                privacy: PUBLIC
+                isFork: false
+                orderBy: { field: STARGAZERS, direction: DESC }
+            ) {
+                totalCount
+                nodes {
+                    name
+                    description
+                    url
+                    stargazerCount
+                    forkCount
+                    visibility
+                    primaryLanguage {
+                        name
+                        color
+                    }
+                }
+            }
+        }
+        search(query: "author:Cocodrulo type:pr sort:created-desc", type: ISSUE, first: 10) {
+            issueCount
+            nodes {
+                ... on PullRequest {
+                    title
+                    url
+                    number
+                    state
+                    createdAt
+                    updatedAt
+                    comments { totalCount }
+                    repository { nameWithOwner }
+                    labels(first: 5) {
+                        nodes { name color }
+                    }
+                }
+            }
+        }
+    }
+`
+
+let weeks: ContributionWeek[] = []
+let totalContributions = 0
+let prs: GHPullRequest[] = []
+let prTotalCount = 0
+let repos: GHRepo[] = []
+let repoTotalCount = 0
+
+const GITHUB_TOKEN = getSecret('GITHUB_TOKEN')
+const ua =
+    Astro.request.headers.get('User-Agent') ?? 'Mozilla/5.0 cocodrulo.dev'
+
+try {
+    const res = await fetch('https://api.github.com/graphql', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'User-Agent': ua,
+            Authorization: `Bearer ${GITHUB_TOKEN}`,
+        },
+        body: JSON.stringify({ query: GH_QUERY }),
+    })
+
+    const { data } = (await res.json()) as any
+
+    const levelMap: Record<string, 0 | 1 | 2 | 3 | 4> = {
+        NONE: 0,
+        FIRST_QUARTILE: 1,
+        SECOND_QUARTILE: 2,
+        THIRD_QUARTILE: 3,
+        FOURTH_QUARTILE: 4,
+    }
+    const cal = data?.user?.contributionsCollection?.contributionCalendar
+    if (cal) {
+        totalContributions = cal.totalContributions
+        weeks = cal.weeks.map((w: any) => ({
+            contributionDays: w.contributionDays.map((d: any) => ({
+                date: d.date,
+                count: d.contributionCount,
+                level: levelMap[d.contributionLevel] ?? 0,
+            })),
+        }))
+    }
+
+    const reposData = data?.user?.repositories
+    repoTotalCount = reposData?.totalCount ?? 0
+    repos = reposData?.nodes ?? []
+
+    const searchData = data?.search
+    prTotalCount = searchData?.issueCount ?? 0
+    prs = (searchData?.nodes ?? []).filter(
+        (n: any) => n?.title,
+    ) as GHPullRequest[]
+} catch (e) {
+    console.error('GitHub GraphQL error:', e)
+}
+
+Astro.response.headers.set(
+    'Cache-Control',
+    'public, max-age=3600, s-maxage=3600',
+)
+---
+
+<Layout
+    title="GitHub"
+    description="Actividad de GitHub de Cocodrulo — contribuciones, pull requests y repositorios públicos.">
+    <div class="gh-page">
+        <div class="gh-container">
+            <header class="gh-header">
+                <img
+                    src="https://github.com/Cocodrulo.png"
+                    alt="Avatar de Cocodrulo"
+                    class="gh-avatar"
+                />
+                <div>
+                    <h1 class="gh-username">Cocodrulo</h1>
+                    <p class="gh-meta">
+                        <a
+                            href="https://github.com/Cocodrulo"
+                            target="_blank"
+                            rel="noopener"
+                            class="gh-link">@Cocodrulo</a
+                        >
+                        &nbsp;·&nbsp; {prTotalCount} PRs &nbsp;·&nbsp; {
+                            repoTotalCount
+                        } repos públicos
+                    </p>
+                </div>
+            </header>
+
+            <ContributionGraph {weeks} {totalContributions} lang="es" />
+
+            <div class="gh-two-col">
+                <div class="gh-col">
+                    <h2 class="gh-col-title">
+                        Pull Requests
+                        <span class="gh-badge">{prTotalCount}</span>
+                    </h2>
+                    <PullRequestList
+                        {prs}
+                        totalCount={prTotalCount}
+                        lang="es"
+                    />
+                </div>
+
+                <div class="gh-col">
+                    <h2 class="gh-col-title">
+                        Repositorios Públicos
+                        <span class="gh-badge">{repoTotalCount}</span>
+                    </h2>
+                    <RepositoryGrid {repos} lang="es" />
+                </div>
+            </div>
+        </div>
+    </div>
+</Layout>
+
+<style>
+    .gh-page {
+        min-height: 100%;
+        background: #0d1117;
+        color: #e6edf3;
+        font-family:
+            -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans',
+            Helvetica, Arial, sans-serif;
+        font-size: 14px;
+        padding: 2.5rem 1rem 4rem;
+    }
+    .gh-container {
+        max-width: 1024px;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+    .gh-header {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+    .gh-avatar {
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        border: 2px solid #30363d;
+        flex-shrink: 0;
+    }
+    .gh-username {
+        font-size: 1.125rem;
+        font-weight: 600;
+        color: #e6edf3;
+        margin: 0 0 0.2rem;
+    }
+    .gh-meta {
+        color: #8b949e;
+        font-size: 13px;
+        margin: 0;
+    }
+    .gh-link {
+        color: #58a6ff;
+        text-decoration: none;
+    }
+    .gh-link:hover {
+        text-decoration: underline;
+    }
+    .gh-two-col {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.25rem;
+        align-items: start;
+    }
+    @media (max-width: 680px) {
+        .gh-two-col {
+            grid-template-columns: 1fr;
+        }
+    }
+    .gh-col {
+        display: flex;
+        flex-direction: column;
+        gap: 0.625rem;
+    }
+    .gh-col-title {
+        font-size: 14px;
+        font-weight: 600;
+        color: #e6edf3;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    .gh-badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 0 6px;
+        font-size: 11px;
+        font-weight: 500;
+        line-height: 18px;
+        background: #30363d;
+        color: #8b949e;
+        border-radius: 20px;
+    }
+</style>
