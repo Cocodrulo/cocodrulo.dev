@@ -41,7 +41,8 @@ const monthLabels: { label: string; weekIdx: number }[] = []
 let prevMonth = -1
 weeks.forEach((week, wi) => {
     const firstDay = week.contributionDays[0]
-    if (!firstDay) return
+    if (!firstDay) return;
+
     const d = new Date(firstDay.date + 'T12:00:00')
     const mo = d.getMonth()
     if (mo !== prevMonth) {

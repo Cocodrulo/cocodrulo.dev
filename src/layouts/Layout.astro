@@ -134,10 +134,9 @@ const alternateEnUrl = `https://cocodrulo.dev${alternateEnPath}`
 
         <title>{title ? `${title} - Cocodrulo` : 'Cocodrulo'}</title>
     </head>
-    <body class="overflow-hidden">
+    <body class="overflow-hidden overflow-y-auto">
         <Header />
-        <main
-            class="scroll-p-10 min-h-[54.5dvh] w-screen overflow-hidden overflow-y-auto">
+        <main class="scroll-p-10 min-h-[54.5dvh] w-screen overflow-hidden">
             <slot />
         </main>
         <Footer />
@@ -161,9 +160,6 @@ const alternateEnUrl = `https://cocodrulo.dev${alternateEnPath}`
         min-height: 100%;
         height: 100%;
         width: 100%;
-        display: table;
-        overflow: hidden;
-        overflow-y: auto;
         font-family:
             'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande',
             'Lucida Sans', Arial, sans-serif;

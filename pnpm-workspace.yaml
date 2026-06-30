@@ -4,5 +4,34 @@ allowBuilds:
   sharp: true
   workerd: set this to true or false
 minimumReleaseAgeExclude:
-  - '@cloudflare/workers-types@4.20260627.1'
-  - prettier@3.9.0
+  - '@cloudflare/workers-types@4.20260627.1 || 4.20260630.1'
+  - prettier@3.9.0 || 3.9.4
+  - '@astrojs/cloudflare@14.0.2'
+  - '@astrojs/compiler-binding-darwin-arm64@0.3.0'
+  - '@astrojs/compiler-binding-darwin-x64@0.3.0'
+  - '@astrojs/compiler-binding-linux-arm64-gnu@0.3.0'
+  - '@astrojs/compiler-binding-linux-arm64-musl@0.3.0'
+  - '@astrojs/compiler-binding-linux-x64-gnu@0.3.0'
+  - '@astrojs/compiler-binding-linux-x64-musl@0.3.0'
+  - '@astrojs/compiler-binding-wasm32-wasi@0.3.0'
+  - '@astrojs/compiler-binding-win32-arm64-msvc@0.3.0'
+  - '@astrojs/compiler-binding-win32-x64-msvc@0.3.0'
+  - '@astrojs/compiler-binding@0.3.0'
+  - '@astrojs/compiler-rs@0.3.0'
+  - '@tailwindcss/node@4.3.2'
+  - '@tailwindcss/oxide-android-arm64@4.3.2'
+  - '@tailwindcss/oxide-darwin-arm64@4.3.2'
+  - '@tailwindcss/oxide-darwin-x64@4.3.2'
+  - '@tailwindcss/oxide-freebsd-x64@4.3.2'
+  - '@tailwindcss/oxide-linux-arm-gnueabihf@4.3.2'
+  - '@tailwindcss/oxide-linux-arm64-gnu@4.3.2'
+  - '@tailwindcss/oxide-linux-arm64-musl@4.3.2'
+  - '@tailwindcss/oxide-linux-x64-gnu@4.3.2'
+  - '@tailwindcss/oxide-linux-x64-musl@4.3.2'
+  - '@tailwindcss/oxide-wasm32-wasi@4.3.2'
+  - '@tailwindcss/oxide-win32-arm64-msvc@4.3.2'
+  - '@tailwindcss/oxide-win32-x64-msvc@4.3.2'
+  - '@tailwindcss/oxide@4.3.2'
+  - '@tailwindcss/vite@4.3.2'
+  - astro@7.0.4
+  - tailwindcss@4.3.2
