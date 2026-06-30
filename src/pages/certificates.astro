@@ -2,34 +2,15 @@
 import { getEmDashCollection } from "emdash";
 import Layout from "@layouts/Layout.astro";
 import Title from "@/components/Title.astro";
+import type { EmDashEntry, CertificateData } from '@/types/emdash'
 
 const language = Astro.currentLocale || "es";
 const { entries: certificateEntries } = await getEmDashCollection("certificates", {
     locale: language,
 });
 
-const certificates = (certificateEntries || []) as unknown as Array<{
-    data: {
-        title: string;
-        certificate_file: {
-            url?: string;
-            filename?: string;
-            mimeType?: string;
-            size?: number;
-            id?: string;
-            provider?: string;
-            meta?: {
-                storageKey?: string;
-                caption?: string | null;
-                blurhash?: string | null;
-                dominantColor?: string | null;
-            };
-        };
-        issuer: string;
-        issuer_id: string;
-        issuer_website: string;
-    };
-}>;
+const certificates = (certificateEntries || []) as unknown as EmDashEntry<CertificateData>[];
+
 
 // Helper to assign colors to issuers for beautiful badges
 const getIssuerBadgeStyle = (issuerId: string) => {

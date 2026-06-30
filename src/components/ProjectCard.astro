@@ -1,5 +1,6 @@
 ---
 import { Image } from 'emdash/ui'
+import type { Label, ImageField } from '@/types/emdash'
 
 const language = Astro.currentLocale || 'es'
 
@@ -26,12 +27,12 @@ const getExcerpt = (description: any) => {
 }
 
 export interface Props {
-    image?: string
+    image?: ImageField
     title: string
     start_date?: string
     end_date?: string
-    labels?: Array<{ etiqueta?: string; label?: string }>
-    description: string
+    labels?: Label[]
+    description: any
     slug: string
     url?: string
 }

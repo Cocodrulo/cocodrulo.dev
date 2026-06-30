@@ -4,6 +4,7 @@ import Layout from '@layouts/Layout.astro'
 import Title from '@/components/Title.astro'
 import { Image } from 'emdash/ui'
 import ProjectCard from '@/components/ProjectCard.astro'
+import type { EmDashEntry, ProjectData } from '@/types/emdash'
 
 const language = Astro.currentLocale || 'en'
 const { entries: projectEntries } = await getEmDashCollection('projects', {
@@ -11,18 +12,7 @@ const { entries: projectEntries } = await getEmDashCollection('projects', {
     status: 'published',
 })
 
-const projects = (projectEntries || []) as unknown as Array<{
-    slug: string
-    data: {
-        title: string
-        description: any
-        url?: string
-        start_date?: string
-        end_date?: string
-        labels: Array<{ etiqueta?: string; label?: string }>
-        image: any
-    }
-}>
+const projects = (projectEntries || []) as unknown as EmDashEntry<ProjectData>[]
 
 // Cache for 5 minutes
 Astro.response.headers.set('Cache-Control', 'public, max-age=300')

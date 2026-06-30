@@ -97,6 +97,24 @@ export interface Social {
   terms?: Record<string, TaxonomyTerm[]>;
 }
 
+export interface Timeline {
+  id: string;
+  slug: string | null;
+  status: string;
+  title: string;
+  place: string;
+  type: 'work' | 'education';
+  start_year: string;
+  end_year?: string;
+  current?: boolean;
+  description?: string;
+  createdAt: Date;
+  updatedAt: Date;
+  publishedAt: Date | null;
+  bylines?: ContentBylineCredit[];
+  terms?: Record<string, TaxonomyTerm[]>;
+}
+
 declare module "emdash" {
   interface EmDashCollections {
     about: About;
@@ -105,5 +123,6 @@ declare module "emdash" {
     profile: Profile;
     projects: Project;
     socials: Social;
+    timeline: Timeline;
   }
 }

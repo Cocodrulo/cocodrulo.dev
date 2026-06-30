@@ -2,6 +2,7 @@
 import Layout from '@layouts/Layout.astro'
 import Hero from '@components/Hero.astro'
 import About from '@components/About.astro'
+import Timeline from '@components/Timeline.astro'
 import FeaturedAndLatest from '@components/FeaturedAndLatest.astro'
 
 // Cache for 5 minutes
@@ -13,5 +14,6 @@ Astro.response.headers.set('Cache-Control', 'public, max-age=300')
     description="Sitio web oficial de Javier Aday Pérez Romero (Cocodrulo) - Desarrollador de software y creador. Explora mis proyectos, artículos de blog y certificaciones.">
     <Hero />
     <About />
+    <Timeline />
     <FeaturedAndLatest />
 </Layout>

@@ -3,34 +3,9 @@ import { getEmDashCollection } from 'emdash'
 import { Image } from 'emdash/ui'
 import Title from './Title.astro'
 import ProjectCard from './ProjectCard.astro'
+import type { EmDashEntry, ProjectData, PostData } from '@/types/emdash'
 
 const language = Astro.currentLocale || 'es'
-
-interface Project {
-    slug: string
-    data: {
-        title: string
-        description: any
-        url?: string
-        start_date?: string
-        end_date?: string
-        labels: Array<{ etiqueta?: string; label?: string }>
-        image: any
-        featured?: boolean
-    }
-}
-
-interface Post {
-    slug: string
-    data: {
-        title: string
-        excerpt: string
-        content: any
-        published_at: string
-        image?: any
-        labels?: Array<{ label: string }>
-    }
-}
 
 // Fetch featured projects
 const { entries: projects } = (await getEmDashCollection('projects', {
@@ -38,42 +13,14 @@ const { entries: projects } = (await getEmDashCollection('projects', {
     status: 'published',
     where: { featured: '1' },
     limit: 3,
-})) as unknown as { entries: Project[] }
-
-// const projects = (projectEntries || [])
-//     .filter((project: any) => project.data && project.data.featured === true)
-//     .slice(0, 3) as unknown as Array<{
-//     slug: string
-//     data: {
-//         title: string
-//         description: any
-//         url?: string
-//         start_date: string
-//         end_date?: string
-//         labels: Array<{ etiqueta?: string; label?: string }>
-//         image: any
-//         featured?: boolean
-//     }
-// }>
+})) as unknown as { entries: EmDashEntry<ProjectData>[] }
 
 // Fetch latest blog posts
 const { entries: posts } = (await getEmDashCollection('posts', {
     locale: language,
     orderBy: { published_at: 'desc' },
     limit: 3,
-})) as unknown as { entries: Post[] }
-
-// const posts = (postEntries || []).slice(0, 3) as unknown as Array<{
-//     slug: string
-//     data: {
-//         title: string
-//         excerpt: string
-//         content: any
-//         published_at: string
-//         image?: any
-//         labels?: Array<{ label: string }>
-//     }
-// }>
+})) as unknown as { entries: EmDashEntry<PostData>[] }
 
 const formatDate = (dateStr: string, locale: string) => {
     if (!dateStr) return ''
