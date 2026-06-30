@@ -2,7 +2,7 @@ allowBuilds:
   better-sqlite3: true
   esbuild: true
   sharp: true
-  workerd: set this to true or false
+  workerd: true
 minimumReleaseAgeExclude:
   - '@cloudflare/workers-types@4.20260627.1 || 4.20260630.1'
   - prettier@3.9.0 || 3.9.4
@@ -35,3 +35,9 @@ minimumReleaseAgeExclude:
   - '@tailwindcss/vite@4.3.2'
   - astro@7.0.4
   - tailwindcss@4.3.2
+  - '@emdash-cms/admin@0.25.1'
+  - '@emdash-cms/auth@0.25.1'
+  - '@emdash-cms/blocks@0.25.1'
+  - '@emdash-cms/cloudflare@0.25.1'
+  - '@emdash-cms/gutenberg-to-portable-text@0.25.1'
+  - emdash@0.25.1
