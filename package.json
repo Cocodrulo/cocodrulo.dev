@@ -30,7 +30,7 @@
         "tailwindcss": "4.3.2"
     },
     "devDependencies": {
-        "@cloudflare/workers-types": "4.20260630.1",
+        "@cloudflare/workers-types": "4.20260701.1",
         "@tailwindcss/typography": "0.5.20",
         "@types/node": "26.0.1",
         "prettier": "3.9.4",
