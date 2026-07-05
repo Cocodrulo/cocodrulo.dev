@@ -15,27 +15,27 @@
         "deploy": "astro build && wrangler deploy",
         "typecheck": "astro check"
     },
-    "packageManager": "pnpm@11.9.0",
+    "packageManager": "pnpm@11.10.0",
     "dependencies": {
         "@astrojs/check": "0.9.9",
-        "@astrojs/cloudflare": "14.0.2",
-        "@astrojs/react": "6.0.0",
-        "@emdash-cms/cloudflare": "0.25.1",
+        "@astrojs/cloudflare": "14.1.1",
+        "@astrojs/react": "6.0.1",
+        "@emdash-cms/cloudflare": "0.27.0",
         "@tailwindcss/vite": "4.3.2",
-        "astro": "7.0.4",
-        "emdash": "0.25.1",
+        "astro": "7.0.6",
+        "emdash": "0.27.0",
         "pg": "8.22.0",
         "react": "19.2.7",
         "react-dom": "19.2.7",
         "tailwindcss": "4.3.2"
     },
     "devDependencies": {
-        "@cloudflare/workers-types": "4.20260630.1",
+        "@cloudflare/workers-types": "5.20260705.1",
         "@tailwindcss/typography": "0.5.20",
-        "@types/node": "26.0.1",
+        "@types/node": "26.1.0",
         "prettier": "3.9.4",
         "prettier-plugin-astro": "0.14.1",
         "typescript": "6.0.3",
-        "wrangler": "4.105.0"
+        "wrangler": "4.107.0"
     }
 }

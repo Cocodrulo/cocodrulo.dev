@@ -4,7 +4,7 @@ allowBuilds:
   sharp: true
   workerd: true
 minimumReleaseAgeExclude:
-  - '@cloudflare/workers-types@4.20260627.1 || 4.20260630.1'
+  - '@cloudflare/workers-types@4.20260627.1 || 4.20260630.1 || 5.20260705.1'
   - prettier@3.9.0 || 3.9.4
   - '@astrojs/cloudflare@14.0.2'
   - '@astrojs/compiler-binding-darwin-arm64@0.3.0'
