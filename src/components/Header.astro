@@ -46,7 +46,20 @@ const targetUrl =
                     </li>
                 ))
             }
-            <li class="border-l border-white/20 pl-6">
+            <li class="flex items-center gap-3 border-l border-white/20 pl-6">
+                <a
+                    href={`/cv.pdf${language === 'en' ? '?lang=en' : ''}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="flex items-center gap-1.5 text-xs font-semibold tracking-wider px-3.5 py-1.5 rounded-full border border-white/20 text-white/90 bg-white/5 hover:bg-white/10 hover:border-white/40 hover:text-white transition-all duration-300 shadow-sm"
+                    aria-label={language === 'es' ? 'Descargar CV' : 'Download CV'}>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                        <polyline points="7 10 12 15 17 10"/>
+                        <line x1="12" y1="15" x2="12" y2="3"/>
+                    </svg>
+                    <span>{language === 'es' ? 'Descargar CV' : 'Download CV'}</span>
+                </a>
                 <a
                     href={targetUrl}
                     class="flex items-center gap-1 text-xs font-semibold tracking-wider px-3 py-1 rounded-full border border-white/20 text-white/80 hover:text-white hover:border-white/40 hover:bg-white/5 transition-all duration-300"
@@ -71,7 +84,19 @@ const targetUrl =
                         </li>
                     ))
                 }
-                <li class="mt-4">
+                <li class="mt-4 flex flex-col items-center gap-4">
+                    <a
+                        href={`/cv.pdf${language === 'en' ? '?lang=en' : ''}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="flex items-center gap-2 text-sm font-semibold tracking-wider px-6 py-2.5 rounded-full border border-white/20 text-white bg-white/10 hover:bg-white/20 transition-all duration-300 mobile-link">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                            <polyline points="7 10 12 15 17 10"/>
+                            <line x1="12" y1="15" x2="12" y2="3"/>
+                        </svg>
+                        <span>{language === 'es' ? 'Descargar CV' : 'Download CV'}</span>
+                    </a>
                     <a
                         href={targetUrl}
                         class="flex items-center gap-1 text-sm font-semibold tracking-wider px-6 py-2 rounded-full border border-white/20 text-white/80 hover:text-white hover:border-white/40 hover:bg-white/5 transition-all duration-300 mobile-link"

@@ -27,22 +27,36 @@ const socials = (socialEntries || []) as unknown as Array<{
         <p class="text-white/70 text-balance">
             {profile.label}
         </p>
-        <div class="flex gap-8 mt-8">
-            {
-                socials.map((social) => {
-                    const key =
-                        social.data.name.charAt(0).toUpperCase() +
-                        social.data.name.slice(1)
-                    const Icon = IconsHandler[key as keyof typeof IconsHandler]
-                    return (
-                        <a href={social.data.url}>
-                            {Icon && (
-                                <Icon class="w-6 h-6 text-white/70 hover:text-white transition-colors duration-300" />
-                            )}
-                        </a>
-                    )
-                })
-            }
+        <div class="flex items-center gap-6 mt-8 flex-wrap">
+            <a
+                href={`/cv.pdf${language === 'en' ? '?lang=en' : ''}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600/20 hover:bg-blue-600/30 border border-blue-500/30 hover:border-blue-500/50 text-white font-medium text-sm transition-all duration-300 shadow-lg shadow-blue-950/20 group backdrop-blur-sm">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-blue-400 group-hover:translate-y-0.5 transition-transform duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                    <polyline points="7 10 12 15 17 10"/>
+                    <line x1="12" y1="15" x2="12" y2="3"/>
+                </svg>
+                <span>{language === 'es' ? 'Descargar CV' : 'Download CV'}</span>
+            </a>
+            <div class="flex gap-6 items-center">
+                {
+                    socials.map((social) => {
+                        const key =
+                            social.data.name.charAt(0).toUpperCase() +
+                            social.data.name.slice(1)
+                        const Icon = IconsHandler[key as keyof typeof IconsHandler]
+                        return (
+                            <a href={social.data.url}>
+                                {Icon && (
+                                    <Icon class="w-6 h-6 text-white/70 hover:text-white transition-colors duration-300" />
+                                )}
+                            </a>
+                        )
+                    })
+                }
+            </div>
         </div>
     </div>
     <div

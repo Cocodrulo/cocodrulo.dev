@@ -55,6 +55,9 @@ export default defineConfig({
 
     vite: {
         plugins: [tailwindcss()],
+        define: {
+            'import.meta.env.BUILD_TIMESTAMP': JSON.stringify(Date.now()),
+        },
     },
 
     env: {
