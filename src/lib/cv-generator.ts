@@ -315,7 +315,7 @@ export async function generateCVPdf(
     })
     const projects = (projectEntries || []).map((p: any) => ({
         title: p.data.title,
-        blocks: extractBlocks(p.data.description),
+        blocks: extractBlocks(p.data.cv_summary || p.data.description),
         url: p.data.url,
         labels: (p.data.labels || [])
             .map((l: any) => l.etiqueta || l.label)
@@ -589,7 +589,7 @@ export async function generateCVPdf(
     const contactItems: Array<{ label: string; url: string }> = [
         { label: 'cocodrulo.dev', url: 'https://cocodrulo.dev' },
         ...socials.map((s) => ({
-            label: cleanText(s.name || s.label),
+            label: cleanText(s.label || s.name),
             url: s.url,
         })),
     ]
