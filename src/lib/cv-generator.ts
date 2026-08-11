@@ -885,9 +885,10 @@ export async function generateCVPdf(
             })
 
             if (pUrl) {
-                const urlWidth = fontRegular.widthOfTextAtSize(pUrl, 8.5)
+                const urlTitle = isEs ? 'Enlace al Proyecto' : 'Project Link'
+                const urlWidth = fontRegular.widthOfTextAtSize(urlTitle, 8.5)
                 const urlX = margin + contentWidth - urlWidth
-                currentPage.drawText(pUrl, {
+                currentPage.drawText(urlTitle, {
                     x: urlX,
                     y,
                     size: 8.5,
