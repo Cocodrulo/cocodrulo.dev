@@ -65,6 +65,62 @@ function getCertFileUrl(fileObj: any): string {
     return url
 }
 
+type SkillCategoryKey = 'language' | 'framework' | 'db' | 'cloud' | 'other'
+
+const CATEGORY_ORDER: SkillCategoryKey[] = [
+    'language',
+    'framework',
+    'db',
+    'cloud',
+    'other',
+]
+
+const CATEGORY_LABELS: Record<SkillCategoryKey, { es: string; en: string }> = {
+    language: { es: 'Lenguajes', en: 'Languages' },
+    framework: { es: 'Frameworks / Librerías', en: 'Frameworks & Libraries' },
+    db: { es: 'Bases de Datos', en: 'Databases' },
+    cloud: { es: 'DevOps / Cloud', en: 'DevOps & Cloud' },
+    other: { es: 'Otros', en: 'Other' },
+}
+
+function normalizeCategoryKey(rawCategory?: string): SkillCategoryKey {
+    if (!rawCategory) return 'other'
+    const lower = rawCategory.toLowerCase().trim()
+    if (
+        lower === 'language' ||
+        lower === 'languages' ||
+        lower.includes('lenguaje')
+    ) {
+        return 'language'
+    }
+    if (
+        lower === 'framework' ||
+        lower === 'frameworks' ||
+        lower.includes('librer') ||
+        lower.includes('librar')
+    ) {
+        return 'framework'
+    }
+    if (
+        lower === 'db' ||
+        lower === 'database' ||
+        lower === 'databases' ||
+        lower.includes('base') ||
+        lower.includes('dato')
+    ) {
+        return 'db'
+    }
+    if (
+        lower === 'cloud' ||
+        lower === 'devops' ||
+        lower.includes('cloud') ||
+        lower.includes('devops')
+    ) {
+        return 'cloud'
+    }
+    return 'other'
+}
+
 export type DescriptionBlock =
     | { type: 'heading'; text: string; level: number }
     | { type: 'bullet-item'; text: string; level: number }
@@ -395,7 +451,7 @@ export async function generateCVPdf(
             }
         })
 
-    // Certificates filtering (opt-in if show_in_cv / featured is checked)
+    // Certificates filtering (opt-in if show_in_cv / featured is checked, max 10)
     const { entries: certEntries } = await getEmDashCollection('certificates', {
         locale,
         status: 'published',
@@ -428,6 +484,49 @@ export async function generateCVPdf(
                 show_in_cv: certData.show_in_cv,
             }
         })
+        .slice(0, 10)
+
+    // Tech skills from EmDash CMS
+    let rawSkills: any[] = []
+    try {
+        const { entries: skillEntries } = await getEmDashCollection(
+            'tech_skills',
+            {
+                locale,
+                status: 'published',
+            },
+        )
+        rawSkills = skillEntries || []
+        if (rawSkills.length === 0) {
+            const fallback = await getEmDashCollection('tech_skills')
+            rawSkills = fallback?.entries || []
+        }
+    } catch (e) {
+        console.error('Error fetching tech_skills:', e)
+    }
+
+    const skillsByCategory: Record<SkillCategoryKey, string[]> = {
+        language: [],
+        framework: [],
+        db: [],
+        cloud: [],
+        other: [],
+    }
+
+    for (const s of rawSkills) {
+        const data = s.data || {}
+        const skillName = (
+            data.skill ||
+            data.name ||
+            data.title ||
+            s.title ||
+            (typeof s === 'string' ? s : '')
+        ).trim()
+        if (!skillName) continue
+
+        const catKey = normalizeCategoryKey(data.category)
+        skillsByCategory[catKey].push(skillName)
+    }
 
     // 2. Initialize PDF Document
     const pdfDoc = await PDFDocument.create()
@@ -1124,8 +1223,10 @@ export async function generateCVPdf(
     }
 
     // =======================================================================
-    // RIGHT COLUMN RENDERING (Certificaciones with subtle dotted dividers)
+    // RIGHT COLUMN RENDERING (Certificaciones, Idiomas, Habilidades Técnicas)
     // =======================================================================
+
+    // 1. CERTIFICACIONES (Max 10)
     if (certificates.length > 0) {
         drawSectionHeader(
             isEs ? 'CERTIFICACIONES' : 'CERTIFICATES',
@@ -1214,7 +1315,165 @@ export async function generateCVPdf(
 
             yRight = certY - 3
         }
+        yRight -= 8
     }
+
+    // 2. IDIOMAS / LANGUAGES
+    drawSectionHeader(
+        isEs ? 'IDIOMAS' : 'LANGUAGES',
+        rightX,
+        () => yRight,
+        (v) => (yRight = v),
+        rightColWidth,
+        ensureSpaceRight,
+        () => rightPageIndex,
+    )
+
+    const languages = [
+        {
+            name: isEs ? 'Español' : 'Spanish',
+            level: isEs ? 'Nativo' : 'Native',
+        },
+        {
+            name: isEs ? 'Inglés' : 'English',
+            level: 'C1',
+        },
+    ]
+
+    for (let i = 0; i < languages.length; i++) {
+        const langItem = languages[i]
+        const langName = cleanText(langItem.name)
+        const langLevel = cleanText(langItem.level)
+
+        ensureSpaceRight(16)
+        const page = getPage(rightPageIndex)
+
+        page.drawText(langName, {
+            x: rightX,
+            y: yRight,
+            size: 8.5,
+            font: fontBold,
+            color: colors.primary,
+        })
+
+        const levelWidth = fontRegular.widthOfTextAtSize(langLevel, 8)
+        page.drawText(langLevel, {
+            x: rightX + rightColWidth - levelWidth,
+            y: yRight,
+            size: 8,
+            font: fontRegular,
+            color: colors.accent,
+        })
+
+        yRight -= 13
+    }
+    yRight -= 6
+
+    // 3. HABILIDADES TÉCNICAS / TECHNICAL SKILLS (Categorized)
+    const activeCategories = CATEGORY_ORDER.filter(
+        (catKey) => skillsByCategory[catKey].length > 0,
+    )
+
+    if (activeCategories.length > 0) {
+        drawSectionHeader(
+            isEs ? 'HABILIDADES TÉCNICAS' : 'TECHNICAL SKILLS',
+            rightX,
+            () => yRight,
+            (v) => (yRight = v),
+            rightColWidth,
+            ensureSpaceRight,
+            () => rightPageIndex,
+        )
+
+        const chipHeight = 13.5
+        const chipPaddingX = 5.5
+        const chipGapX = 4
+        const chipGapY = 4.5
+        const fontSizeSkill = 7.5
+
+        for (const catKey of activeCategories) {
+            const catSkills = skillsByCategory[catKey]
+            if (!catSkills || catSkills.length === 0) continue
+
+            const catTitle = cleanText(
+                isEs
+                    ? CATEGORY_LABELS[catKey].es
+                    : CATEGORY_LABELS[catKey].en,
+            )
+
+            ensureSpaceRight(26)
+            let page = getPage(rightPageIndex)
+
+            // Category Subtitle
+            page.drawText(catTitle, {
+                x: rightX,
+                y: yRight,
+                size: 8,
+                font: fontBold,
+                color: colors.primary,
+            })
+            yRight -= 11
+
+            let curSkillX = rightX
+
+            for (const skill of catSkills) {
+                const cleanSkill = cleanText(skill)
+                if (!cleanSkill) continue
+
+                const textWidth = fontRegular.widthOfTextAtSize(
+                    cleanSkill,
+                    fontSizeSkill,
+                )
+                const chipWidth = Math.min(
+                    textWidth + chipPaddingX * 2,
+                    rightColWidth,
+                )
+
+                // If chip overflows the right column boundary, advance to the next line
+                if (
+                    curSkillX + chipWidth > rightX + rightColWidth &&
+                    curSkillX > rightX
+                ) {
+                    curSkillX = rightX
+                    yRight -= chipHeight + chipGapY
+                }
+
+                const prevPageIndex = rightPageIndex
+                ensureSpaceRight(chipHeight + chipGapY)
+                if (rightPageIndex !== prevPageIndex) {
+                    curSkillX = rightX
+                }
+
+                page = getPage(rightPageIndex)
+
+                // Draw soft badge background
+                page.drawRectangle({
+                    x: curSkillX,
+                    y: yRight - 2,
+                    width: chipWidth,
+                    height: chipHeight,
+                    color: rgb(0.94, 0.96, 0.98),
+                    borderColor: rgb(0.82, 0.86, 0.92),
+                    borderWidth: 0.5,
+                })
+
+                // Draw badge text
+                page.drawText(cleanSkill, {
+                    x: curSkillX + chipPaddingX,
+                    y: yRight + 1.5,
+                    size: fontSizeSkill,
+                    font: fontRegular,
+                    color: colors.textDark,
+                })
+
+                curSkillX += chipWidth + chipGapX
+            }
+
+            yRight -= chipHeight + 6
+        }
+    }
+
+
 
     // Add footer to all pages
     const pageCount = pages.length

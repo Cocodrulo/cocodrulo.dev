@@ -350,6 +350,41 @@
                     "type": "boolean"
                 }
             ]
+        },
+        {
+            "slug": "tech_skills",
+            "label": "Habilidades Técnicas",
+            "labelSingular": "Habilidad Técnica",
+            "description": "Habilidades técnicas a mostrar en el CV",
+            "supports": [
+                "drafts",
+                "revisions"
+            ],
+            "urlPattern": "/tech_skills/{slug}",
+            "fields": [
+                {
+                    "slug": "skill",
+                    "label": "Habilidad",
+                    "type": "string",
+                    "required": true,
+                    "unique": true
+                },
+                {
+                    "slug": "category",
+                    "label": "Categoría",
+                    "type": "select",
+                    "required": true,
+                    "validation": {
+                        "options": [
+                            "language",
+                            "framework",
+                            "db",
+                            "cloud",
+                            "other"
+                        ]
+                    }
+                }
+            ]
         }
     ],
     "taxonomies": [
@@ -1344,6 +1379,92 @@
                 },
                 "locale": "es",
                 "translationOf": "socials:github:en"
+            }
+        ],
+        "tech_skills": [
+            {
+                "id": "tech_skills:typescript:es",
+                "slug": "typescript",
+                "status": "published",
+                "data": { "skill": "TypeScript", "category": "language" },
+                "locale": "es"
+            },
+            {
+                "id": "tech_skills:javascript:es",
+                "slug": "javascript",
+                "status": "published",
+                "data": { "skill": "JavaScript", "category": "language" },
+                "locale": "es"
+            },
+            {
+                "id": "tech_skills:python:es",
+                "slug": "python",
+                "status": "published",
+                "data": { "skill": "Python", "category": "language" },
+                "locale": "es"
+            },
+            {
+                "id": "tech_skills:pytorch-ia:es",
+                "slug": "pytorch-ia",
+                "status": "published",
+                "data": { "skill": "PyTorch / IA", "category": "framework" },
+                "locale": "es"
+            },
+            {
+                "id": "tech_skills:astro:es",
+                "slug": "astro",
+                "status": "published",
+                "data": { "skill": "Astro", "category": "framework" },
+                "locale": "es"
+            },
+            {
+                "id": "tech_skills:react:es",
+                "slug": "react",
+                "status": "published",
+                "data": { "skill": "React", "category": "framework" },
+                "locale": "es"
+            },
+            {
+                "id": "tech_skills:nodejs:es",
+                "slug": "nodejs",
+                "status": "published",
+                "data": { "skill": "Node.js", "category": "framework" },
+                "locale": "es"
+            },
+            {
+                "id": "tech_skills:tailwind:es",
+                "slug": "tailwind",
+                "status": "published",
+                "data": { "skill": "Tailwind CSS", "category": "framework" },
+                "locale": "es"
+            },
+            {
+                "id": "tech_skills:postgresql:es",
+                "slug": "postgresql",
+                "status": "published",
+                "data": { "skill": "PostgreSQL", "category": "db" },
+                "locale": "es"
+            },
+            {
+                "id": "tech_skills:cloudflare-workers:es",
+                "slug": "cloudflare-workers",
+                "status": "published",
+                "data": { "skill": "Cloudflare Workers", "category": "cloud" },
+                "locale": "es"
+            },
+            {
+                "id": "tech_skills:docker:es",
+                "slug": "docker",
+                "status": "published",
+                "data": { "skill": "Docker", "category": "cloud" },
+                "locale": "es"
+            },
+            {
+                "id": "tech_skills:git:es",
+                "slug": "git",
+                "status": "published",
+                "data": { "skill": "Git & GitHub", "category": "other" },
+                "locale": "es"
             }
         ]
     }

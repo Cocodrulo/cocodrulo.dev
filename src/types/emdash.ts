@@ -117,3 +117,25 @@ export type TimelineData = {
     description?: string
     show_in_cv?: boolean
 }
+
+// --- Tech Skills ---
+export type TechSkillCategory =
+    | 'language'
+    | 'framework'
+    | 'db'
+    | 'cloud'
+    | 'other'
+    | 'Lenguajes'
+    | 'Frameworks/Librerías'
+    | 'Bases de Datos'
+    | 'DevOps/Cloud'
+    | 'Otros'
+    | string
+
+export type TechSkillData = {
+    skill: string
+    category?: TechSkillCategory
+}
+
+
+
