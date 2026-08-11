@@ -585,13 +585,18 @@ export async function generateCVPdf(
         color: colors.accent,
     })
 
-    // Contact / Socials: ONLY LABELS (clickable links)
-    const contactItems: Array<{ label: string; url: string }> = [
+    // Contact / Socials / Additional Info: clickable links & key meta
+    const contactItems: Array<{ label: string; url?: string }> = [
         { label: 'cocodrulo.dev', url: 'https://cocodrulo.dev' },
         ...socials.map((s) => ({
             label: cleanText(s.label || s.name),
             url: s.url,
         })),
+        {
+            label: isEs
+                ? 'Permiso B (Vehículo propio)'
+                : "Driver's License B (Own vehicle)",
+        },
     ]
 
     let contactX = margin
@@ -619,23 +624,26 @@ export async function generateCVPdf(
             contactY -= 11
         }
 
+        const isLink = Boolean(item.url)
         currentPage.drawText(cleanLabel, {
             x: contactX,
             y: contactY,
             size: fontSizeContact,
             font: fontRegular,
-            color: colors.accent,
+            color: isLink ? colors.accent : colors.textMuted,
         })
 
-        addLink(
-            pdfDoc,
-            currentPage,
-            item.url,
-            contactX,
-            contactY,
-            itemWidth,
-            fontSizeContact,
-        )
+        if (item.url) {
+            addLink(
+                pdfDoc,
+                currentPage,
+                item.url,
+                contactX,
+                contactY,
+                itemWidth,
+                fontSizeContact,
+            )
+        }
 
         contactX += itemWidth
 
