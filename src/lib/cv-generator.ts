@@ -48,10 +48,27 @@ function cleanText(text: string): string {
 
 function getCertFileUrl(fileObj: any): string {
     if (!fileObj) return ''
-    let url = fileObj.url || fileObj.src || ''
+    if (typeof fileObj === 'string') {
+        let url = fileObj
+        if (url.startsWith('/')) {
+            url = `https://cocodrulo.dev${url}`
+        }
+        return url
+    }
+
+    let url = fileObj.src || fileObj.url || ''
 
     if (!url && fileObj.meta?.storageKey) {
         url = `https://files.cocodrulo.dev/${fileObj.meta.storageKey}`
+    }
+
+    if (
+        !url &&
+        fileObj.filename &&
+        !fileObj.meta?.storageKey &&
+        fileObj.provider === 'local'
+    ) {
+        url = `https://cocodrulo.dev/certificates/${fileObj.filename}`
     }
 
     if (!url && fileObj.id) {
@@ -367,13 +384,22 @@ export async function generateCVPdf(
         url: string
     }>
 
-    const { entries: timelineEntries } = await getEmDashCollection('timeline', {
-        locale,
-        status: 'published',
-    })
-    const rawTimeline = (timelineEntries || []).map(
-        (t: any) => t.data,
-    ) as Array<{
+    let rawTimelineEntries: any[] = []
+    try {
+        const { entries: timelineEntries } = await getEmDashCollection(
+            'timeline',
+            { locale },
+        )
+        rawTimelineEntries = timelineEntries || []
+        if (rawTimelineEntries.length === 0) {
+            const fallback = await getEmDashCollection('timeline')
+            rawTimelineEntries = fallback?.entries || []
+        }
+    } catch (e) {
+        console.error('Error fetching timeline:', e)
+    }
+
+    const rawTimeline = rawTimelineEntries.map((t: any) => t.data) as Array<{
         title: string
         place: string
         type: 'work' | 'education'
@@ -420,14 +446,25 @@ export async function generateCVPdf(
         .sort((a, b) => parseInt(b.start_year) - parseInt(a.start_year))
 
     // Projects filtering (opt-in if show_in_cv / featured is checked)
-    const { entries: projectEntries } = await getEmDashCollection('projects', {
-        locale,
-        status: 'published',
-    })
-    const hasExplicitProjectFilter = (projectEntries || []).some(
+    let rawProjectEntries: any[] = []
+    try {
+        const { entries: projectEntries } = await getEmDashCollection(
+            'projects',
+            { locale },
+        )
+        rawProjectEntries = projectEntries || []
+        if (rawProjectEntries.length === 0) {
+            const fallback = await getEmDashCollection('projects')
+            rawProjectEntries = fallback?.entries || []
+        }
+    } catch (e) {
+        console.error('Error fetching projects:', e)
+    }
+
+    const hasExplicitProjectFilter = rawProjectEntries.some(
         (p: any) => isTruthy(p.data?.show_in_cv) || isTruthy(p.data?.featured),
     )
-    const projects = (projectEntries || [])
+    const projects = rawProjectEntries
         .filter((p: any) => {
             const data = p.data || {}
             if (hasExplicitProjectFilter) {
@@ -452,14 +489,25 @@ export async function generateCVPdf(
         })
 
     // Certificates filtering (opt-in if show_in_cv / featured is checked, max 10)
-    const { entries: certEntries } = await getEmDashCollection('certificates', {
-        locale,
-        status: 'published',
-    })
-    const hasExplicitCertFilter = (certEntries || []).some(
+    let rawCertEntries: any[] = []
+    try {
+        const { entries: certEntries } = await getEmDashCollection(
+            'certificates',
+            { locale },
+        )
+        rawCertEntries = certEntries || []
+        if (rawCertEntries.length === 0) {
+            const fallback = await getEmDashCollection('certificates')
+            rawCertEntries = fallback?.entries || []
+        }
+    } catch (e) {
+        console.error('Error fetching certificates:', e)
+    }
+
+    const hasExplicitCertFilter = rawCertEntries.some(
         (c: any) => isTruthy(c.data?.show_in_cv) || isTruthy(c.data?.featured),
     )
-    const certificates = (certEntries || [])
+    const certificates = rawCertEntries
         .filter((c: any) => {
             const certData = c.data || {}
             if (hasExplicitCertFilter) {
@@ -477,24 +525,22 @@ export async function generateCVPdf(
             const certData = c.data || {}
             const fileUrl = getCertFileUrl(certData.certificate_file)
             return {
-                title: certData.title || '',
-                issuer: certData.issuer || '',
-                issuer_website: certData.issuer_website || '',
+                title: certData.title || certData.titulo || '',
+                issuer: certData.issuer || certData.emisor || '',
+                issuer_website:
+                    certData.issuer_website || certData.sitio_web || '',
                 file_url: fileUrl,
                 show_in_cv: certData.show_in_cv,
             }
         })
-        .slice(0, 10)
+        .slice(0, 8)
 
     // Tech skills from EmDash CMS
     let rawSkills: any[] = []
     try {
         const { entries: skillEntries } = await getEmDashCollection(
             'tech_skills',
-            {
-                locale,
-                status: 'published',
-            },
+            { locale },
         )
         rawSkills = skillEntries || []
         if (rawSkills.length === 0) {
@@ -516,6 +562,7 @@ export async function generateCVPdf(
     for (const s of rawSkills) {
         const data = s.data || {}
         const skillName = (
+            data.habilidad ||
             data.skill ||
             data.name ||
             data.title ||
@@ -524,7 +571,7 @@ export async function generateCVPdf(
         ).trim()
         if (!skillName) continue
 
-        const catKey = normalizeCategoryKey(data.category)
+        const catKey = normalizeCategoryKey(data.category || data.categoria)
         skillsByCategory[catKey].push(skillName)
     }
 
@@ -1385,7 +1432,7 @@ export async function generateCVPdf(
             () => rightPageIndex,
         )
 
-        const chipHeight = 13.5
+        const chipHeight = 13
         const chipPaddingX = 5.5
         const chipGapX = 4
         const chipGapY = 4.5
@@ -1396,12 +1443,10 @@ export async function generateCVPdf(
             if (!catSkills || catSkills.length === 0) continue
 
             const catTitle = cleanText(
-                isEs
-                    ? CATEGORY_LABELS[catKey].es
-                    : CATEGORY_LABELS[catKey].en,
+                isEs ? CATEGORY_LABELS[catKey].es : CATEGORY_LABELS[catKey].en,
             )
 
-            ensureSpaceRight(26)
+            ensureSpaceRight(28)
             let page = getPage(rightPageIndex)
 
             // Category Subtitle
@@ -1412,7 +1457,7 @@ export async function generateCVPdf(
                 font: fontBold,
                 color: colors.primary,
             })
-            yRight -= 11
+            yRight -= 16
 
             let curSkillX = rightX
 
@@ -1449,7 +1494,7 @@ export async function generateCVPdf(
                 // Draw soft badge background
                 page.drawRectangle({
                     x: curSkillX,
-                    y: yRight - 2,
+                    y: yRight - 2.5,
                     width: chipWidth,
                     height: chipHeight,
                     color: rgb(0.94, 0.96, 0.98),
@@ -1457,10 +1502,10 @@ export async function generateCVPdf(
                     borderWidth: 0.5,
                 })
 
-                // Draw badge text
+                // Draw badge text centered vertically in chip
                 page.drawText(cleanSkill, {
                     x: curSkillX + chipPaddingX,
-                    y: yRight + 1.5,
+                    y: yRight + 1,
                     size: fontSizeSkill,
                     font: fontRegular,
                     color: colors.textDark,
@@ -1469,11 +1514,9 @@ export async function generateCVPdf(
                 curSkillX += chipWidth + chipGapX
             }
 
-            yRight -= chipHeight + 6
+            yRight -= chipHeight + 7
         }
     }
-
-
 
     // Add footer to all pages
     const pageCount = pages.length

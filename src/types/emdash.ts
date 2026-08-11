@@ -81,6 +81,7 @@ export type PostData = {
 // --- Certificate ---
 export type CertificateFileField = {
     id?: string
+    src?: string
     url?: string
     filename?: string
     mimeType?: string

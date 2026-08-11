@@ -54,7 +54,10 @@ const getCertificateUrl = (
     fileObj: (typeof certificates)[number]['data']['certificate_file'],
 ) => {
     if (!fileObj) return ''
-    if (fileObj.url) return fileObj.url
+    if (typeof fileObj === 'string') return fileObj
+
+    const directUrl = fileObj.src || fileObj.url
+    if (directUrl) return directUrl
 
     const storageKey = fileObj.meta?.storageKey
     if (storageKey) {
@@ -62,6 +65,10 @@ const getCertificateUrl = (
             return Astro.locals.emdash.getPublicMediaUrl(storageKey)
         }
         return `/_emdash/api/media/file/${storageKey}`
+    }
+
+    if (fileObj.filename && fileObj.provider === 'local') {
+        return `/certificates/${fileObj.filename}`
     }
 
     if (fileObj.id) {
