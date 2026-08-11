@@ -235,10 +235,22 @@ function addLink(
     height: number,
 ) {
     if (!url) return
-    const formattedUrl =
-        url.startsWith('http://') || url.startsWith('https://')
-            ? url
-            : `https://${url}`
+    let formattedUrl = url.trim()
+    if (formattedUrl.startsWith('mailto:') || formattedUrl.startsWith('tel:')) {
+        // Keep protocol as-is
+    } else if (
+        formattedUrl.includes('@') &&
+        !formattedUrl.includes('/') &&
+        !formattedUrl.startsWith('http')
+    ) {
+        formattedUrl = `mailto:${formattedUrl}`
+    } else if (
+        !formattedUrl.startsWith('http://') &&
+        !formattedUrl.startsWith('https://')
+    ) {
+        formattedUrl = `https://${formattedUrl}`
+    }
+
     const linkAnnot = pdfDoc.context.obj({
         Type: 'Annot',
         Subtype: 'Link',
@@ -254,6 +266,18 @@ function addLink(
     page.node.addAnnot(linkAnnotRef)
 }
 
+function isTruthy(val: any): boolean {
+    if (
+        val === true ||
+        val === 1 ||
+        val === '1' ||
+        val === 'true' ||
+        val === 'on'
+    )
+        return true
+    return false
+}
+
 export async function generateCVPdf(
     locale: string = 'es',
 ): Promise<Uint8Array> {
@@ -265,7 +289,9 @@ export async function generateCVPdf(
     })
     const profile = (profileEntry?.data || {
         name: 'Javier Aday Pérez Romero',
-        label: isEs ? 'Desarrollador de Software' : 'Software Developer',
+        label: isEs
+            ? 'Desarrollador de software y estudiante de Ingeniería Informática en la ULPGC'
+            : 'Software developer and Computer Science student at ULPGC',
     }) as { name: string; label: string }
 
     const { entry: aboutEntry } = await getEmDashEntry('about', 'about', {
@@ -299,43 +325,109 @@ export async function generateCVPdf(
         end_year?: string
         current?: boolean
         description?: string
+        show_in_cv?: boolean
     }>
 
+    // Work & Education filtering (opt-in if any entry has show_in_cv checked)
+    const hasExplicitWorkFilter = rawTimeline.some(
+        (t) => t.type === 'work' && isTruthy(t.show_in_cv),
+    )
     const workTimeline = rawTimeline
-        .filter((t) => t.type === 'work')
+        .filter((t) => {
+            if (t.type !== 'work') return false
+            if (hasExplicitWorkFilter) {
+                return isTruthy(t.show_in_cv)
+            }
+            return (
+                t.show_in_cv !== false &&
+                t.show_in_cv !== undefined &&
+                t.show_in_cv !== null
+            )
+        })
         .sort((a, b) => parseInt(b.start_year) - parseInt(a.start_year))
 
+    const hasExplicitEduFilter = rawTimeline.some(
+        (t) => t.type === 'education' && isTruthy(t.show_in_cv),
+    )
     const eduTimeline = rawTimeline
-        .filter((t) => t.type === 'education')
+        .filter((t) => {
+            if (t.type !== 'education') return false
+            if (hasExplicitEduFilter) {
+                return isTruthy(t.show_in_cv)
+            }
+            return (
+                t.show_in_cv !== false &&
+                t.show_in_cv !== undefined &&
+                t.show_in_cv !== null
+            )
+        })
         .sort((a, b) => parseInt(b.start_year) - parseInt(a.start_year))
 
+    // Projects filtering (opt-in if show_in_cv / featured is checked)
     const { entries: projectEntries } = await getEmDashCollection('projects', {
         locale,
         status: 'published',
     })
-    const projects = (projectEntries || []).map((p: any) => ({
-        title: p.data.title,
-        blocks: extractBlocks(p.data.cv_summary || p.data.description),
-        url: p.data.url,
-        labels: (p.data.labels || [])
-            .map((l: any) => l.etiqueta || l.label)
-            .filter(Boolean),
-    }))
+    const hasExplicitProjectFilter = (projectEntries || []).some(
+        (p: any) => isTruthy(p.data?.show_in_cv) || isTruthy(p.data?.featured),
+    )
+    const projects = (projectEntries || [])
+        .filter((p: any) => {
+            const data = p.data || {}
+            if (hasExplicitProjectFilter) {
+                return isTruthy(data.show_in_cv) || isTruthy(data.featured)
+            }
+            return (
+                data.show_in_cv !== false &&
+                data.show_in_cv !== 0 &&
+                data.show_in_cv !== 'false'
+            )
+        })
+        .map((p: any) => {
+            const data = p.data || {}
+            return {
+                title: data.title || '',
+                url: data.url || '',
+                blocks: extractBlocks(data.cv_summary || data.description),
+                labels: (data.labels || [])
+                    .map((l: any) => l.etiqueta || l.label)
+                    .filter(Boolean),
+            }
+        })
 
+    // Certificates filtering (opt-in if show_in_cv / featured is checked)
     const { entries: certEntries } = await getEmDashCollection('certificates', {
         locale,
         status: 'published',
     })
-    const certificates = (certEntries || []).map((c: any) => {
-        const certData = c.data || {}
-        const fileUrl = getCertFileUrl(certData.certificate_file)
-        return {
-            title: certData.title,
-            issuer: certData.issuer,
-            issuer_website: certData.issuer_website,
-            file_url: fileUrl,
-        }
-    })
+    const hasExplicitCertFilter = (certEntries || []).some(
+        (c: any) => isTruthy(c.data?.show_in_cv) || isTruthy(c.data?.featured),
+    )
+    const certificates = (certEntries || [])
+        .filter((c: any) => {
+            const certData = c.data || {}
+            if (hasExplicitCertFilter) {
+                return (
+                    isTruthy(certData.show_in_cv) || isTruthy(certData.featured)
+                )
+            }
+            return (
+                certData.show_in_cv !== false &&
+                certData.show_in_cv !== 0 &&
+                certData.show_in_cv !== 'false'
+            )
+        })
+        .map((c: any) => {
+            const certData = c.data || {}
+            const fileUrl = getCertFileUrl(certData.certificate_file)
+            return {
+                title: certData.title || '',
+                issuer: certData.issuer || '',
+                issuer_website: certData.issuer_website || '',
+                file_url: fileUrl,
+                show_in_cv: certData.show_in_cv,
+            }
+        })
 
     // 2. Initialize PDF Document
     const pdfDoc = await PDFDocument.create()
@@ -343,7 +435,7 @@ export async function generateCVPdf(
     const fontBold = await pdfDoc.embedFont(StandardFonts.HelveticaBold)
     const fontOblique = await pdfDoc.embedFont(StandardFonts.HelveticaOblique)
 
-    // Load avatar image from bundled inline base64 string (works 100% in Cloudflare Workers / SSR)
+    // Load avatar image from bundled inline base64 string
     let avatarImg: any = null
     try {
         if (avatarDataUri) {
@@ -364,234 +456,104 @@ export async function generateCVPdf(
 
     const pageWidth = 595.28 // A4 width
     const pageHeight = 841.89 // A4 height
-    const margin = 40
+    const margin = 34
     const contentWidth = pageWidth - margin * 2
 
-    // Colors: Professional Modern Palette
+    // Two-column layout geometry (Matching Enhancv layout from screenshot)
+    const gutter = 18
+    const leftColWidth = 316
+    const rightColWidth = contentWidth - leftColWidth - gutter // ~173pt
+    const leftX = margin
+    const rightX = margin + leftColWidth + gutter
+
+    // Colors: Clean High-Contrast Palette (Enhancv style)
     const colors = {
-        primary: rgb(0.06, 0.09, 0.16), // #0F172A Dark Slate
-        accent: rgb(0.15, 0.39, 0.92), // #2563EB Blue
-        textDark: rgb(0.12, 0.16, 0.23), // #1E293B
-        textMuted: rgb(0.35, 0.42, 0.52), // #5A6A80
-        textLight: rgb(0.47, 0.55, 0.67), // #788C9E
-        lineDivider: rgb(0.88, 0.91, 0.94), // #E2E8F0
-        bgHeader: rgb(0.96, 0.97, 0.99), // #F5F7FA
+        primary: rgb(0.05, 0.05, 0.05), // #0D0D0D Deep Black
+        accent: rgb(0.0, 0.44, 0.95), // #0070F3 / #0066FF Vibrant Accent Blue
+        textDark: rgb(0.18, 0.22, 0.28), // #2E3846
+        textMuted: rgb(0.45, 0.5, 0.58), // #738094
+        textLight: rgb(0.6, 0.65, 0.72), // #99A6B8
+        lineBlack: rgb(0.08, 0.08, 0.08), // Solid section underline
+        lineDotted: rgb(0.82, 0.85, 0.89), // Light divider line
     }
 
-    let currentPage: PDFPage = pdfDoc.addPage([pageWidth, pageHeight])
-    let y = pageHeight - margin
+    const pages: PDFPage[] = [pdfDoc.addPage([pageWidth, pageHeight])]
 
-    // Helper: Check space and add new page if needed
-    function ensureSpace(heightNeeded: number) {
-        if (y - heightNeeded < margin + 20) {
-            currentPage = pdfDoc.addPage([pageWidth, pageHeight])
-            y = pageHeight - margin
+    function getPage(index: number): PDFPage {
+        while (pages.length <= index) {
+            pages.push(pdfDoc.addPage([pageWidth, pageHeight]))
         }
-    }
-
-    // Helper: Draw Section Title
-    function drawSectionTitle(title: string) {
-        ensureSpace(35)
-        currentPage.drawText(cleanText(title.toUpperCase()), {
-            x: margin,
-            y,
-            size: 11,
-            font: fontBold,
-            color: colors.primary,
-        })
-        y -= 6
-        currentPage.drawLine({
-            start: { x: margin, y },
-            end: { x: margin + contentWidth, y },
-            thickness: 1,
-            color: colors.accent,
-        })
-        y -= 14
-    }
-
-    // Helper: Render description blocks (headings, lists, paragraphs)
-    function renderDescriptionBlocks(blocks: DescriptionBlock[]) {
-        for (const block of blocks) {
-            if (block.type === 'heading') {
-                const headingSize = Math.max(9, 10.5 - block.level * 0.5)
-                const lines = wrapText(
-                    block.text,
-                    fontBold,
-                    headingSize,
-                    contentWidth - 10,
-                )
-                ensureSpace(lines.length * 12 + 6)
-                y -= 3
-                for (const line of lines) {
-                    currentPage.drawText(line, {
-                        x: margin + 8,
-                        y,
-                        size: headingSize,
-                        font: fontBold,
-                        color: colors.primary,
-                    })
-                    y -= 12
-                }
-                y -= 2
-            } else if (block.type === 'bullet-item') {
-                const indent = margin + 12 + (block.level - 1) * 10
-                const availWidth = contentWidth - 20 - (block.level - 1) * 10
-                const bulletSymbol = '• '
-                const bulletWidth = fontBold.widthOfTextAtSize(bulletSymbol, 9)
-                const lines = wrapText(
-                    block.text,
-                    fontRegular,
-                    9,
-                    availWidth - bulletWidth,
-                )
-                ensureSpace(lines.length * 11 + 2)
-
-                for (let i = 0; i < lines.length; i++) {
-                    if (i === 0) {
-                        currentPage.drawText(bulletSymbol, {
-                            x: indent,
-                            y,
-                            size: 9,
-                            font: fontBold,
-                            color: colors.accent,
-                        })
-                        currentPage.drawText(lines[i], {
-                            x: indent + bulletWidth,
-                            y,
-                            size: 9,
-                            font: fontRegular,
-                            color: colors.textDark,
-                        })
-                    } else {
-                        currentPage.drawText(lines[i], {
-                            x: indent + bulletWidth,
-                            y,
-                            size: 9,
-                            font: fontRegular,
-                            color: colors.textDark,
-                        })
-                    }
-                    y -= 11
-                }
-                y -= 1
-            } else if (block.type === 'number-item') {
-                const indent = margin + 12 + (block.level - 1) * 10
-                const availWidth = contentWidth - 20 - (block.level - 1) * 10
-                const numPrefix = `${block.index}. `
-                const numWidth = fontBold.widthOfTextAtSize(numPrefix, 9)
-                const lines = wrapText(
-                    block.text,
-                    fontRegular,
-                    9,
-                    availWidth - numWidth,
-                )
-                ensureSpace(lines.length * 11 + 2)
-
-                for (let i = 0; i < lines.length; i++) {
-                    if (i === 0) {
-                        currentPage.drawText(numPrefix, {
-                            x: indent,
-                            y,
-                            size: 9,
-                            font: fontBold,
-                            color: colors.accent,
-                        })
-                        currentPage.drawText(lines[i], {
-                            x: indent + numWidth,
-                            y,
-                            size: 9,
-                            font: fontRegular,
-                            color: colors.textDark,
-                        })
-                    } else {
-                        currentPage.drawText(lines[i], {
-                            x: indent + numWidth,
-                            y,
-                            size: 9,
-                            font: fontRegular,
-                            color: colors.textDark,
-                        })
-                    }
-                    y -= 11
-                }
-                y -= 1
-            } else {
-                // Paragraph
-                const lines = wrapText(
-                    block.text,
-                    fontRegular,
-                    9,
-                    contentWidth - 10,
-                )
-                ensureSpace(lines.length * 12 + 4)
-                for (const line of lines) {
-                    currentPage.drawText(line, {
-                        x: margin + 8,
-                        y,
-                        size: 9,
-                        font: fontRegular,
-                        color: colors.textDark,
-                    })
-                    y -= 12
-                }
-                y -= 4
-            }
-        }
+        return pages[index]
     }
 
     // -----------------------------------------------------------------------
-    // HEADER BLOCK (With Round Photo & Face Crop)
+    // FULL-WIDTH HEADER
     // -----------------------------------------------------------------------
-    const headerHeight = 85
-    currentPage.drawRectangle({
-        x: margin - 10,
-        y: y - headerHeight,
-        width: contentWidth + 20,
-        height: headerHeight + 10,
-        color: colors.bgHeader,
-    })
+    let curHeaderPage = pages[0]
+    let yHeader = pageHeight - margin
 
-    const headerTextWidth = avatarImg ? contentWidth - 85 : contentWidth
+    const headerTextWidth = avatarImg ? contentWidth - 75 : contentWidth
 
-    // Name (with 22pt vertical top padding)
-    const nameText = cleanText(profile.name || 'Javier Aday Pérez Romero')
-    currentPage.drawText(nameText, {
+    // Full Name in uppercase bold
+    const nameText = cleanText(
+        profile.name || 'Javier Aday Pérez Romero',
+    ).toUpperCase()
+    curHeaderPage.drawText(nameText, {
         x: margin,
-        y: y - 22,
-        size: 21,
+        y: yHeader - 18,
+        size: 20,
         font: fontBold,
         color: colors.primary,
     })
     addLink(
         pdfDoc,
-        currentPage,
+        curHeaderPage,
         'https://cocodrulo.dev',
         margin,
-        y - 22,
-        fontBold.widthOfTextAtSize(nameText, 21),
-        21,
+        yHeader - 18,
+        fontBold.widthOfTextAtSize(nameText, 20),
+        20,
     )
 
-    // Tagline / Label
+    // Subtitle in Vibrant Blue
     const labelText = cleanText(
         profile.label ||
-            (isEs ? 'Desarrollador de Software' : 'Software Developer'),
+            (isEs
+                ? 'Desarrollador de software y estudiante de Ingeniería Informática en la ULPGC'
+                : 'Software developer and Computer Science student at ULPGC'),
     )
-    currentPage.drawText(labelText, {
-        x: margin,
-        y: y - 41,
-        size: 11,
-        font: fontBold,
-        color: colors.accent,
-    })
+    const labelLines = wrapText(labelText, fontBold, 10, headerTextWidth)
+    let curLabelY = yHeader - 34
+    for (const l of labelLines) {
+        curHeaderPage.drawText(l, {
+            x: margin,
+            y: curLabelY,
+            size: 10,
+            font: fontBold,
+            color: colors.accent,
+        })
+        curLabelY -= 12
+    }
 
-    // Contact / Socials / Additional Info: clickable links & key meta
+    // Contact bar with links directly from Emdash socials
+    const socialItems =
+        socials && socials.length > 0
+            ? socials
+                  .map((s) => ({
+                      label: cleanText(s.label || s.name),
+                      url: s.url,
+                  }))
+                  .filter((s) => s.label)
+            : [
+                  { label: 'Web', url: 'https://cocodrulo.dev' },
+                  {
+                      label: 'contact@cocodrulo.dev',
+                      url: 'mailto:contact@cocodrulo.dev',
+                  },
+              ]
+
     const contactItems: Array<{ label: string; url?: string }> = [
-        { label: 'cocodrulo.dev', url: 'https://cocodrulo.dev' },
-        ...socials.map((s) => ({
-            label: cleanText(s.label || s.name),
-            url: s.url,
-        })),
+        ...socialItems,
         {
             label: isEs
                 ? 'Permiso B (Vehículo propio)'
@@ -600,18 +562,18 @@ export async function generateCVPdf(
     ]
 
     let contactX = margin
-    let contactY = y - 61
-    const fontSizeContact = 8.5
-    const separator = '  •  '
-    const separatorWidth = fontRegular.widthOfTextAtSize(
-        separator,
-        fontSizeContact,
-    )
+    let contactY = curLabelY - 4
+    const fontSizeContact = 8
+    const separatorGap = 10
 
     for (let i = 0; i < contactItems.length; i++) {
         const item = contactItems[i]
         const cleanLabel = cleanText(item.label)
-        const itemWidth = fontRegular.widthOfTextAtSize(
+        if (!cleanLabel) continue
+
+        const isLink = Boolean(item.url)
+        const itemFont = isLink ? fontBold : fontRegular
+        const itemWidth = itemFont.widthOfTextAtSize(
             cleanLabel,
             fontSizeContact,
         )
@@ -624,87 +586,54 @@ export async function generateCVPdf(
             contactY -= 11
         }
 
-        const isLink = Boolean(item.url)
-        currentPage.drawText(cleanLabel, {
+        curHeaderPage.drawText(cleanLabel, {
             x: contactX,
             y: contactY,
             size: fontSizeContact,
-            font: fontRegular,
-            color: isLink ? colors.accent : colors.textMuted,
+            font: itemFont,
+            color: isLink ? colors.primary : colors.textMuted,
         })
 
         if (item.url) {
             addLink(
                 pdfDoc,
-                currentPage,
+                curHeaderPage,
                 item.url,
                 contactX,
-                contactY,
+                contactY - 1,
                 itemWidth,
-                fontSizeContact,
+                fontSizeContact + 2,
             )
         }
 
-        contactX += itemWidth
-
-        if (i < contactItems.length - 1) {
-            if (contactX + separatorWidth <= margin + headerTextWidth) {
-                currentPage.drawText(separator, {
-                    x: contactX,
-                    y: contactY,
-                    size: fontSizeContact,
-                    font: fontRegular,
-                    color: colors.textMuted,
-                })
-                contactX += separatorWidth
-            }
-        }
+        contactX += itemWidth + separatorGap
     }
 
-    // Draw Round Photo on Right Side (with aspect ratio preservation & face focus)
+    // Draw Portrait Avatar on Top Right
     if (avatarImg) {
-        const cx = margin + contentWidth - 38
-        const cy = y - 42
-        const r = 32
+        const cx = margin + contentWidth - 32
+        const cy = yHeader - 34
+        const r = 30
         const k = r * 0.5522847498
         const D = r * 2
 
-        // Object-fit cover math to keep aspect ratio & focus on face (top of portrait)
         const srcW = avatarImg.width
         const srcH = avatarImg.height
         const aspect = srcW / srcH
 
-        let drawW: number
-        let drawH: number
-        let drawX: number
-        let drawY: number
+        let drawW = D
+        let drawH = D / aspect
+        let drawX = cx - r
+        let drawY = cy + r - drawH
 
-        if (aspect < 1) {
-            // Portrait photo (taller than wide): match width, align top to show face
-            drawW = D
-            drawH = D / aspect
-            drawX = cx - r
-            drawY = cy + r - drawH
-        } else {
-            // Landscape or square photo: match height, center horizontally
+        if (aspect >= 1) {
             drawH = D
             drawW = D * aspect
             drawX = cx - drawW / 2
             drawY = cy - r
         }
 
-        // Draw Accent Ring around avatar
-        currentPage.drawCircle({
-            x: cx,
-            y: cy,
-            size: r + 2.5,
-            borderWidth: 2,
-            borderColor: colors.accent,
-            color: colors.bgHeader,
-        })
-
-        // Circular clipping operators
-        currentPage.pushOperators(
+        curHeaderPage.pushOperators(
             pushGraphicsState(),
             moveTo(cx, cy + r),
             curveTo(cx + k, cy + r, cx + r, cy + k, cx + r, cy),
@@ -715,42 +644,275 @@ export async function generateCVPdf(
             endPath(),
         )
 
-        // Draw avatar image without stretching/squishing
-        currentPage.drawImage(avatarImg, {
+        curHeaderPage.drawImage(avatarImg, {
             x: drawX,
             y: drawY,
             width: drawW,
             height: drawH,
         })
 
-        // Restore graphics state
-        currentPage.pushOperators(popGraphicsState())
+        curHeaderPage.pushOperators(popGraphicsState())
     }
 
-    y -= headerHeight + 15
+    // Starting Y for both columns
+    const columnsStartY = Math.min(contactY - 16, yHeader - 78)
 
-    // -----------------------------------------------------------------------
-    // ABOUT / PROFILE SUMMARY
-    // -----------------------------------------------------------------------
+    let yLeft = columnsStartY
+    let leftPageIndex = 0
+
+    let yRight = columnsStartY
+    let rightPageIndex = 0
+
+    // Helper: Ensure space in Left Column
+    function ensureSpaceLeft(heightNeeded: number) {
+        if (yLeft - heightNeeded < margin + 25) {
+            leftPageIndex++
+            yLeft = pageHeight - margin
+        }
+    }
+
+    // Helper: Ensure space in Right Column
+    function ensureSpaceRight(heightNeeded: number) {
+        if (yRight - heightNeeded < margin + 25) {
+            rightPageIndex++
+            yRight = pageHeight - margin
+        }
+    }
+
+    // Helper: Draw Section Title with Solid Black Underline
+    function drawSectionHeader(
+        title: string,
+        colX: number,
+        getY: () => number,
+        setY: (v: number) => void,
+        colWidth: number,
+        ensureSpaceFn: (h: number) => void,
+        getPageIndex: () => number,
+    ) {
+        ensureSpaceFn(28)
+        let curY = getY()
+        const page = getPage(getPageIndex())
+
+        page.drawText(cleanText(title.toUpperCase()), {
+            x: colX,
+            y: curY,
+            size: 10.5,
+            font: fontBold,
+            color: colors.primary,
+        })
+
+        curY -= 4
+        page.drawLine({
+            start: { x: colX, y: curY },
+            end: { x: colX + colWidth, y: curY },
+            thickness: 1.5,
+            color: colors.lineBlack,
+        })
+
+        setY(curY - 11)
+    }
+
+    // Helper: Render description blocks in a column
+    function renderColBlocks(
+        blocks: DescriptionBlock[],
+        colX: number,
+        colWidth: number,
+        getY: () => number,
+        setY: (v: number) => void,
+        ensureSpaceFn: (h: number) => void,
+        getPageIndex: () => number,
+    ) {
+        for (const block of blocks) {
+            let curY = getY()
+            let page = getPage(getPageIndex())
+
+            if (block.type === 'heading') {
+                const headingSize = Math.max(8.5, 9.5 - block.level * 0.5)
+                const lines = wrapText(
+                    block.text,
+                    fontBold,
+                    headingSize,
+                    colWidth - 4,
+                )
+                ensureSpaceFn(lines.length * 11 + 4)
+                curY = getY() - 2
+                page = getPage(getPageIndex())
+
+                for (const line of lines) {
+                    page.drawText(line, {
+                        x: colX,
+                        y: curY,
+                        size: headingSize,
+                        font: fontBold,
+                        color: colors.primary,
+                    })
+                    curY -= 11
+                }
+                setY(curY - 2)
+            } else if (block.type === 'bullet-item') {
+                const indent = colX + (block.level - 1) * 8
+                const availWidth = colWidth - (block.level - 1) * 8
+                const bulletSymbol = '• '
+                const bulletWidth = fontBold.widthOfTextAtSize(
+                    bulletSymbol,
+                    8.5,
+                )
+                const lines = wrapText(
+                    block.text,
+                    fontRegular,
+                    8.5,
+                    availWidth - bulletWidth,
+                )
+                ensureSpaceFn(lines.length * 10.5 + 2)
+                curY = getY()
+                page = getPage(getPageIndex())
+
+                for (let i = 0; i < lines.length; i++) {
+                    if (i === 0) {
+                        page.drawText(bulletSymbol, {
+                            x: indent,
+                            y: curY,
+                            size: 8.5,
+                            font: fontBold,
+                            color: colors.accent,
+                        })
+                        page.drawText(lines[i], {
+                            x: indent + bulletWidth,
+                            y: curY,
+                            size: 8.5,
+                            font: fontRegular,
+                            color: colors.textDark,
+                        })
+                    } else {
+                        page.drawText(lines[i], {
+                            x: indent + bulletWidth,
+                            y: curY,
+                            size: 8.5,
+                            font: fontRegular,
+                            color: colors.textDark,
+                        })
+                    }
+                    curY -= 10.5
+                }
+                setY(curY - 1)
+            } else if (block.type === 'number-item') {
+                const indent = colX + (block.level - 1) * 8
+                const availWidth = colWidth - (block.level - 1) * 8
+                const numPrefix = `${block.index}. `
+                const numWidth = fontBold.widthOfTextAtSize(numPrefix, 8.5)
+                const lines = wrapText(
+                    block.text,
+                    fontRegular,
+                    8.5,
+                    availWidth - numWidth,
+                )
+                ensureSpaceFn(lines.length * 10.5 + 2)
+                curY = getY()
+                page = getPage(getPageIndex())
+
+                for (let i = 0; i < lines.length; i++) {
+                    if (i === 0) {
+                        page.drawText(numPrefix, {
+                            x: indent,
+                            y: curY,
+                            size: 8.5,
+                            font: fontBold,
+                            color: colors.accent,
+                        })
+                        page.drawText(lines[i], {
+                            x: indent + numWidth,
+                            y: curY,
+                            size: 8.5,
+                            font: fontRegular,
+                            color: colors.textDark,
+                        })
+                    } else {
+                        page.drawText(lines[i], {
+                            x: indent + numWidth,
+                            y: curY,
+                            size: 8.5,
+                            font: fontRegular,
+                            color: colors.textDark,
+                        })
+                    }
+                    curY -= 10.5
+                }
+                setY(curY - 1)
+            } else {
+                // Paragraph
+                const lines = wrapText(
+                    block.text,
+                    fontRegular,
+                    8.5,
+                    colWidth - 2,
+                )
+                ensureSpaceFn(lines.length * 11 + 3)
+                curY = getY()
+                page = getPage(getPageIndex())
+
+                for (const line of lines) {
+                    page.drawText(line, {
+                        x: colX,
+                        y: curY,
+                        size: 8.5,
+                        font: fontRegular,
+                        color: colors.textDark,
+                    })
+                    curY -= 11
+                }
+                setY(curY - 2)
+            }
+        }
+    }
+
+    // =======================================================================
+    // LEFT COLUMN RENDERING (Resumen, Experiencia, Educación, Proyectos)
+    // =======================================================================
+
+    // 1. RESUMEN
     const aboutBlocks: DescriptionBlock[] = []
     if (about.subtitle) aboutBlocks.push(...extractBlocks(about.subtitle))
     if (Array.isArray(about.paragraphs)) {
         about.paragraphs.forEach((p: any) => {
             aboutBlocks.push(...extractBlocks(p))
         })
+    } else if (typeof about.paragraphs === 'string') {
+        aboutBlocks.push(...extractBlocks(about.paragraphs))
     }
 
     if (aboutBlocks.length > 0) {
-        drawSectionTitle(isEs ? 'PERFIL PROFESIONAL' : 'PROFESSIONAL SUMMARY')
-        renderDescriptionBlocks(aboutBlocks.slice(1, -1))
-        y -= 10
+        drawSectionHeader(
+            isEs ? 'RESUMEN' : 'SUMMARY',
+            leftX,
+            () => yLeft,
+            (v) => (yLeft = v),
+            leftColWidth,
+            ensureSpaceLeft,
+            () => leftPageIndex,
+        )
+        renderColBlocks(
+            aboutBlocks,
+            leftX,
+            leftColWidth,
+            () => yLeft,
+            (v) => (yLeft = v),
+            ensureSpaceLeft,
+            () => leftPageIndex,
+        )
+        yLeft -= 8
     }
 
-    // -----------------------------------------------------------------------
-    // WORK EXPERIENCE
-    // -----------------------------------------------------------------------
+    // 2. EXPERIENCIA LABORAL (if any)
     if (workTimeline.length > 0) {
-        drawSectionTitle(isEs ? 'EXPERIENCIA LABORAL' : 'WORK EXPERIENCE')
+        drawSectionHeader(
+            isEs ? 'EXPERIENCIA LABORAL' : 'WORK EXPERIENCE',
+            leftX,
+            () => yLeft,
+            (v) => (yLeft = v),
+            leftColWidth,
+            ensureSpaceLeft,
+            () => leftPageIndex,
+        )
 
         for (const item of workTimeline) {
             const periodStr = item.current
@@ -763,274 +925,310 @@ export async function generateCVPdf(
             const placeStr = cleanText(item.place)
             const descBlocks = extractBlocks(item.description)
 
-            ensureSpace(30)
+            ensureSpaceLeft(26)
+            let page = getPage(leftPageIndex)
 
-            // Title
-            currentPage.drawText(titleStr, {
-                x: margin,
-                y,
-                size: 10.5,
+            page.drawText(titleStr, {
+                x: leftX,
+                y: yLeft,
+                size: 9.5,
                 font: fontBold,
-                color: colors.textDark,
+                color: colors.primary,
             })
 
-            // Period right-aligned
-            const periodWidth = fontBold.widthOfTextAtSize(periodStr, 9)
-            currentPage.drawText(periodStr, {
-                x: margin + contentWidth - periodWidth,
-                y,
-                size: 9,
-                font: fontBold,
-                color: colors.accent,
+            const periodWidth = fontRegular.widthOfTextAtSize(periodStr, 8)
+            page.drawText(periodStr, {
+                x: leftX + leftColWidth - periodWidth,
+                y: yLeft,
+                size: 8,
+                font: fontRegular,
+                color: colors.textMuted,
             })
 
-            y -= 13
+            yLeft -= 11
 
-            // Place
             if (placeStr) {
-                currentPage.drawText(placeStr, {
-                    x: margin,
-                    y,
-                    size: 9.5,
-                    font: fontOblique,
-                    color: colors.textMuted,
+                page.drawText(placeStr, {
+                    x: leftX,
+                    y: yLeft,
+                    size: 9,
+                    font: fontBold,
+                    color: colors.accent,
                 })
-                y -= 13
+                yLeft -= 11
             }
 
-            // Render structured blocks (headings, lists, paragraphs)
-            renderDescriptionBlocks(descBlocks)
-
-            y -= 8
+            renderColBlocks(
+                descBlocks,
+                leftX,
+                leftColWidth,
+                () => yLeft,
+                (v) => (yLeft = v),
+                ensureSpaceLeft,
+                () => leftPageIndex,
+            )
+            yLeft -= 5
         }
-        y -= 5
+        yLeft -= 6
     }
 
-    // -----------------------------------------------------------------------
-    // EDUCATION
-    // -----------------------------------------------------------------------
+    // 3. EDUCACIÓN
     if (eduTimeline.length > 0) {
-        drawSectionTitle(isEs ? 'EDUCACIÓN' : 'EDUCATION')
+        drawSectionHeader(
+            isEs ? 'EDUCACIÓN' : 'EDUCATION',
+            leftX,
+            () => yLeft,
+            (v) => (yLeft = v),
+            leftColWidth,
+            ensureSpaceLeft,
+            () => leftPageIndex,
+        )
 
         for (const item of eduTimeline) {
             const periodStr = item.current
-                ? `${item.start_year} — ${isEs ? 'Presente' : 'Present'}`
+                ? `${item.start_year} - ${isEs ? 'Presente' : 'Present'}`
                 : item.end_year
-                  ? `${item.start_year} — ${item.end_year}`
+                  ? `${item.start_year} - ${item.end_year}`
                   : item.start_year
 
             const titleStr = cleanText(item.title)
             const placeStr = cleanText(item.place)
             const descBlocks = extractBlocks(item.description)
 
-            ensureSpace(30)
+            ensureSpaceLeft(26)
+            let page = getPage(leftPageIndex)
 
-            currentPage.drawText(titleStr, {
-                x: margin,
-                y,
-                size: 10.5,
+            page.drawText(titleStr, {
+                x: leftX,
+                y: yLeft,
+                size: 9.5,
                 font: fontBold,
-                color: colors.textDark,
+                color: colors.primary,
             })
-
-            const periodWidth = fontBold.widthOfTextAtSize(periodStr, 9)
-            currentPage.drawText(periodStr, {
-                x: margin + contentWidth - periodWidth,
-                y,
-                size: 9,
-                font: fontBold,
-                color: colors.accent,
-            })
-
-            y -= 13
+            yLeft -= 11
 
             if (placeStr) {
-                currentPage.drawText(placeStr, {
-                    x: margin,
-                    y,
-                    size: 9.5,
-                    font: fontOblique,
-                    color: colors.textMuted,
+                page.drawText(placeStr, {
+                    x: leftX,
+                    y: yLeft,
+                    size: 9,
+                    font: fontBold,
+                    color: colors.accent,
                 })
-                y -= 13
+                yLeft -= 11
             }
 
-            renderDescriptionBlocks(descBlocks)
+            // Date line
+            page = getPage(leftPageIndex)
+            page.drawText(periodStr, {
+                x: leftX,
+                y: yLeft,
+                size: 8,
+                font: fontRegular,
+                color: colors.textMuted,
+            })
+            yLeft -= 10
 
-            y -= 8
+            renderColBlocks(
+                descBlocks,
+                leftX,
+                leftColWidth,
+                () => yLeft,
+                (v) => (yLeft = v),
+                ensureSpaceLeft,
+                () => leftPageIndex,
+            )
+            yLeft -= 5
         }
-        y -= 5
+        yLeft -= 6
     }
 
-    // -----------------------------------------------------------------------
-    // PROJECTS (With Headings, Bullet Lists, Numbered Lists & Paragraphs)
-    // -----------------------------------------------------------------------
+    // 4. PROYECTOS
     if (projects.length > 0) {
-        drawSectionTitle(isEs ? 'PROYECTOS DESTACADOS' : 'FEATURED PROJECTS')
+        drawSectionHeader(
+            isEs ? 'PROYECTOS DESTACADOS' : 'FEATURED PROJECTS',
+            leftX,
+            () => yLeft,
+            (v) => (yLeft = v),
+            leftColWidth,
+            ensureSpaceLeft,
+            () => leftPageIndex,
+        )
 
         for (const proj of projects) {
             const pTitle = cleanText(proj.title)
-            const pBlocks = proj.blocks
             const pTags = proj.labels.map(cleanText).join(' • ')
             const pUrl = proj.url ? cleanText(proj.url) : ''
 
-            ensureSpace(25)
+            ensureSpaceLeft(26)
+            let page = getPage(leftPageIndex)
 
-            currentPage.drawText(pTitle, {
-                x: margin,
-                y,
-                size: 10,
-                font: fontBold,
-                color: colors.textDark,
-            })
+            // Project Title
+            const titleLines = wrapText(pTitle, fontBold, 9.5, leftColWidth)
+            for (const tl of titleLines) {
+                page.drawText(tl, {
+                    x: leftX,
+                    y: yLeft,
+                    size: 9.5,
+                    font: fontBold,
+                    color: colors.primary,
+                })
+                yLeft -= 11
+            }
 
+            // Project URL link line
             if (pUrl) {
-                const urlTitle = isEs ? 'Enlace al Proyecto' : 'Project Link'
-                const urlWidth = fontRegular.widthOfTextAtSize(urlTitle, 8.5)
-                const urlX = margin + contentWidth - urlWidth
-                currentPage.drawText(urlTitle, {
-                    x: urlX,
-                    y,
-                    size: 8.5,
+                page = getPage(leftPageIndex)
+                const urlClean = pUrl.replace(/^https?:\/\//, '')
+                const urlDisplay =
+                    fontRegular.widthOfTextAtSize(urlClean, 7.5) > leftColWidth
+                        ? urlClean.slice(0, 48) + '...'
+                        : urlClean
+                const urlWidth = fontRegular.widthOfTextAtSize(urlDisplay, 7.5)
+
+                page.drawText(urlDisplay, {
+                    x: leftX,
+                    y: yLeft,
+                    size: 7.5,
                     font: fontRegular,
                     color: colors.accent,
                 })
-                addLink(pdfDoc, currentPage, proj.url!, urlX, y, urlWidth, 8.5)
+                addLink(pdfDoc, page, proj.url!, leftX, yLeft, urlWidth, 7.5)
+                yLeft -= 10
             }
 
-            y -= 13
-
-            // Render structured blocks for project description
-            renderDescriptionBlocks(pBlocks)
+            renderColBlocks(
+                proj.blocks,
+                leftX,
+                leftColWidth,
+                () => yLeft,
+                (v) => (yLeft = v),
+                ensureSpaceLeft,
+                () => leftPageIndex,
+            )
 
             if (pTags) {
-                y -= 2
-                currentPage.drawText(`Tech: ${pTags}`, {
-                    x: margin + 8,
-                    y,
-                    size: 8,
+                ensureSpaceLeft(12)
+                page = getPage(leftPageIndex)
+                page.drawText(`Tech: ${pTags}`, {
+                    x: leftX,
+                    y: yLeft,
+                    size: 7.5,
                     font: fontBold,
                     color: colors.textMuted,
                 })
-                y -= 12
+                yLeft -= 10
             }
 
-            y -= 6
+            yLeft -= 5
         }
-        y -= 5
     }
 
-    // -----------------------------------------------------------------------
-    // CERTIFICATES & COURSES (With Direct PDF Links)
-    // -----------------------------------------------------------------------
+    // =======================================================================
+    // RIGHT COLUMN RENDERING (Certificaciones with subtle dotted dividers)
+    // =======================================================================
     if (certificates.length > 0) {
-        drawSectionTitle(isEs ? 'CERTIFICACIONES' : 'CERTIFICATES')
+        drawSectionHeader(
+            isEs ? 'CERTIFICACIONES' : 'CERTIFICATES',
+            rightX,
+            () => yRight,
+            (v) => (yRight = v),
+            rightColWidth,
+            ensureSpaceRight,
+            () => rightPageIndex,
+        )
 
-        for (const cert of certificates) {
+        for (let i = 0; i < certificates.length; i++) {
+            const cert = certificates[i]
             const certTitle = cleanText(cert.title)
             const certIssuer = cleanText(cert.issuer)
-            const pdfTag = isEs ? '[Ver PDF]' : '[View PDF]'
-            const pdfTagWidth = fontBold.widthOfTextAtSize(pdfTag, 8)
 
-            const lines = wrapText(certTitle, fontBold, 9, contentWidth - 170)
-            const itemHeight = Math.max(16, lines.length * 12)
+            const lines = wrapText(certTitle, fontBold, 8.5, rightColWidth)
+            const neededHeight = lines.length * 10.5 + 18
 
-            ensureSpace(itemHeight + 4)
+            ensureSpaceRight(neededHeight)
+            let page = getPage(rightPageIndex)
 
-            let certY = y
-            for (let i = 0; i < lines.length; i++) {
-                currentPage.drawText(lines[i], {
-                    x: margin,
+            let certY = yRight
+            for (let j = 0; j < lines.length; j++) {
+                page.drawText(lines[j], {
+                    x: rightX,
                     y: certY,
-                    size: 9,
+                    size: 8.5,
                     font: fontBold,
-                    color: colors.textDark,
+                    color: colors.primary,
                 })
-                certY -= 12
+                certY -= 10.5
             }
 
             // Link title to certificate file if available
             if (cert.file_url) {
-                const titleWidth = fontBold.widthOfTextAtSize(lines[0], 9)
+                const titleWidth = fontBold.widthOfTextAtSize(lines[0], 8.5)
                 addLink(
                     pdfDoc,
-                    currentPage,
-                    cert.file_url,
-                    margin,
-                    y,
-                    titleWidth,
-                    9,
-                )
-            }
-
-            // Right side: Issuer + [Ver PDF] link
-            let rightX = margin + contentWidth
-
-            if (cert.file_url) {
-                rightX -= pdfTagWidth
-                currentPage.drawText(pdfTag, {
-                    x: rightX,
-                    y,
-                    size: 8,
-                    font: fontBold,
-                    color: colors.accent,
-                })
-                addLink(
-                    pdfDoc,
-                    currentPage,
+                    page,
                     cert.file_url,
                     rightX,
-                    y,
-                    pdfTagWidth,
-                    8,
-                )
-                rightX -= 8
-            }
-
-            if (certIssuer) {
-                const issuerWidth = fontRegular.widthOfTextAtSize(
-                    certIssuer,
+                    yRight,
+                    titleWidth,
                     8.5,
                 )
-                rightX -= issuerWidth
-                currentPage.drawText(certIssuer, {
-                    x: rightX,
-                    y,
-                    size: 8.5,
-                    font: fontOblique,
-                    color: cert.issuer_website
-                        ? colors.accent
-                        : colors.textMuted,
-                })
-                if (cert.issuer_website) {
-                    addLink(
-                        pdfDoc,
-                        currentPage,
-                        cert.issuer_website,
-                        rightX,
-                        y,
-                        issuerWidth,
-                        8.5,
-                    )
-                }
             }
 
-            y = certY - 4
+            // Issuer
+            if (certIssuer) {
+                page.drawText(certIssuer, {
+                    x: rightX,
+                    y: certY,
+                    size: 8,
+                    font: fontRegular,
+                    color: colors.textMuted,
+                })
+                if (cert.issuer_website) {
+                    const issWidth = fontRegular.widthOfTextAtSize(
+                        certIssuer,
+                        8,
+                    )
+                    addLink(
+                        pdfDoc,
+                        page,
+                        cert.issuer_website,
+                        rightX,
+                        certY,
+                        issWidth,
+                        8,
+                    )
+                }
+                certY -= 10
+            }
+
+            // Subtle divider line between certificates (except after last)
+            if (i < certificates.length - 1) {
+                page.drawLine({
+                    start: { x: rightX, y: certY + 3 },
+                    end: { x: rightX + rightColWidth, y: certY + 3 },
+                    thickness: 0.5,
+                    color: colors.lineDotted,
+                })
+                certY -= 5
+            }
+
+            yRight = certY - 3
         }
     }
 
-    // Add footer to all pages with website link
-    const pageCount = pdfDoc.getPageCount()
+    // Add footer to all pages
+    const pageCount = pages.length
     for (let i = 0; i < pageCount; i++) {
-        const page = pdfDoc.getPage(i)
+        const page = pages[i]
         const footerText = cleanText(
             `Javier Aday Pérez Romero — Curriculum Vitae | ${isEs ? 'Página' : 'Page'} ${i + 1} ${isEs ? 'de' : 'of'} ${pageCount}`,
         )
-        const fWidth = fontRegular.widthOfTextAtSize(footerText, 8)
+        const fWidth = fontRegular.widthOfTextAtSize(footerText, 7.5)
         page.drawText(footerText, {
             x: (pageWidth - fWidth) / 2,
-            y: 20,
-            size: 8,
+            y: 16,
+            size: 7.5,
             font: fontRegular,
             color: colors.textLight,
         })

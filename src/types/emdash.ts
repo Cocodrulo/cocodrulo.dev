@@ -64,6 +64,8 @@ export type ProjectData = {
     labels: Label[]
     image: ImageField
     featured?: boolean
+    show_in_cv?: boolean
+    cv_summary?: string
 }
 
 // --- Post ---
@@ -98,6 +100,8 @@ export type CertificateData = {
     issuer: string
     issuer_id: string
     issuer_website: string
+    show_in_cv?: boolean
+    featured?: boolean
 }
 
 // --- Timeline ---
@@ -111,4 +115,5 @@ export type TimelineData = {
     end_year?: string
     current?: boolean
     description?: string
+    show_in_cv?: boolean
 }

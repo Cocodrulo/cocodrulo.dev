@@ -81,6 +81,16 @@
                     "label": "Issuer Website",
                     "type": "string",
                     "required": true
+                },
+                {
+                    "slug": "show_in_cv",
+                    "label": "Mostrar en CV Individual",
+                    "type": "boolean"
+                },
+                {
+                    "slug": "featured",
+                    "label": "Destacado",
+                    "type": "boolean"
                 }
             ]
         },
@@ -244,6 +254,16 @@
                     "label": "Destacado",
                     "type": "boolean",
                     "required": true
+                },
+                {
+                    "slug": "show_in_cv",
+                    "label": "Mostrar en CV",
+                    "type": "boolean"
+                },
+                {
+                    "slug": "cv_summary",
+                    "label": "Resumen / Logros para CV (Viñetas)",
+                    "type": "text"
                 }
             ]
         },
@@ -273,6 +293,61 @@
                     "label": "URL",
                     "type": "string",
                     "required": true
+                }
+            ]
+        },
+        {
+            "slug": "timeline",
+            "label": "Timeline Items",
+            "labelSingular": "Timeline Item",
+            "supports": [
+                "drafts",
+                "revisions"
+            ],
+            "fields": [
+                {
+                    "slug": "title",
+                    "label": "Título",
+                    "type": "string",
+                    "required": true
+                },
+                {
+                    "slug": "place",
+                    "label": "Lugar / Institución",
+                    "type": "string",
+                    "required": true
+                },
+                {
+                    "slug": "type",
+                    "label": "Tipo (work / education)",
+                    "type": "string",
+                    "required": true
+                },
+                {
+                    "slug": "start_year",
+                    "label": "Año Inicio",
+                    "type": "string",
+                    "required": true
+                },
+                {
+                    "slug": "end_year",
+                    "label": "Año Fin",
+                    "type": "string"
+                },
+                {
+                    "slug": "current",
+                    "label": "Actualmente aquí",
+                    "type": "boolean"
+                },
+                {
+                    "slug": "description",
+                    "label": "Descripción",
+                    "type": "text"
+                },
+                {
+                    "slug": "show_in_cv",
+                    "label": "Mostrar en CV",
+                    "type": "boolean"
                 }
             ]
         }
@@ -412,11 +487,9 @@
                 "status": "published",
                 "data": {
                     "label": "About me",
-                    "subtitle": "Who is Javier Aday Pérez Romero?",
+                    "subtitle": "Professional Summary",
                     "paragraphs": [
-                        "An technology enthusiast, with experience in software development. Currently a Computer Science student at the University of Las Palmas de Gran Canaria.",
-                        "Since I was little I have liked to tinker with technology. I started by creating calculators in C# and Java, and little by little I got into the world of software development.",
-                        "Thanks to technology, I have been able to meet many interesting people and participate in various projects, both personal and professional."
+                        "Software developer and final-year Computer Science student experienced in modular architecture design, AI (Deep Learning), and full-stack web development."
                     ]
                 },
                 "locale": "en"
@@ -427,11 +500,9 @@
                 "status": "published",
                 "data": {
                     "label": "Sobre mí",
-                    "subtitle": "¿Quién es Javier Aday Pérez Romero?",
+                    "subtitle": "Perfil Profesional",
                     "paragraphs": [
-                        "Un apasionado de la tecnología, con experiencia en el desarrollo de software. Actualmente estudiante de Ingeniería Informática en la Universidad de Las Palmas de Gran Canaria.",
-                        "Desde pequeño me ha gustado trastear con la tecnología. Empecé creando calculadoras en C# y Java, y poco a poco me fui adentrando en el mundo del desarrollo de software.",
-                        "Gracias a la tecnología he podido conocer a mucha gente interesante y he podido participar en varios proyectos, tanto personales como profesionales."
+                        "Desarrollador de software y estudiante de último año de Ingeniería Informática con experiencia en el diseño de arquitecturas modulares, IA (Deep Learning) y desarrollo web full-stack."
                     ]
                 },
                 "locale": "es",
