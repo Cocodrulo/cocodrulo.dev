@@ -871,7 +871,6 @@ export async function generateCVPdf(
 
     // 1. RESUMEN
     const aboutBlocks: DescriptionBlock[] = []
-    if (about.subtitle) aboutBlocks.push(...extractBlocks(about.subtitle))
     if (Array.isArray(about.paragraphs)) {
         about.paragraphs.forEach((p: any) => {
             aboutBlocks.push(...extractBlocks(p))
