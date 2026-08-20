@@ -3,9 +3,10 @@ import { getEmDashEntry } from 'emdash'
 export async function GET({ params }: { params: { slug: string } }) {
     const { slug } = params
 
-    const { entry: shortLink, error } = await getEmDashEntry('short-links', slug)
+    const { entry: shortLink, error } = await getEmDashEntry('shortlinks', slug)
 
     if (error) {
+        console.error(error)
         return new Response('Server Error', {
             status: 500,
         })
