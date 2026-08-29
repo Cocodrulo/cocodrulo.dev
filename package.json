@@ -20,7 +20,7 @@
         "@astrojs/check": "0.9.10",
         "@astrojs/cloudflare": "14.2.3",
         "@astrojs/react": "6.0.4",
-        "@emdash-cms/cloudflare": "0.34.0",
+        "@emdash-cms/cloudflare": "0.35.0",
         "@tailwindcss/vite": "4.3.3",
         "astro": "7.2.4",
         "emdash": "0.34.0",
