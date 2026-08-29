@@ -22,7 +22,7 @@
         "@astrojs/react": "6.0.4",
         "@emdash-cms/cloudflare": "0.35.0",
         "@tailwindcss/vite": "4.3.3",
-        "astro": "7.2.4",
+        "astro": "7.2.7",
         "emdash": "0.34.0",
         "pdf-lib": "1.17.1",
         "pg": "8.23.0",
