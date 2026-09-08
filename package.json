@@ -18,7 +18,7 @@
     "packageManager": "pnpm@11.25.0",
     "dependencies": {
         "@astrojs/check": "0.9.10",
-        "@astrojs/cloudflare": "14.2.6",
+        "@astrojs/cloudflare": "14.3.0",
         "@astrojs/react": "6.0.5",
         "@emdash-cms/cloudflare": "0.36.0",
         "@tailwindcss/vite": "4.3.3",
