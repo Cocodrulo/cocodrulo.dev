@@ -18,25 +18,25 @@
     "packageManager": "pnpm@11.25.0",
     "dependencies": {
         "@astrojs/check": "0.9.10",
-        "@astrojs/cloudflare": "14.3.0",
-        "@astrojs/react": "6.0.5",
-        "@emdash-cms/cloudflare": "0.36.0",
+        "@astrojs/cloudflare": "14.3.2",
+        "@astrojs/react": "6.0.6",
+        "@emdash-cms/cloudflare": "0.38.0",
         "@tailwindcss/vite": "4.3.3",
-        "astro": "7.3.1",
-        "emdash": "0.36.0",
+        "astro": "7.3.3",
+        "emdash": "0.38.0",
         "pdf-lib": "1.17.1",
         "pg": "8.23.0",
-        "react": "19.2.8",
-        "react-dom": "19.2.8",
+        "react": "19.3.0",
+        "react-dom": "19.3.0",
         "tailwindcss": "4.3.3"
     },
     "devDependencies": {
-        "@cloudflare/workers-types": "5.20260905.1",
+        "@cloudflare/workers-types": "5.20260917.1",
         "@tailwindcss/typography": "0.5.20",
-        "@types/node": "26.4.1",
-        "prettier": "3.9.6",
-        "prettier-plugin-astro": "0.14.1",
+        "@types/node": "22.20.3",
+        "prettier": "3.9.7",
+        "prettier-plugin-astro": "1.0.1",
         "typescript": "7.0.2",
-        "wrangler": "4.129.0"
+        "wrangler": "4.133.0"
     }
 }

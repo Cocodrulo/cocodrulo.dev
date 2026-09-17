@@ -4,9 +4,9 @@ allowBuilds:
   sharp: true
   workerd: true
 minimumReleaseAgeExclude:
-  - '@cloudflare/workers-types@4.20260627.1 || 4.20260630.1 || 5.20260705.1 || 5.20260708.1 || 5.20260722.1 || 5.20260811.1 || 5.20260820.1 || 5.20260903.1'
+  - '@cloudflare/workers-types@4.20260627.1 || 4.20260630.1 || 5.20260705.1 || 5.20260708.1 || 5.20260722.1 || 5.20260811.1 || 5.20260820.1 || 5.20260903.1 || 5.20260917.1'
   - prettier@3.9.0 || 3.9.4
-  - '@astrojs/cloudflare@14.0.2 || 14.1.2'
+  - '@astrojs/cloudflare@14.0.2 || 14.1.2 || 14.3.2'
   - '@astrojs/compiler-binding-darwin-arm64@0.3.0'
   - '@astrojs/compiler-binding-darwin-x64@0.3.0'
   - '@astrojs/compiler-binding-linux-arm64-gnu@0.3.0'
@@ -33,7 +33,7 @@ minimumReleaseAgeExclude:
   - '@tailwindcss/oxide-win32-x64-msvc@4.3.2'
   - '@tailwindcss/oxide@4.3.2'
   - '@tailwindcss/vite@4.3.2'
-  - astro@7.0.4 || 7.0.7
+  - astro@7.0.4 || 7.0.7 || 7.3.3
   - tailwindcss@4.3.2
   - '@emdash-cms/admin@0.25.1 || 0.31.0'
   - '@emdash-cms/auth@0.25.1 || 0.31.0'
@@ -64,11 +64,13 @@ minimumReleaseAgeExclude:
   - '@typescript/typescript-win32-arm64@7.0.2'
   - '@typescript/typescript-win32-x64@7.0.2'
   - typescript@7.0.2
-  - miniflare@4.20260721.0 || 5.20260804.0-alpha || 5.20260820.0-alpha
-  - wrangler@4.113.0 || 4.120.1 || 4.125.0
+  - miniflare@4.20260721.0 || 5.20260804.0-alpha || 5.20260820.0-alpha || 5.20260916.0-alpha
+  - wrangler@4.113.0 || 4.120.1 || 4.125.0 || 4.133.0
   - '@cloudflare/workerd-darwin-64@1.20260820.1'
   - '@cloudflare/workerd-darwin-arm64@1.20260820.1'
   - '@cloudflare/workerd-linux-64@1.20260820.1'
   - '@cloudflare/workerd-linux-arm64@1.20260820.1'
   - '@cloudflare/workerd-windows-64@1.20260820.1'
   - workerd@1.20260820.1
+  - '@astrojs/react@6.0.6'
+  - prettier-plugin-astro@1.0.1
