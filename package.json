@@ -33,7 +33,7 @@
     "devDependencies": {
         "@cloudflare/workers-types": "5.20260917.1",
         "@tailwindcss/typography": "0.5.20",
-        "@types/node": "22.20.3",
+        "@types/node": "26.5.1",
         "prettier": "3.9.7",
         "prettier-plugin-astro": "1.0.1",
         "typescript": "7.0.2",
