@@ -12,7 +12,8 @@
         "dev": "astro dev",
         "build": "astro build",
         "preview": "astro preview",
-        "deploy": "astro build && emdash migrate && wrangler deploy && emdash migrate --check",
+        "deploy": "astro build && wrangler deploy && emdash migrate --check",
+        "migrate&deploy": "astro build && emdash migrate && wrangler deploy && emdash migrate --check",
         "typecheck": "astro check"
     },
     "packageManager": "pnpm@12.18.0",
